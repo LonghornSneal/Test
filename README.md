@@ -1,2 +1,81 @@
-test repo for the Paramedic Quick Reference repo. The Paramedic Quick Reference is a single-page web application that offers paramedics a quick-access guide to critical information. It includes hierarchical categories of topics (like protocols, medications, etc.), detailed medication information for ALS (Advanced Life Support) drugs, a patient info sidebar for contextual inputs, and dynamic features such as dosage calculations and warnings based on patient data. How about any that might be useful for incorporating into my Paramedic app that I am creating. My Paramedic app will have the following things coded for it. A main contents page that has a list of topics. A blue arrow (pointing towards the right) adjacent to the topic. When either the blue arrow (pointing to the right) or the topic title that is adjacent to this blue arrow is clicked upon, the blue arrow rotates to face downward and expands a list of subtopics. The subtopics will also have a blue arrow adjacent to itself if there are more subtopics within that subtopic. The subtopics without a blue arrow will be a clickable button that when clicked upon will open up a focused section dedicated to that specific subtopic. This dedicated section can contain: links, images, videos, hidden text that can be expanded (and collapsed after expanding) when the text that is hiding it is clicked upon, a expandible list of topics. The main contents page will have a title at the top center and a search bar underneath it. The search bar will begin populating with related options when the user begins typing in it. In the top left of the main contents page there will be a expandible button that brings up a section with different topics that the user can enter data into. This data that is entered in by the user will be able to have the following effects on the rest of the app: strikethrough text that is no longer appropriate, warnings, narrowed lists, focused lists, formulas will now have their calculations already performed with math to obtain to calculations visible to the user, new button options, faded topic buttons, the user entered data will have the most important data shown on the screen as the user navigates through the app afterwards, and this area will automatically collapse when the user clicks outside of this boxed in section. At all times in the top right of the app there will be a back navigation button, a forward navigation button, and a button underneath that takes the user to the home screen. When the user clicks the back navigation button, the user will be taken back to the prior screen with the last thing the user had clicked upon now being highlighted. The forward navigation button can only be used after the back navigation button has been used. Font will incorporate all the various style options. When the user exits the app and goes back into the app, the user will be able to easily access any information that the user had previously inputted into the app and there will be a history button that is on the screen at all times that will give a scrollable list, that starts from the most recent button that the user had clicked upon in the app session or in prior app sections, and this button can be clicked upon with the button having the full functionality of the button it represents. The code will be organized into separate files and folders, so information that is in one file may have to be accessed by one or more files. The code will incorporate only html, css, and javascript. Modules will not be used.
-Test repo for Paramedic-App 
+# Paramedic Quick Reference
+
+This repository outlines the planned structure for the **Paramedic Quick Reference** web application. The app is a single-page HTML, CSS, and JavaScript project that provides paramedics with quick access to critical information.
+
+## Planned Directory Structure
+
+```
+/ (project root)
+├── index.html           # Main page of the application
+├── css/
+│   └── styles.css       # Global styles
+├── js/
+│   ├── app.js           # Initializes the app and manages state
+│   ├── navigation.js    # Back, forward, and home navigation logic
+│   ├── search.js        # Search bar functionality
+│   └── patientInfo.js   # Patient data sidebar and related effects
+├── data/
+│   └── medications.js   # ALS medication information and dosage tools
+└── assets/
+    ├── images/          # UI images and icons
+    └── video/           # Optional embedded instructional videos
+```
+
+## File Descriptions
+
+### index.html
+The single HTML file that loads the entire interface. It contains:
+- A centered title and search bar on the main contents page.
+- A collapsible sidebar for patient information entry.
+- A nested list of topics and subtopics. Each entry has a rotating blue arrow to expand or collapse subtopics.
+- Navigation buttons (back, forward, home) positioned in the top right.
+- A persistent history button that shows previously accessed content.
+All UI elements are assigned IDs or classes so the JavaScript files can manipulate them.
+
+### css/styles.css
+Defines all visual styling for the application:
+- Layout of the main content page, sidebar, and navigation controls.
+- Styles for the blue arrows, expandable lists, hidden text sections, and warning messages.
+- Font declarations and responsive design rules.
+
+### js/app.js
+Acts as the entry point for the JavaScript code:
+- Runs after the HTML content loads and sets up event listeners for user interactions.
+- Coordinates with `navigation.js`, `search.js`, and `patientInfo.js` to update the page.
+- Maintains a central record of the current topic, navigation history, and user-entered patient data.
+
+### js/navigation.js
+Handles the back, forward, and home navigation buttons:
+- Updates the navigation history and highlights the last selected item when navigating backward.
+- Prevents the forward button from being used unless the user has moved back first.
+- Controls the visibility of content sections based on history.
+
+### js/search.js
+Implements search bar functionality:
+- Filters topic buttons as the user types.
+- Provides autocomplete suggestions and focuses on matching topics.
+
+### js/patientInfo.js
+Manages the collapsible patient info sidebar:
+- Collects user-entered data and stores it in `app.js`.
+- Applies effects throughout the app, such as striking through text, showing warnings, and pre-calculating dosages using data from `data/medications.js`.
+- Auto-collapses when the user clicks outside the sidebar.
+
+### data/medications.js
+Contains structured data for ALS medications:
+- Each drug entry stores dosage ranges, contraindications, and administration notes.
+- Functions to calculate dosage based on patient information are exposed for `patientInfo.js` to use.
+
+### assets/
+A collection of static resources such as images, icons, or instructional videos referenced by the HTML.
+
+## File Interaction and Order of Operations
+1. **index.html** loads first when the user opens the app.
+2. The `styles.css` file is referenced from the HTML to apply visual styles.
+3. JavaScript files load in this order:
+   - `app.js` initializes the app and registers event listeners.
+   - `navigation.js`, `search.js`, and `patientInfo.js` are loaded next to provide specific functionality. These files rely on the global state managed by `app.js`.
+   - `medications.js` is loaded last because its data is used by `patientInfo.js` for dosage calculations.
+4. The `assets` directory is referenced whenever images, icons, or videos are needed in the UI.
+
+All scripts work together within a single-page interface. No module system is used—all files attach their functionality to the global scope. The app.js file orchestrates interactions between scripts, ensuring that changes to patient data and navigation are reflected across all components.
