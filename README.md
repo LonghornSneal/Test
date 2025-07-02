@@ -15,7 +15,7 @@ This repository outlines the planned structure for the **Paramedic Quick Referen
 │   ├── history.js       # 
 │   ├── main.js          #
 │   ├── navigation.js    # Back, forward, and home navigation logic
-│   ├── patientInfo.js   # Patient data sidebar and related effects
+│   ├── patientData.js   # Patient data sidebar and related effects
 │   └── search.js        # Search bar functionality
 ├── data/
 │   └── medications.js   # ALS medication information and dosage tools
@@ -30,8 +30,8 @@ This repository outlines the planned structure for the **Paramedic Quick Referen
 2. The `styles.css` file is referenced from the HTML to apply visual styles.
 3. JavaScript files load in this order:
    - `app.js` initializes the app and registers event listeners.
-   - `navigation.js`, `search.js`, and `patientInfo.js` are loaded next to provide specific functionality. These files rely on the global state managed by `app.js`.
-   - `medications.js` is loaded last because its data is used by `patientInfo.js` for dosage calculations.
+   - `navigation.js`, `search.js`, and `patientData.js` are loaded next to provide specific functionality. These files rely on the global state managed by `app.js`.
+   - `medications.js` is loaded last because its data is used by `patientData.js` for dosage calculations.
 4. The `assets` directory is referenced whenever images, icons, or videos are needed in the UI.
 
 All scripts work together within a single-page interface. No module system is used—all files attach their functionality to the global scope. The app.js file orchestrates interactions between scripts, ensuring that changes to patient data and navigation are reflected across all components.
