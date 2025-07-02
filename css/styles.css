@@ -6,7 +6,7 @@ Defines all visual styling for the application:
 */
 
 /*
-style.css – Main stylesheet defining the UI’s look and feel. It covers layout, colors, typography, and responsive behavior of the app. Key styling includes:
+styles.css – Main stylesheet defining the UI’s look and feel. It covers layout, colors, typography, and responsive behavior of the app. Key styling includes:
 Layout styles: CSS rules to position the header, sidebar, content list, and detail view. For example, the patient info sidebar might be positioned off-canvas or as an overlay that slides out from the left; the content list might scroll independently if tall, and detail sections might either overlay the list or replace it.
 Typography and color: Defines font families, sizes, and weights for titles, content text, and highlights. Ensures the “various style options” for text (bold, italic, underlined, etc.) are available. Also sets colors for headings, normal text, links, and warning messages (e.g., using red or bold for warnings).
 Menu and button styles: Styles for the topic list and arrows. For example, arrows might be implemented using an inline image or CSS content; .collapsed vs .expanded classes could rotate an arrow icon (pointing right vs down) using a CSS transform. List items are indented to show hierarchy. Buttons (like Home, Back, Forward, History, and leaf topic buttons) have distinct styling (color, hover effects) to appear clickable. The currently selected or highlighted item (e.g., the last clicked topic when returning to the list) has a special highlight style.

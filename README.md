@@ -22,7 +22,7 @@ This repository outlines the planned structure for the **Paramedic Quick Referen
 └── assets/
     ├── images/          # UI images and icons
     ├── video/           # Optional embedded instructional videos
-    └── assestsREADME.md #
+    └── assetsREADME.md #
 ```
 
 ## File Interaction and Order of Operations
