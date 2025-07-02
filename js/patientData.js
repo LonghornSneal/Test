@@ -1,9 +1,17 @@
 /*
-Manages the collapsible patient info sidebar:
-- Collects user-entered data and stores it in `app.js`.
-- Applies effects throughout the app, such as striking through text, showing warnings, and pre-calculating dosages using data from `data/medications.js`.
-- Auto-collapses when the user clicks outside the sidebar.
+Manages the patient information input panel and related dynamic content:
+- Controls the patient info sidebar panel’s behavior (expand and collapse) and form inputs for patient data (e.g., age, weight, allergies).
+- Provides an initialization function (`initPatientDataPanel()`) to attach event listeners: opens the panel when the toggle button (`#patientInfoToggle`) is clicked, and updates internal data whenever an input field changes.
+- Stores the user’s patient data in a global structure and uses browser storage (localStorage) to persist this information between sessions.
+- Applies patient-specific context to the content: recalculates medication dosages and displays warnings based on current inputs, modifying or annotating content sections as needed (for example, adding a `.not-applicable` CSS class to irrelevant sections for a pediatric patient).
+- Exposes utility functions for other modules to use (e.g., an `applyToSection(sectionElement)` function to update a newly shown detail section with patient-specific adjustments), ensuring that whenever a topic’s details are displayed, they reflect the current patient parameters.
 */
+
+
+
+
+
+
 
 /*
 patientData.js – Manages the patient information input panel and dynamic content filtering/calculations. This script makes the app responsive to user-provided patient data, tailoring the displayed information (e.g., protocols, dosages) to the context of the patient. Major functions include:

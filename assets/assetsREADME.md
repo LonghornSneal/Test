@@ -1,7 +1,13 @@
-assets/ (folder) – Contains static assets like images or videos used in the application content or UI.
-images/ – Image files for icons and illustrations:
-For example, arrow-right.png and arrow-down.png (or SVGs) to represent the expandable list arrows. The app might use a single arrow image and rotate it via CSS, but separate files or an icon sprite can be provided. These images are styled in the CSS (for size and color if not inherently blue) or inserted via <img> tags in the HTML where needed.
-Other possible images include protocol diagrams or drug reference images that might appear in the detailed content sections. Each such image would be stored here and referenced in the HTML detail content or via <img src="assets/images/…"> tags.
-Any logo or branding images for the app could also reside here.
-videos/ – Video files (if any are packaged with the app). Typically, large videos might be streamed or embedded from external sources, but if small training clips or demonstrations are included offline, they would be in this folder. The HTML detail sections would use the <video> tag or external <iframe> (for YouTube, etc.). If using local video files, they would be referenced from this directory.
-(Other assets) – If needed, other subfolders could exist (e.g., fonts/ for custom webfont files, or data/ for any static JSON files containing content like drug info). In this project, most reference data is likely hard-coded into the HTML or JS, so a dedicated data file may not be necessary. However, if the list of medications or protocols is very large, one might include a JSON or JS file with that data and load it for generating content or for search indexing.
+**assets/** – Contains static assets (images, videos, etc.) used in the application.
+
+- **images/** – Image files for icons and illustrations.  
+    - *Examples:* Arrow icons for the menu (e.g. `arrow-right.png` and `arrow-down.png` used as expand/collapse indicators). The app might use a single arrow graphic rotated via CSS, but separate image files or an SVG sprite can also be used.  
+    - Other images, such as protocol diagrams or medication reference illustrations, are stored here. These are referenced in the HTML detail content (for example: `<img src="assets/images/diagram.png" alt="Protocol Diagram">`).  
+    - Any logo or branding images for the app would also reside in this folder.
+
+- **video/** – Video files for training or instructional content (if any).  
+    - Large videos are typically streamed or embedded from external sites (e.g. YouTube), but smaller clips could be included here for offline use.  
+    - The app’s detail sections might use `<video>` tags to play these files or `<iframe>` elements for externally hosted videos.
+
+- *(Other assets)* – Additional subfolders can be added as needed (for example, a **fonts/** directory for custom font files).  
+    - In this project, most reference information is handled within the application code itself (for example, medication data is in `data/medications.js`), so few external data files are needed at this stage.

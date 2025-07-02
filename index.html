@@ -1,3 +1,18 @@
+<!-- 
+- Header with app title and a search bar. (The search input may have an id like "searchInput" for scripts to access.)
+- Navigation controls in the top-right corner (Back, Forward, Home buttons; e.g. IDs "btnBack", "btnForward", "btnHome").
+- Sidebar toggle button in the top-left to open the patient info panel (e.g. id "patientInfoToggle").
+- Patient Info sidebar panel: a form for patient data (age, weight, etc.), initially hidden. For example, the panel container might have id "patientInfoPanel", and form fields could have IDs like "patientAge" and "patientWeight".
+- Main content area: a nested list of topics and subtopics (e.g. a <ul id="topicsList"> with <li> items). Each topic that has subtopics shows a right-arrow icon, which rotates down when the section is expanded. Final subtopics (leaf nodes) are clickable entries that display detailed content.
+- Detail sections: content containers for each final subtopic (hidden by default, revealed when that topic is selected). Each detail section might have a unique id (e.g. "detailEpinephrine" for the Epinephrine content).
+- History panel: a hidden dropdown/section listing recently viewed topics, triggered by a History button (id "btnHistory"). Selecting an item from this list navigates to that topic’s detail view.
+- Script includes: the JS files are linked at the bottom of the HTML (just before </body>). They must appear in the correct order so that dependencies load first and `main.js` runs last to initialize the app.
+- Link to CSS: the <head> section includes the stylesheet (e.g. <link rel="stylesheet" href="css/styles.css">) for overall app styling.
+-->
+
+
+
+
 notes: index.html
 The single HTML file that loads the entire interface. It contains:
 - A centered title and search bar on the main contents page.
