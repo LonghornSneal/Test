@@ -1,11 +1,117 @@
 <!-- 
-- Header with app title and a search bar. (The search input may have an id like "searchInput" for scripts to access.)
-- Navigation controls in the top-right corner (Back, Forward, Home buttons; e.g. IDs "btnBack", "btnForward", "btnHome").
-- Sidebar toggle button in the top-left to open the patient info panel (e.g. id "patientInfoToggle").
-- Patient Info sidebar panel: a form for patient data (age, weight, etc.), initially hidden. For example, the panel container might have id "patientInfoPanel", and form fields could have IDs like "patientAge" and "patientWeight".
-- Main content area: a nested list of topics and subtopics (e.g. a <ul id="topicsList"> with <li> items). Each topic that has subtopics shows a right-arrow icon, which rotates down when the section is expanded. Final subtopics (leaf nodes) are clickable entries that display detailed content.
-- Detail sections: content containers for each final subtopic (hidden by default, revealed when that topic is selected). Each detail section might have a unique id (e.g. "detailEpinephrine" for the Epinephrine content).
-- History panel: a hidden dropdown/section listing recently viewed topics, triggered by a History button (id "btnHistory"). Selecting an item from this list navigates to that topic’s detail view.
-- Script includes: the JS files are linked at the bottom of the HTML (just before </body>). They must appear in the correct order so that dependencies load first and `main.js` runs last to initialize the app.
-- Link to CSS: the <head> section includes the stylesheet (e.g. <link rel="stylesheet" href="css/styles.css">) for overall app styling.
+  index.html – Main HTML structure for the Paramedic Quick Reference app.
+  
+  This file sets up the base UI layout and includes all necessary scripts and resources.
+  Goals:
+  1. Define a clear, semantic structure: header for top controls, main for content views, asides for side panels.
+  2. Use meaningful IDs and classes so JavaScript can easily select and manipulate elements.
+  3. Include placeholder elements (empty containers or sample items) where dynamic content will be inserted by scripts.
+  4. Ensure scripts are linked in the correct order (patientData.js first, main.js last) and that no module system is used (all scripts are global).
+  5. Avoid duplicating information: e.g., do not hard-code lists that will be generated from data; just provide containers and templates if needed.
+  
+  Page Layout Outline:
+  - <head>: Page title, meta tags, link to CSS.
+  - <body>:
+    * Header section with app title, navigation buttons (Back, Forward, Home, etc.), search bar, and a toggle for the patient info sidebar.
+    * An aside for the collapsible Patient Info panel (initially hidden) with input fields for patient data (age, weight, etc.).
+    * Main content area:
+       - "Topics view" section: the default view showing the list of reference topics (with categories and subtopics).
+       - "Detail view" section: a container for displaying detailed information of a selected topic (hidden until a topic is selected).
+    * An aside for the History panel (initially hidden) that will show the list of recently viewed topics.
+    * Script tags at the end of body in the specified load order.
 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paramedic Quick Reference</title>
+  <!-- Link to global styles -->
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- Header: contains navigation controls, title, search bar, and patient info toggle -->
+  <header id="app-header">
+    <!-- Navigation control buttons for history navigation -->
+    <button id="back-btn" disabled>Back</button>
+    <button id="forward-btn" disabled>Forward</button>
+    <button id="home-btn">Home</button>
+    <button id="history-btn">History</button>
+    <!-- Button to toggle the patient info sidebar -->
+    <button id="patient-btn">Patient Info</button>
+    <!-- App title -->
+    <h1 id="app-title">Paramedic Quick Reference</h1>
+    <!-- Search bar with input and suggestion dropdown -->
+    <div id="search-bar">
+      <input type="text" id="search-input" placeholder="Search topics..." autocomplete="off" />
+      <!-- Suggestions list (hidden until user types) -->
+      <ul id="suggestions-list" class="hidden"></ul>
+    </div>
+  </header>
+
+  <!-- Collapsible Patient Info Sidebar (initially hidden/offscreen) -->
+  <aside id="patient-info" class="hidden">
+    <h2>Patient Info</h2>
+    <!-- Input fields for patient data -->
+    <label for="patient-age">Age (years):</label>
+    <input type="number" id="patient-age" min="0" placeholder="Age in years" />
+    <label for="patient-weight">Weight (kg):</label>
+    <input type="number" id="patient-weight" min="0" placeholder="Weight in kg" />
+    <!-- (If needed, more patient parameters or controls can be added here) -->
+  </aside>
+
+  <!-- Main content area: contains the topic list view and the detail view -->
+  <main id="main-content">
+    <!-- Topics List View: default view showing all topics/categories -->
+    <section id="topics-view">
+      <!-- Topics list (with categories and subtopics). 
+           Categories are expandable; subtopic lists are hidden by default. -->
+      <nav id="topics-nav">
+        <ul id="topics-list">
+          <!-- Example Category (expandable) -->
+          <li class="category">
+            <span class="category-title">Medications</span>
+            <ul id="medications-list" class="subcategory hidden">
+              <!-- Medication items will be populated here by navigation.js using data from medications.js -->
+            </ul>
+          </li>
+          <!-- (Optional additional categories can be structured similarly) -->
+          <!-- Example placeholder for another category:
+          <li class="category">
+            <span class="category-title">Procedures</span>
+            <ul class="subcategory hidden">
+              <li class="item">Example Procedure (placeholder)</li>
+            </ul>
+          </li>
+          -->
+        </ul>
+      </nav>
+    </section>
+
+    <!-- Detail View: displays detailed info for a selected topic (hidden until a topic is selected) -->
+    <section id="detail-view" class="hidden">
+      <!-- Placeholder content for detail view -->
+      <!-- When a topic is selected, navigation.js will populate this section with the topic's details 
+           (e.g., name, dosage information, contraindications, notes, etc.). -->
+      <h2 id="detail-title"><!-- Topic Name will go here --></h2>
+      <div id="detail-content"><!-- Detailed info will be inserted here --></div>
+    </section>
+  </main>
+
+  <!-- History Panel: shows recently viewed topics (initially hidden) -->
+  <aside id="history-panel" class="hidden">
+    <h2>History</h2>
+    <ul id="history-list">
+      <!-- History entries will be added here by history.js (each entry could be a list item with a topic name) -->
+    </ul>
+  </aside>
+
+  <!-- Include JavaScript files in the specified order. -->
+  <script src="js/patientData.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/history.js"></script>
+  <script src="data/medications.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

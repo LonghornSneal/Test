@@ -1,32 +1,173 @@
 /*
-Manages the patient information input panel and related dynamic content:
-- Controls the patient info sidebar panel’s behavior (expand and collapse) and form inputs for patient data (e.g., age, weight, allergies).
-- Provides an initialization function (`initPatientDataPanel()`) to attach event listeners: opens the panel when the toggle button (`#patientInfoToggle`) is clicked, and updates internal data whenever an input field changes.
-- Stores the user’s patient data in a global structure and uses browser storage (localStorage) to persist this information between sessions.
-- Applies patient-specific context to the content: recalculates medication dosages and displays warnings based on current inputs, modifying or annotating content sections as needed (for example, adding a `.not-applicable` CSS class to irrelevant sections for a pediatric patient).
-- Exposes utility functions for other modules to use (e.g., an `applyToSection(sectionElement)` function to update a newly shown detail section with patient-specific adjustments), ensuring that whenever a topic’s details are displayed, they reflect the current patient parameters.
+  patientData.js – Manages the Patient Info sidebar and patient-specific effects on the app.
+  
+  Responsibilities:
+  1. Maintain a global patient data object with properties like age and weight (initialize with default or saved values).
+  2. Provide functions to open/close the patient info panel (toggle the sidebar visibility).
+  3. Attach event listeners to patient info input fields (age, weight) so that any changes update the global data and trigger recalculations of any patient-dependent information.
+  4. If patient data changes affect displayed content (e.g., medication dosages), update the content appropriately (for example, highlight the pediatric dose or recalc a recommended dose).
+  5. Avoid conflicts: use the same global patient data for all calculations; ensure naming consistency across files (e.g., if `calculateDose` expects certain patient object structure).
+  6. Do not rely on any module system – all functions/variables here are in the global scope for use by other scripts.
+  
+  Key elements & interactions:
+  - Global object `patientData` (or similar) to store patient info (e.g., patientData.age, patientData.weight).
+  - Function to initialize patient data (possibly check localStorage for saved values, else defaults).
+  - Function to toggle the patient info sidebar (show/hide #patient-info element), triggered by the "Patient Info" button (#patient-btn).
+  - Within toggle, possibly handle closing by clicking outside the panel (attach document event listener when open, remove when closed).
+  - Event handlers for input fields (#patient-age, #patient-weight) to update patientData and call an update function.
+  - Update function (maybe part of the input handler) that applies changes:
+      * e.g., if a medication detail is currently displayed, recalc or adjust dosage info using the updated patient data.
+      * Could call `updateCurrentDetail()` or similar to refresh the displayed content.
+      * Uses helper from medications.js like `calculateDose()` if needed.
+  - Utility function to determine if patient is pediatric (based on age < certain threshold or weight < threshold).
+  
+  Predefined names and structures:
+  - Use a global variable or object named `patientData` to store patient info. For example:
+        patientData = { age: <number>, weight: <number> }
+    Other scripts (medications.js) use patient info as an object (the calculateDose function expects an object with age and/or weight properties).
+  - Ensure `calculateDose(medName, patientObj)` from medications.js can be used with `patientData` object.
+  - ID #patient-info is the sidebar container; #patient-age and #patient-weight are input fields.
+  - The toggle button has ID #patient-btn.
+  - Classes: uses .hidden to show/hide the sidebar.
 */
 
+"use strict";  // (Optional strict mode for good practice)
 
+// Global patient data object with default values
+var patientData = {
+  age: null,    // default to null or a specific value (e.g., 0 or adult age if preferred)
+  weight: null  // default to null (meaning not set yet)
+  // We assume null means "no data entered"; scripts can treat that as adult by default.
+};
 
+// Function to determine if current patient should be considered pediatric
+function isPediatricPatient() {
+  // Define pediatric criteria: e.g., age < 12 years OR (age not set and weight < 40 kg)
+  if (patientData.age !== null) {
+    return patientData.age < 12;
+  } else if (patientData.weight !== null) {
+    return patientData.weight < 40;
+  }
+  return false;
+}
 
+// Initialize patient data (e.g., on app load)
+function initializePatientData() {
+  // If needed, load saved patient info from localStorage (for now, just use defaults)
+  // Example: 
+  // let savedAge = localStorage.getItem("patientAge");
+  // let savedWeight = localStorage.getItem("patientWeight");
+  // if (savedAge) patientData.age = Number(savedAge);
+  // if (savedWeight) patientData.weight = Number(savedWeight);
+  // For now, assume no saved data; patientData is already set to defaults.
 
+  // Set up event listeners for patient info inputs:
+  var ageInput = document.getElementById("patient-age");
+  var weightInput = document.getElementById("patient-weight");
+  if (ageInput && weightInput) {
+    ageInput.addEventListener("input", function() {
+      // Update global patient data age
+      patientData.age = ageInput.value ? Number(ageInput.value) : null;
+      handlePatientDataChange();
+    });
+    weightInput.addEventListener("input", function() {
+      // Update global patient data weight
+      patientData.weight = weightInput.value ? Number(weightInput.value) : null;
+      handlePatientDataChange();
+    });
+  }
 
+  // Set up event listener for clicking outside the patient info panel to close it
+  document.addEventListener("click", function(event) {
+    var panel = document.getElementById("patient-info");
+    var toggleBtn = document.getElementById("patient-btn");
+    if (!panel || panel.classList.contains("hidden")) {
+      return;  // panel is not open, nothing to do
+    }
+    var isClickInside = panel.contains(event.target) || (toggleBtn && toggleBtn.contains(event.target));
+    if (!isClickInside) {
+      // Clicked outside the panel (and not on the toggle button) => close the panel
+      panel.classList.add("hidden");
+    }
+  });
+}
 
-/*
-patientData.js – Manages the patient information input panel and dynamic content filtering/calculations. This script makes the app responsive to user-provided patient data, tailoring the displayed information (e.g., protocols, dosages) to the context of the patient. Major functions include:
-Sidebar toggle and form behavior: Controls showing and hiding of the patient info sidebar. When the user clicks the top-left button to open the sidebar, patientData.js will remove the collapsed state class (allowing the sidebar to slide out or appear). If the user clicks outside the sidebar or on a close button, this script will hide it again. It ensures that the UI is not obstructive: the sidebar may overlay the content or push it depending on design, but it auto-collapses when not in use.
-Input handling and storage: Captures data from form fields such as patient age, weight, vital signs, allergies, etc. Each time the user enters or changes a field, this script can validate the input (e.g., ensure numbers are within sensible ranges) and then store the values (possibly in a global state object or directly in localStorage for persistence). By using localStorage (or a similar mechanism), the app can remember these inputs between sessions so the paramedic doesn’t have to re-enter info if they close and reopen the app in the field.
-Dynamic content adjustments: Based on the current patient data, patientData.js applies or triggers changes throughout the app’s content:
-It might add or remove CSS classes on certain elements. For example, if a protocol is not applicable to a pediatric patient and the user inputs an age that classifies the patient as a child, the script will find all adult-only protocol entries and add a .not-applicable or .disabled class to them, causing them to be visibly struck through or faded via CSS. Conversely, pediatric-only content might be highlighted or enabled.
-It can display warnings if the input data triggers any red flags. For instance, if the patient has an allergy to a medication, and the user navigates to that medication’s page, the script could inject a warning message in that detail view (or turn the text red) to alert the paramedic. Similarly, if a calculated dose would exceed a recommended maximum based on weight, it might show a warning in that section.
-It performs dosage calculations and fills in results. Many medication protocols use formulas (like dose per kilogram). If the detail content includes placeholders or formula references (e.g., “Dose: 0.1 mg/kg IV”), patientData.js can calculate the actual dose using the patient’s entered weight (e.g., 0.1 mg * 70 kg = 7 mg) and update the content to show “Dose: 0.1 mg/kg IV (≈7 mg for this patient)”. These calculations would update in real-time as the input changes. The script may maintain a set of formula rules or identify elements in the DOM with data attributes (like <span data-formula="0.1*weight">) to compute and inject values.
-It enables or introduces new options when relevant. For example, if the user indicates the patient has a certain condition, the app might reveal an extra protocol step or medication that’s normally hidden. patientData.js would handle making those previously hidden elements visible (or adding new elements) when conditions are met.
-It fades or narrows lists to guide the user. For instance, if the user’s data indicates the patient is an adult, pediatric categories could appear faded or be automatically collapsed, focusing the UI on adult-relevant sections. The script could temporarily filter the main list to only show relevant items (or just visually de-emphasize the irrelevant ones).
-*/
+// Function to toggle the patient info sidebar panel
+function togglePatientPanel() {
+  var panel = document.getElementById("patient-info");
+  if (!panel) return;
+  if (panel.classList.contains("hidden")) {
+    // Show the panel
+    panel.classList.remove("hidden");
+    // (Optionally, focus the first input for convenience)
+    var ageInput = document.getElementById("patient-age");
+    if (ageInput) ageInput.focus();
+  } else {
+    // Hide the panel
+    panel.classList.add("hidden");
+  }
+}
 
-/*
-Context display: This script can also update a small summary display of key patient info on the main interface. For example, after entering data, a fixed bar or sidebar section might show “Patient: 70kg, Adult, Allergies: Penicillin” so that as the medic navigates, they’re reminded of the current context. patientData.js would construct and update this summary whenever inputs change.
-Collaboration with other scripts: While patientData.js directly manipulates content (e.g., adding classes or altering text in the DOM), other scripts may consult the patient data state as well. For instance, navigation.js might skip adding certain items to history if they’re not applicable, or search.js might rank applicable results higher. To facilitate this, patientData.js might expose some global state (like an object window.patientData containing the current inputs and perhaps some derived flags such as isPediatric:true/false) that other scripts can read. Because no modules are used, this global sharing is how data flows between components.
+// Handle changes to patient data (called whenever age/weight inputs change)
+function handlePatientDataChange() {
+  // If a detail view is currently open, update it to reflect new patient data.
+  var detailSection = document.getElementById("detail-view");
+  if (detailSection && !detailSection.classList.contains("hidden")) {
+    // A detail is currently displayed
+    updateDetailForPatient();
+  }
+  // We could also persist the patient data to localStorage here for future sessions.
+  // Example:
+  // localStorage.setItem("patientAge", patientData.age !== null ? patientData.age : "");
+  // localStorage.setItem("patientWeight", patientData.weight !== null ? patientData.weight : "");
+}
 
-*/
+// Update the currently displayed detail content according to the current patient data
+function updateDetailForPatient() {
+  // This function will adjust dosage info or other patient-specific elements in the detail view.
+  // For example, highlight pediatric vs adult dosages or recalculate recommended dose.
+  var titleElem = document.getElementById("detail-title");
+  var contentElem = document.getElementById("detail-content");
+  if (!contentElem || !titleElem) return;
+  // Determine current topic being viewed (could use title text or store current topic in a global variable)
+  var currentTopic = titleElem.textContent;
+  if (!currentTopic) return;
+  // If currentTopic corresponds to a medication name in medicationsData, we can recalc dosage.
+  var recommendedDoseStr = "";
+  if (typeof calculateDose === "function") {
+    // Use the global calculateDose(medName, patientData) provided by medications.js
+    recommendedDoseStr = calculateDose(currentTopic, patientData);
+  }
+  // Find dosage elements in detail content (assuming they were created with identifiable classes or IDs)
+  // Let's assume detail content includes elements for adult and pediatric dose with classes 'adult-dose' and 'pediatric-dose'
+  var adultDoseElem = contentElem.querySelector(".adult-dose");
+  var pedDoseElem = contentElem.querySelector(".pediatric-dose");
+  if (adultDoseElem && pedDoseElem) {
+    // Apply highlighting or hiding based on patient type
+    if (isPediatricPatient()) {
+      // Pediatric patient: highlight pediatric dose, dim adult dose
+      pedDoseElem.classList.remove("inactive");
+      adultDoseElem.classList.add("inactive");
+    } else {
+      // Adult or no specific pediatric criteria: ensure adult dose is normal, ped may be dimmed if not applicable
+      adultDoseElem.classList.remove("inactive");
+      // If this medication is not indicated for pediatric (pediatric dose text might say "Not indicated"), we might highlight that if patient is pediatric. 
+      // But if not pediatric, ensure ped dose is not highlighted (we could dim it to indicate it's not currently relevant).
+      pedDoseElem.classList.remove("inactive");
+    }
+    // Optionally, if we want to display a "Recommended dose for patient" line:
+    // We could insert or update a line in contentElem with recommendedDoseStr.
+    var recDoseElem = contentElem.querySelector(".recommended-dose");
+    if (recommendedDoseStr && recDoseElem) {
+      recDoseElem.textContent = "Recommended Dose: " + recommendedDoseStr;
+    } else if (recommendedDoseStr) {
+      // If a recommended dose element doesn't exist yet, create one at the top or bottom of content
+      var p = document.createElement("p");
+      p.className = "recommended-dose";
+      p.textContent = "Recommended Dose: " + recommendedDoseStr;
+      contentElem.appendChild(p);
+    }
+  }
+}
+
+// (No code executes on load by itself; functions above will be called from main.js for initialization and events.)
