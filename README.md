@@ -1,6 +1,6 @@
 # New App Planning Repository
 
-This repository captures the early planning artifacts for our next application. The runtime codebase does not live here yet—only high-level documentation that explains the product vision and the steps required to deliver the first release.
+This repository captures the early planning artifacts for our next application. The runtime codebase does not live here yet—only high-level documentation that explains the product vision. The steps required to deliver the first release is in ROADMAP.md. AI agents will use the ROADMAP.md file to build the app one task at a time, and by checking off completed tasks as the app is being produced.
 
 ## Project Vision
 - Provide a focused problem statement and success criteria for the new product.
@@ -12,10 +12,3 @@ This repository captures the early planning artifacts for our next application. 
 
 ## How to Use These Docs
 1. Review this README to understand current goals and outstanding questions.
-2. Update the planning notes whenever priorities shift or new research emerges.
-3. Treat this repository as the canonical planning artifact until the implementation repository is established.
-
-## Next Steps
-- Finalize the product brief with stakeholders.
-- Translate planning checkpoints into detailed engineering tickets once the delivery repo is provisioned.
-- Archive or supersede these documents after the working codebase is in place.
