@@ -1,71 +1,22 @@
-# Paramedic Quick Reference
+# New App Planning Repository
 
-This repository outlines the planned structure for the **Paramedic Quick Reference** web application. The app is a single-page HTML, CSS, and JavaScript project that provides paramedics with quick access to critical information.
+This repository captures the early planning artifacts for our next application. The runtime codebase does not live here yet—only high-level documentation that explains the product vision and the steps required to deliver the first release.
 
-## Planned Directory Structure
+## Project Vision
+- Provide a focused problem statement and success criteria for the new product.
+- Maintain a single source of truth for the app's scope, user experience goals, and technical constraints.
+- Track outstanding decisions and assumptions so the implementation team can validate them before writing code.
 
-    / (project root)
-    ├── index.html           # Main page of the application
-    ├── README.md            # Project overview and documentation
-    ├── css/
-    │   └── styles.css       # Global styles
-    ├── js/
-    │   ├── main.js          # Orchestrates initial UI setup and event handlers
-    │   ├── patientData.js   # Manages the patient info sidebar and patient-specific effects
-    │   ├── navigation.js    # Handles menu expansion, detail display, and content navigation
-    │   ├── search.js        # Provides search bar suggestions and dynamic filtering
-    │   └── history.js       # Manages Back/Forward navigation and the history panel
-    ├── data/
-    │   └── medications.js   # ALS medication reference data and dosage calculation tools
-    └── assets/
-        ├── images/          # UI images and icons
-        ├── video/           # Embedded instructional videos (if any)
-        └── assestsREADME.md # Description of assets folder contents
+## Repository Contents
+- `README.md` – high-level overview of the product goals and documentation index.
+- `ROADMAP.md` – milestone-based plan outlining the work required to reach launch readiness.
 
-## File Interaction and Order of Operations
+## How to Use These Docs
+1. Review the roadmap to understand upcoming milestones and responsibilities.
+2. Update both documents whenever priorities shift or new research emerges.
+3. Treat this repository as the canonical planning artifact until the implementation repository is established.
 
-1. **index.html** loads first when the user opens the app.  
-2. The `styles.css` file is referenced in the HTML `<head>` to apply global visual styles.  
-3. JavaScript files are included in a specific order:  
-   - `patientData.js` (loads first) – establishes patient data structures and default values.  
-   - `navigation.js`, `search.js`, and `history.js` – load next to provide core functionality (they rely on shared global variables set up by the earlier scripts).  
-   - `medications.js` – loaded toward the end; it provides drug reference data and dosage calculation functions that other scripts can use when needed.  
-   - `main.js` – loaded last; it ties together all components by initializing UI event listeners and kicking off the app.  
-4. The `assets/` directory is used whenever images, icons, or videos are needed in the UI (for example, arrow icons for menus, or an embedded training video).
-
-All scripts work together within the single-page interface, and no module system is used (each file defines variables/functions in the global scope). The main script (`main.js`) orchestrates interactions between components, ensuring that changes to patient data or navigation state are reflected across the app.
-
-**Detailed Sequence & Interactions:**
-
-### Initial Page Load (HTML & CSS)
-When the user first opens the application (loading **index.html**), the static HTML is rendered and the linked CSS is applied. At this stage, the basic UI elements are in place: the app title and search bar are visible at the top, the navigation buttons (Back, Forward, Home) appear in the header, the main list of topics is present (with all subtopic lists hidden by default), and the patient info sidebar is in the DOM (but initially collapsed/invisible). The CSS ensures proper layout and visuals (for example, arrow icons are shown next to expandable topics, and any sections meant to be hidden by default are not displayed).
-
-### Loading JavaScript Files
-As the page loads, the script files execute in order (as listed above):
-- **patientData.js:** This runs first, setting up the patient data system. For example, it might check `localStorage` for saved patient info and initialize a global patient data object with those values (or with defaults). It defines functions or objects that other scripts can use to access patient information (like current age or weight), and it may attach some preliminary event handlers related to the patient info panel (such as hiding the panel when clicking outside). Full interaction (such as responding to input changes) will be initialized later by main.js.
-- **navigation.js:** Next, the navigation script loads. It defines the behavior for the topics menu and content display. This script creates global functions to expand/collapse topic lists and to show detail content for a selected subtopic. It may also immediately use patient data to adjust the menu (for example, marking certain topics as not applicable if the patient is pediatric). At this stage, event listeners for clicks might be defined within these functions but not yet bound to the actual DOM elements.
-- **search.js:** The search functionality script loads afterward. It prepares the logic for filtering and suggesting topics as the user types in the search bar. It might build a list of all topic names (and maybe keywords) to enable quick lookup. It defines how to display suggestion dropdown items and what happens when a suggestion is selected. (The actual hookup of the search bar’s input event to these functions can be done in main.js once the DOM is fully ready.)
-- **history.js:** Then the history management script executes. It sets up structures for tracking navigation history (for Back/Forward buttons and the history list). For example, it might load any saved history from `localStorage` into an array. It defines functions like `pushHistory(state)`, `goBack()`, `goForward()`, and `showHistoryList()`. These functions manage the user's navigation trail but typically won’t modify the UI until those controls are used. Event listeners for the history controls (e.g., onclick for Back/Forward) are attached later during main.js initialization.
-- **medications.js:** Next, the medication data script runs. This file provides a structured list of medications (with their dosage information, contraindications, etc.) and defines helper functions such as `calculateDose()` to determine appropriate dosages based on the current patient data. This data isn't displayed immediately on load; it will be used when a medication detail page is opened or when patient info changes (to update dosage displays). By loading this toward the end, we ensure that the core UI scripts are in place first.
-- **main.js:** Finally, the main script executes once all other scripts are ready. This script initializes the application’s interactive behavior. It typically calls setup functions from the other modules: for example, it might call an initialization function in patientData.js to attach event listeners to the sidebar toggle button and to patient data input fields (so changes update calculations), then call a function in navigation.js to bind click events for menu items and arrows, initialize the search bar’s event handler, and set up the Back/Forward/History button listeners using history.js. After main.js runs, the app is fully interactive. If needed, main.js can also handle any startup logic, such as restoring the last viewed topic (if the app remembers where the user left off) or simply ensuring the main menu is shown initially.
-
-### User Interaction: Menu Navigation
-Once initialization is complete, the user can navigate the interface:
-- **Expanding Topics:** When the user clicks on a topic that contains subtopics, navigation.js handles the event to expand that section. The corresponding sub-list becomes visible and the arrow icon next to the parent topic rotates (pointing down to indicate an open state). This change is achieved by toggling CSS classes (and possibly updating ARIA attributes for accessibility). The app can allow multiple topics to be expanded at once, or it might auto-collapse others depending on the design.
-- **Viewing Details:** Clicking on a final (leaf) subtopic will display its detailed information. Navigation.js intercepts the click and shows the associated detail section (for example, by adding a `.hidden` class to the main topics list container and removing `.hidden` from the detail content element for that topic). The detail content (which was either hidden in the HTML or created dynamically) is now visible, and the page may scroll to the top of that content. As this happens, navigation.js also updates the history stack via history.js (e.g., using `pushHistory`) to record that the user opened this detail. The History list is updated with this entry as well. At the moment of displaying a detail, patientData.js may apply any patient-specific annotations to the content (for example, highlighting pediatric dosage information or striking out adult doses if the patient is a child, possibly using the `calculateDose()` function from medications.js to insert the exact dose based on the current patient data).
-- **Back Navigation:** When the user clicks the Back button, history.js manages the transition to the previous state. If the user was viewing a detail page, going "Back" will return them to the main topics list. Navigation.js will restore the list view — it may re-expand the section the user came from and highlight the item that was just viewed (to provide context). The detail section that was open becomes hidden again. History.js updates its internal stacks (moving one step back and preparing the Forward stack) and will disable the Back button if there are no further pages to go back to.
-- **Forward Navigation:** If the user clicks Forward (after having gone Back), history.js will move forward in the stack. For example, if the user went back to the main list and then hits Forward, the previously viewed detail page will be shown again. Navigation.js handles the display of that detail content (making it visible and ensuring the corresponding menu item is highlighted). History.js updates its stacks accordingly (and will disable the Forward button if there are no more forward entries after that).
-- **Home Button:** Clicking the Home button returns the interface to the top-level view. Navigation.js will collapse any expanded topics and show the main topic list from the beginning (no detail content visible, and all arrows reset to the default state). This provides a quick way to reset the view. Depending on the implementation, using Home might not add to the history (or it might clear the history stacks) since it's meant as a jump back to the start.
-
-### User Interaction: Search and History
-Aside from navigating through the menu, the app provides quick access via search and a history of viewed items:
-- **Search (Live Filter):** As the user types into the search bar, the search.js script filters the topics and subtopics to find matches. For example, typing "Epi" will surface "Epinephrine" (a medication) and any protocols or topics containing that text. A dropdown list of suggestions appears below the search input, updating with each keystroke. Each suggestion might display the topic name and possibly its category for context.
-- **Selecting a Search Result:** When the user selects one of the suggestions (by clicking it or pressing Enter), the app will navigate directly to that topic’s detail view. For instance, choosing "Epinephrine" from the suggestions would cause the Epinephrine detail section to be displayed: navigation.js can handle this by programmatically expanding the necessary menu sections and then showing the detail content. This immediate navigation bypasses the manual menu clicks. History is updated so that the user can use the Back button to return to their previous view.
-- **History Panel:** The user can review previously viewed content via the History feature. Clicking the History button (in the header) toggles a panel or dropdown that lists recently viewed topics. This list is managed by history.js and updates every time a new detail is viewed. For example, it might list entries like "Epinephrine – Medication", "Cardiac Arrest Protocol", etc., with the most recent at the top. If the user clicks an item in this history list, the app navigates to that content just as if they had selected it through the menu or search. Navigation.js will display the detail, and history.js will add a new entry to the history stack for this navigation (so the Back button can return the user to the state before they opened the history panel). After the selection, the history panel hides itself.
-- **History List Management:** The history list can grow during a session. The app may limit the number of stored entries (e.g., keeping only the last 20 items) to keep the list manageable. There might also be a "Clear History" option to reset the history. These ensure the history feature remains useful and not overwhelming.
-
-### Dynamic Content Updates (Patient Data)
-Throughout all interactions, the patient-specific data context continuously influences the content:
-- **Content Adaptation:** Based on the entered patient information, certain parts of the content adjust automatically. For instance, if the patient is marked as 4 years old and 18 kg (a pediatric case), the interface might visually de-emphasize or hide content meant only for adult patients. Sections of protocols or medication details that are not applicable could be greyed out or labeled (e.g., an "Adult dose" label might be marked as not applicable for a pediatric patient).
-- **Real-Time Calculations:** When the user updates any patient info in the sidebar (such as changing the weight or toggling an allergy), the relevant information on any currently visible detail page updates immediately. The patientData.js script listens for changes on the form inputs and triggers updates to the content. For example, if the Epinephrine page is open and the patient's weight is changed, the dose displayed on that page will recalculate via the `calculateDose()` function from medications.js (the value might change, say, from 0.18 mg to 0.20 mg based on the new weight). Similarly, if an allergy checkbox is checked, any medication detail that is contraindicated for that allergy could display a warning.
-- **Context-Sensitive Navigation:** Patient data can also influence navigation options. For example, if the user indicates the patient is pediatric, the application might hide or disable an entire category of adult-only protocols to avoid confusion. Conversely, certain pediatric-specific sections might only appear (or become enabled) when a pediatric patient is selected. The patientData.js and navigation.js scripts work together so that whenever patient information changes, both the content and the menu adjust to remain relevant to the patient being treated.
+## Next Steps
+- Finalize the product brief with stakeholders.
+- Translate roadmap milestones into detailed engineering tickets once the delivery repo is provisioned.
+- Archive or supersede these documents after the working codebase is in place.
