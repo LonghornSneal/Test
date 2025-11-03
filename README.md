@@ -8,15 +8,14 @@ This repository captures the early planning artifacts for our next application. 
 - Track outstanding decisions and assumptions so the implementation team can validate them before writing code.
 
 ## Repository Contents
-- `README.md` – high-level overview of the product goals and documentation index.
-- `ROADMAP.md` – milestone-based plan outlining the work required to reach launch readiness.
+- `README.md` – high-level overview of the product goals, discovery status, and planning checkpoints.
 
 ## How to Use These Docs
-1. Review the roadmap to understand upcoming milestones and responsibilities.
-2. Update both documents whenever priorities shift or new research emerges.
+1. Review this README to understand current goals and outstanding questions.
+2. Update the planning notes whenever priorities shift or new research emerges.
 3. Treat this repository as the canonical planning artifact until the implementation repository is established.
 
 ## Next Steps
 - Finalize the product brief with stakeholders.
-- Translate roadmap milestones into detailed engineering tickets once the delivery repo is provisioned.
+- Translate planning checkpoints into detailed engineering tickets once the delivery repo is provisioned.
 - Archive or supersede these documents after the working codebase is in place.
