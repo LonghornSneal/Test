@@ -1,14 +1,11 @@
-# New App Planning Repository
+# CosmoBond
 
-This repository captures the early planning artifacts for our next application. The runtime codebase does not live here yet—only high-level documentation that explains the product vision. The steps required to deliver the first release is in ROADMAP.md. AI agents will use the ROADMAP.md file to build the app one task at a time, and by checking off completed tasks as the app is being produced.
+CosmoBond is an interactive Samsung Galaxy Watch8 Classic watch face that pairs timekeeping with caring for evolving anime-style companions. Wearers choose one of three starters—Nebula Pangolin, Glyph Dragonet, or Rhythm Lynx—and nurture them through activity milestones, language mini-games, or music-driven dance sessions. Each pet’s mood and growth surface directly on the watch face with expressive animations, optional cosmetic overlays when other apps are foregrounded, and story arcs that unfold over time.
 
-## Project Vision
-- Provide a focused problem statement and success criteria for the new product.
-- Maintain a single source of truth for the app's scope, user experience goals, and technical constraints.
-- Track outstanding decisions and assumptions so the implementation team can validate them before writing code.
+Key pillars:
+- **Personalized evolution:** Goal-driven growth adapts to each wearer’s priorities, from improving sleep consistency to mastering rhythm challenges.
+- **Ambient companionship:** Pets stay glanceable without nagging prompts, respecting Do Not Disturb while conveying needs through animation and overlays.
+- **Social play:** Bluetooth co-op, invite circles, public events, and QR-triggered meetups let pets collaborate, prank, or relocate when neglected.
+- **Offline-first design:** Care progress, audio-reactive behaviors, and customization settings work without a phone connection, syncing only when available.
 
-## Repository Contents
-- `README.md` – high-level overview of the product goals, discovery status, and planning checkpoints.
-
-## How to Use These Docs
-1. Review this README to understand current goals and outstanding questions.
+For the detailed AI-executable roadmap, standards, and QA requirements, see `AGENTS.md`.
