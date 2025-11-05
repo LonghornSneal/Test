@@ -1,224 +1,331 @@
 # CosmoBond Roadmap for AI Agents
 
 ## Agent Orientation
-- **Codebase focus:** Build CosmoBond as a native Wear OS 4 watch-face experience written in Kotlin using Jetpack Compose for Wear OS, Kotlin Coroutines, and Android Architecture Components. Avoid alternative stacks unless a future task explicitly approves them.
-- **Coding objectives:** Maintain an offline-first pet-care loop, anime-quality visuals, and extensible social interactions while keeping every source file under 500 lines of code by splitting logic into subpackages and shared utilities.
-- **Workflow expectations:** You are the sole developer. Work strictly from the first unchecked task downward; do not skip ahead or parallelize. Create directories before adding files, and never generate code artifacts until the roadmap instructs you to do so.
-- **Quality obligations:** Every task ends with a Definition of Done that requires test creation/updates, execution of relevant automated suites, on-device or emulator validation, documentation of evidence, and resolution of all failures before marking the task complete. Cosmetic overlay behaviour must remain non-blocking when other apps are foregrounded, and "Do Not Disturb" settings must always be respected.
-- **Documentation hygiene:** All specifications, diagrams, and reports live inside the `docs/` tree. Run Markdown linting (using `npx markdownlint "**/*.md"`) or perform an equivalent manual checklist if the tooling is unavailable. Record notes about decisions and validations in the same commit as the task’s artifacts.
+- **Platform focus:** Build the CosmoBond Galaxy Watch8 Classic experience using Watch Face Format v2 with a lightweight Kotlin host for configuration and complications.
+- **Toolchain expectations:** Android Gradle Plugin 8.5+, Kotlin 1.9+, Gradle wrapper (JDK 17), GitHub Actions for CI/CD, Gradle Play Publisher for distribution, Google Play internal→production release tracks.
+- **Workflow rule:** Progress strictly in checklist order. Claim an item by appending `_(claimed by @agent, YYYY-MM-DD HH:mm UTC)_` to the task line before making changes. Complete all acceptance checks before marking `[x]` and append `_Completed: summary (timestamp)_`. Use `_Blocked: reason (timestamp)_` if stalled.
+- **Quality bar:** Each completed item must include updated/created tests, executed commands, screenshots or logs when specified, and documentation of decisions in `docs/`.
+- **Documentation lint:** Run `npx markdownlint "**/*.md"` (or manually audit if tooling unavailable) after editing Markdown files and record the result in the task evidence.
+- **Execution principles:**
+  1. Smaller prompts work better—ship one feature at a time.
+  2. Prototype core logic first before polishing visuals or notifications.
+  3. Name and reuse components so prompts become building blocks.
+  4. Keep context lean by feeding only relevant files/configs.
+  5. Use version control aggressively; avoid large untracked change sets.
+  6. Debug quickly with print statements and share the captured output when looping.
+
+## Ready-to-Run Repository Snapshot
+This repository already includes baseline policy files, directory scaffolding, GitHub Actions workflows, and a minimal Watch Face Format XML. Review the structure before claiming tasks:
+- `.github/workflows/android.yml` and `release.yml` implement PR checks and internal releases.
+- `app/` contains a starter Wear OS module with `res/raw/watchface.xml` and a placeholder `CosmoBondWatchFaceService`.
+- `docs/`, `art/`, and related directories are pre-created so that documentation tasks can start immediately.
 
 ---
 
-## Sequential Task Checklist
+## CI/CD Checklist for the Galaxy Watch Face
+Follow the tasks in order. Each item lists its purpose, precise steps, acceptance checks, required artifacts, and recovery guidance.
 
-### Phase 1 · Product Definition
-1. [ ] **Document CosmoBond product vision**
-   - Implementation: Create `docs/product/vision.md` capturing the watch-face mission, user personas, success metrics, and high-level experience pillars (personalized evolution, ambient companionship, social play, offline-first).
-   - Definition of Done: Vision file saved with clear sections; self-review against README alignment; run `npx markdownlint "docs/product/vision.md"` (or manually verify headings, lists, links) and note results in the task log.
-2. [ ] **Capture starter pet roster details**
-   - Implementation: Create `docs/product/pets.md` describing Nebula Pangolin (sleep guardian), Glyph Dragonet (language mini-games), and Rhythm Lynx (music-driven dancer) including evolution triggers, neglect states, emotional cues, and runaway rules.
-   - Definition of Done: Pet profiles documented with table of stats and trigger thresholds; linted with markdownlint; confirm consistency with README and record validation notes.
-3. [ ] **Define personalization & accessibility charter**
-   - Implementation: Draft `docs/product/personalization_accessibility.md` explaining adaptive evolution goals, gesture-only affordances, color contrast requirements, font sizing, and behaviour under Do Not Disturb.
-   - Definition of Done: Charter lists at least three persona-driven goal templates and accessibility checkpoints; markdownlint passes; perform manual accessibility checklist (contrast ratios, gesture descriptions) and log findings.
-4. [ ] **Specify data retention and storage policy**
-   - Implementation: Author `docs/data/retention.md` covering pet history caps (e.g., latest 12 evolutions), archival/compression strategy, offline cache limits for art/audio, and purge triggers.
-   - Definition of Done: Policy references storage thresholds and pruning workflow; markdownlint passes; run a peerless self-review verifying alignment with privacy expectations and document conclusions.
-5. [ ] **Outline care state communication rules**
-   - Implementation: Create `docs/product/pet_states.md` enumerating visual cues for hunger, mood, fatigue, runaway behaviour, and recovery for each starter pet, including animation requirements for overlays.
-   - Definition of Done: File includes state diagrams or tables; linted; manually verify states cover happy, neutral, warning, critical; record QA note.
+### Phase 0 — Baseline Verification & Policy Alignment
 
-### Phase 2 · Experience & Narrative Design
-6. [ ] **Map interaction surfaces**
-   - Implementation: Produce `docs/experience/interaction_map.md` detailing the main watch face, customization panels, and cosmetic status overlay behaviour when other apps are foregrounded (drag-to-move, pause when hidden).
-   - Definition of Done: Diagram or structured outline stored; markdownlint passes; validate flow against Wear OS interaction guidelines and record confirmation.
-7. [ ] **Draft episodic story arc plan**
-   - Implementation: Write `docs/experience/story_arcs.md` defining anime-style chapter cadence, art needs per chapter, and how arcs tie to evolution milestones.
-   - Definition of Done: Outline contains at least one season with episode summaries; linted; manually confirm storage needs feed retention policy; log QA note.
-8. [ ] **Design social feature charter**
-   - Implementation: Prepare `docs/experience/social_charter.md` covering Bluetooth co-op care, stealth pranks, pet relocation, invite-only circles, public rooms, event-based QR flows, and abuse mitigation strategies.
-   - Definition of Done: Charter lists consent flows and telemetry for each mechanic; markdownlint passes; perform privacy/security checklist and document results.
-9. [ ] **Detail audio affinity behaviour**
-   - Implementation: Create `docs/experience/audio_affinity.md` describing how Rhythm Lynx reacts to media metadata, respects Do Not Disturb, and handles optional sound effects.
-   - Definition of Done: Document explains metadata sources, fallback when unavailable, and quiet-hour compliance; linted; validate privacy considerations and log verification.
-10. [ ] **Specify cosmetic overlay configuration**
-    - Implementation: Add `docs/experience/overlay_settings.md` explaining overlay toggle, positioning UI, collision avoidance with foreground apps, and persistence across sessions.
-    - Definition of Done: Settings described with wireframe references; markdownlint passes; manual review ensures overlay remains cosmetic-only; note QA outcome.
+1. **[ ] Prompt:** _"Audit the repository guardrails. Inspect `README.md`, `CODEOWNERS`, `CONTRIBUTING.md`, `LICENSE`, `.gitignore`, `.editorconfig`, and `.gitattributes`; record any needed adjustments in `docs/project/decision_log.md`; capture current branch protection status and document how to request updates."_
+   - **Purpose:** Confirm guardrails and initial documentation are present.
+   - **Acceptance:** Baseline files reviewed; issues noted in `docs/project/decision_log.md`; branch protections documented.
+   - **Artifacts:** Decision log entry, branch protection screenshot.
+   - **Fail?:** Address missing protections or file updates, recommit.
 
-### Phase 3 · Visual & Audio Asset Direction
-11. [ ] **Author art direction bible**
-    - Implementation: Build `art/styleguide.md` defining color palettes, line weights, animation frame targets, and expression sheets for all pets.
-    - Definition of Done: Style guide includes reference swatches and frame timing table; run markdownlint; verify assets align with anime aesthetic and record check.
-12. [ ] **Produce baseline mockups**
-    - Implementation: Generate high-level mockups (static images) for watch face, overlay, and customization UI, saving them under `art/mockups/` with descriptive filenames.
-    - Definition of Done: At least three mockups exported (PNG or SVG); visually inspect for alignment with interaction map; document review notes in `art/mockups/README.md` and lint that file.
-13. [ ] **Define animation asset plan**
-    - Implementation: Draft `docs/art/animation_plan.md` listing sprite sheets or vector sequences per pet, frame counts, file-size targets (<500 KB per animation), and compression approach.
-    - Definition of Done: Plan enumerates assets for happy/warning/critical states plus dance routines; markdownlint passes; manually verify size targets meet storage policy; note QA findings.
-14. [ ] **Outline audio asset guidelines**
-    - Implementation: Create `docs/audio/guidelines.md` explaining optional sound effects, volume standards, and conditions for muting under DND or quiet hours.
-    - Definition of Done: Guidelines include testing checklist for audio levels; linted; self-verify compliance with privacy policy and log results.
+2. **[ ] Prompt:** _"Lock the platform versions and compliance targets. Confirm JDK 17, AGP 8.5.x+, Kotlin 1.9+, Gradle wrapper, Android SDK API 34, and Wear OS emulator images, then update `docs/setup/tooling.md` with the versions, download links, and Wear OS 5/6 lineage references."_
+   - **Purpose:** Freeze host/tool versions for repeatability.
+   - **Acceptance:** `docs/setup/tooling.md` describes tooling, cites Play target API 34 requirement.
+   - **Artifacts:** Tooling doc diff.
+   - **Fail?:** Adjust mismatched versions and re-document.
 
-### Phase 4 · Technical Blueprint
-15. [ ] **Establish high-level architecture**
-    - Implementation: Compose `docs/tech/architecture.md` describing module boundaries (`watchface/ui`, `watchface/pets`, `engine/sensors`, `engine/audio`, `engine/social`, `data/persistence`, `tests/`, `art/`, `docs/`), communication flows, and dependency rules.
-    - Definition of Done: Diagram or textual architecture recorded; markdownlint passes; manual review ensures no anticipated file exceeds 500 LOC without planned splitting; log QA note.
-16. [ ] **Define repository directory scaffold**
-    - Implementation: Document intended folder structure and naming conventions in `docs/tech/directory_structure.md`, including when to create submodules to keep files under 500 LOC.
-    - Definition of Done: Structure lists all planned directories and file naming rules; linted; cross-check with architecture doc and note confirmation.
-17. [ ] **Set coding standards & tooling**
-    - Implementation: Write `docs/tech/standards.md` covering Kotlin style (Kotlin Coding Conventions + Compose idioms), lint/format commands, static analysis tools, and commit hygiene.
-    - Definition of Done: Standards mention `ktlint`, `detekt`, and testing minimums; markdownlint passes; validate tool list against workflow capabilities and record QA note.
-18. [ ] **Plan testing strategy**
-    - Implementation: Populate `docs/qa/strategy.md` detailing unit, integration, UI, performance, battery, and localization testing suites plus required tools/emulators.
-    - Definition of Done: Strategy specifies pass/fail gates for each suite; linted; verify coverage spans every module and log review summary.
-19. [ ] **Draft CI/CD pipeline blueprint**
-    - Implementation: Author `docs/devops/pipeline.md` describing build stages, lint/test automation, artifact signing, battery benchmark gating, and release packaging for Google Play.
-    - Definition of Done: Pipeline lists command invocations and triggers; markdownlint passes; manually confirm steps cover rollback path and note QA.
-20. [ ] **Record analytics & telemetry plan**
-    - Implementation: Create `docs/data/analytics.md` enumerating metrics for evolution progress, social interactions, overlay usage, and prank abuse detection.
-    - Definition of Done: Plan maps metrics to data retention rules and privacy safeguards; linted; self-review ensures anonymization steps are defined and document outcome.
+3. **[ ] Prompt:** _"Confirm the rendering track. Update `docs/tech/architecture.md` to summarize the Watch Face Format v2 + Kotlin host approach, set minSdk/targetSdk to 34, and cite the supporting Google/Samsung guidance. If you pivot to the Kotlin-rendered path, adjust downstream notes accordingly."_
+   - **Purpose:** Document Watch Face Format v2 choice (or switch to Kotlin track if required).
+   - **Acceptance:** Architecture doc captures decision with references.
+   - **Artifacts:** Architecture doc diff.
+   - **Fail?:** If opting into Kotlin-rendered path, update downstream steps and checklist notes accordingly.
 
-### Phase 5 · Feature Specification
-21. [ ] **Spec Nebula Pangolin sleep guardian**
-    - Implementation: Write `docs/features/nebula_pangolin.md` detailing sleep metrics consumed, threshold logic, animations per state, and offline fallbacks.
-    - Definition of Done: Spec includes pseudocode for state machine and QA scenarios; markdownlint passes; manually verify retention compatibility; record QA note.
-22. [ ] **Spec Glyph Dragonet language mini-games**
-    - Implementation: Prepare `docs/features/glyph_dragonet.md` describing gameplay loops, localization packs, offline bundles, and neglect consequences.
-    - Definition of Done: Document lists mini-game flowchart and localization testing plan; linted; confirm offline strategy matches data policy; note QA results.
-23. [ ] **Spec Rhythm Lynx dance system**
-    - Implementation: Draft `docs/features/rhythm_lynx.md` explaining media metadata hooks, arrow timing tolerances, failure animations, and Do Not Disturb compliance.
-    - Definition of Done: Spec includes timing equations and latency targets; markdownlint passes; validate privacy for media access and log findings.
-24. [ ] **Spec customization & settings flows**
-    - Implementation: Create `docs/features/settings.md` mapping on-watch pet selection, evolution goal configuration, overlay toggle, and reposition UX.
-    - Definition of Done: Flow includes step-by-step UI states with gestures; linted; confirm accessibility charter requirements met; log QA.
-25. [ ] **Spec social matchmaking & relocation**
-    - Implementation: Build `docs/features/social_bluetooth.md` detailing Bluetooth discovery, consent prompts, prank throttling, and neglected pet relocation rules.
-    - Definition of Done: Spec lists state diagrams and abuse mitigations; markdownlint passes; run security self-audit checklist and document.
-26. [ ] **Spec invite circles & public rooms**
-    - Implementation: Document `docs/features/social_network.md` covering invite-only circles, open public rooms, and event-based QR onboarding.
-    - Definition of Done: File includes user flows, backend assumptions, and rate limits; linted; confirm telemetry hooks align with analytics plan; record QA.
-27. [ ] **Spec large event triggers & rewards**
-    - Implementation: Write `docs/features/event_triggers.md` defining location-based or scheduled event evolutions, reward distribution, and opt-in UX.
-    - Definition of Done: Spec outlines cooldowns and abuse prevention; markdownlint passes; manually verify compliance with privacy/geolocation policies and note QA.
-28. [ ] **Plan story content pipeline**
-    - Implementation: Draft `docs/features/story_pipeline.md` describing how episodic chapters are stored, scheduled, and localized.
-    - Definition of Done: Pipeline details asset packaging and delivery cadence; linted; confirm retention policy handles archive; document QA.
+---
 
-### Phase 6 · Implementation Readiness
-29. [ ] **Create backlog tracker**
-    - Implementation: Initialize `docs/project/backlog.csv` enumerating tasks derived from feature specs with estimates and dependencies.
-    - Definition of Done: CSV populated and sorted by sequence; verify data integrity using spreadsheet check; log QA note.
-30. [ ] **Author risk register**
-    - Implementation: Add `docs/project/risks.md` covering top technical, schedule, and experience risks plus mitigation plans.
-    - Definition of Done: Register includes probability/impact matrix; linted; perform self-review ensuring mitigations tie to roadmap tasks; document.
-31. [ ] **Define communication & decision log**
-    - Implementation: Create `docs/project/decision_log.md` template to record future architectural and design decisions with timestamps.
-    - Definition of Done: Template includes fields for context, decision, alternatives, rationale, and QA impact; markdownlint passes; confirm usage instructions align with workflow; note QA.
-32. [ ] **Set up repository contribution guide**
-    - Implementation: Author `CONTRIBUTING.md` summarizing workflow rules, branching strategy, commit message format, testing expectations, and file-length policy.
-    - Definition of Done: Guide cross-links to standards and roadmap; linted; manual review ensures policy clarity; document QA.
-33. [ ] **Update README references**
-    - Implementation: Ensure `README.md` references all foundational docs and clarifies roadmap location without duplicating specs.
-    - Definition of Done: README updated accordingly; run markdownlint on README; verify summary stays concise; log QA note.
+### Phase 1 — Android Project Skeleton
 
-### Phase 7 · Repository Scaffolding
-34. [ ] **Initialize Gradle project structure**
-    - Implementation: Create Gradle settings and module directories (`app`, `wear`, etc.) per architecture, ensuring each module will stay under 500 LOC per file by planning subpackages.
-    - Definition of Done: Project syncs with `./gradlew help`; run `./gradlew lint` (expect baseline success); document results and fix any failures before proceeding.
-35. [ ] **Configure Kotlin and Compose dependencies**
-    - Implementation: Update Gradle files to include Kotlin, Compose for Wear OS, coroutines, lifecycle libraries, and testing dependencies.
-    - Definition of Done: Build succeeds with `./gradlew assembleDebug`; run `./gradlew test` (should pass with placeholder tests) and record evidence.
-36. [ ] **Set up static analysis tooling**
-    - Implementation: Integrate `ktlint` and `detekt` via Gradle plugins and configure baseline rules in `config/` directories.
-    - Definition of Done: `./gradlew ktlintCheck detekt` passes; document configuration choices in decision log.
-37. [ ] **Implement base package structure**
-    - Implementation: Create empty Kotlin packages for `watchface.time`, `pets`, `engine.sensors`, `engine.audio`, `engine.social`, `data.persistence`, and `ui.overlay`, keeping each file under 500 LOC.
-    - Definition of Done: Build still passes; add placeholder unit tests verifying package wiring; run `./gradlew test`; log outcomes.
-38. [ ] **Establish resource folders and placeholders**
-    - Implementation: Add resource directories for drawable, raw audio, and story content along with placeholder JSON definitions respecting storage policy.
-    - Definition of Done: Resources compile; run `./gradlew assembleDebug`; confirm APK size within projections; record QA notes.
-39. [ ] **Document scaffolding status**
-    - Implementation: Update `docs/project/decision_log.md` summarizing scaffolding actions, tool versions, and outstanding questions.
-    - Definition of Done: Entry added with date/time; lint decision log; ensure backlog updated if new tasks arise.
+> **USER NOTE — first on-watch testing unlock:** Task 4 produces a debug build you can sideload to the Galaxy Watch8 Classic for initial smoke checks once completed. AI agents should ignore this line.
 
-### Phase 8 · Feature Implementation
-40. [ ] **Build timekeeping watch-face core**
-    - Implementation: Implement Compose-based time display, complications placeholders, and base rendering loop.
-    - Definition of Done: Unit tests for time updates + UI snapshot tests pass; run on emulator to confirm smooth updates; fix issues before closing.
-41. [ ] **Implement pet state engine**
-    - Implementation: Create state machine module handling pet moods, neglect timers, and runaway logic shared across pets.
-    - Definition of Done: Comprehensive unit tests for transitions pass; integration test with persistence layer passes; run emulator scenario validating visual state changes.
-42. [ ] **Wire offline persistence layer**
-    - Implementation: Implement local database (Room) and data access objects for pet history, story progression, and settings.
-    - Definition of Done: Unit tests for DAOs pass; instrumented tests confirm offline usage; verify data retention rules enforced; document test evidence.
-43. [ ] **Develop Nebula Pangolin features**
-    - Implementation: Connect to sleep APIs, implement evolution thresholds, animations, and fallback for missing data.
-    - Definition of Done: Sensor simulation tests, UI tests, and manual device validation (real or emulator with mock data) succeed; energy impact measured and within limits.
-44. [ ] **Develop Glyph Dragonet mini-games**
-    - Implementation: Build language mini-game UI, localization pack loader, and neglect outcomes.
-    - Definition of Done: Unit + UI tests covering gameplay; localization tests for at least two locales; emulator session verifying offline bundles.
-45. [ ] **Develop Rhythm Lynx dance gameplay**
-    - Implementation: Integrate media metadata listener, arrow sequencing logic, and animation reactions respecting DND.
-    - Definition of Done: Timing accuracy tests, audio privacy checks, and manual playtest with sample music succeed; record latency metrics.
-46. [ ] **Create customization and settings panels**
-    - Implementation: Implement on-watch configuration screens for pet selection, evolution goal tuning, overlay toggle, and reposition tutorial.
-    - Definition of Done: UI tests verifying gestures; emulator manual test ensures accessibility goals met; fix before closure.
-47. [ ] **Implement cosmetic overlay widget**
-    - Implementation: Build overlay service showing pet cameo when other apps in foreground with drag-to-move and pause behaviour.
-    - Definition of Done: Instrumented tests verifying overlay respects app boundaries; manual testing ensures purely cosmetic; battery impact logged.
-48. [ ] **Integrate audio affinity reactions**
-    - Implementation: Hook Rhythm Lynx animations to currently playing media, include fallbacks when metadata unavailable, and ensure DND compliance.
-    - Definition of Done: Automated tests for metadata parsing; manual tests with various media apps; confirm no audio when DND active.
-49. [ ] **Implement Bluetooth co-op and pranks**
-    - Implementation: Develop discovery, consent dialogs, co-op care flows, prank delivery, and neglected pet relocation via Bluetooth.
-    - Definition of Done: Integration tests using emulator pairs; security tests for consent bypass; manual session verifying throttling.
-50. [ ] **Implement invite circles & public rooms**
-    - Implementation: Build UI and storage for circles, public rooms, and QR onboarding leveraging local networking or companion sync as planned.
-    - Definition of Done: Unit tests for membership management; UI tests for join flows; manual validation at least with emulator cluster.
-51. [ ] **Enable large event triggers**
-    - Implementation: Implement event scheduler, geofence or time-based triggers, and reward distribution respecting privacy opt-ins.
-    - Definition of Done: Automated tests for trigger calculations; manual simulation verifying opt-in/out; telemetry logs captured.
-52. [ ] **Deliver story arc content system**
-    - Implementation: Implement content loader, scheduling, and narrative surfacing on watch face.
-    - Definition of Done: Unit tests for schedule engine; UI tests for chapter display; manual check ensuring storage usage within limits.
-53. [ ] **Finalize pet audio/visual polish**
-    - Implementation: Integrate final animations, audio cues, and transitions ensuring file-size budget maintained.
-    - Definition of Done: Visual regression tests (screenshot comparisons); audio level checks; manual review confirming anime aesthetic preserved.
+4. **[ ] Prompt:** _"Validate the Wear OS project scaffolding. Review `app/build.gradle.kts`, `settings.gradle.kts`, and `AndroidManifest.xml`; run `./gradlew :app:assembleDebug` on JDK 17; capture the build logs and record any dependency updates needed in the decision log."_
+   - **Purpose:** Ensure the existing module builds and aligns with naming/package expectations.
+   - **Acceptance:** Debug build succeeds; notes recorded in decision log.
+   - **Artifacts:** Build log, Gradle wrapper version, decision log entry.
+   - **Fail?:** Resolve version mismatches or missing dependencies and rerun.
 
-### Phase 9 · Quality Assurance & Compliance
-54. [ ] **Execute full automated test suite**
-    - Implementation: Run `./gradlew test connectedCheck ktlintCheck detekt` plus any snapshot or performance suites configured.
-    - Definition of Done: All suites pass; capture reports in `docs/qa/reports/`; rerun after addressing failures until clean.
-55. [ ] **Perform battery & performance benchmarking**
-    - Implementation: Use Wear OS profiler to measure frame rate, CPU, memory, and battery impact during typical sessions.
-    - Definition of Done: Benchmarks meet targets defined in strategy; results logged in `docs/qa/reports/performance.md`; repeat if thresholds missed.
-56. [ ] **Conduct localization and accessibility audit**
-    - Implementation: Verify UI across target locales and accessibility settings (font scaling, high contrast).
-    - Definition of Done: Audit notes stored in `docs/qa/reports/accessibility.md`; issues resolved and re-tested before sign-off.
-57. [ ] **Complete security & privacy review**
-    - Implementation: Review sensor permissions, Bluetooth interactions, data retention, and prank abuse mitigations.
-    - Definition of Done: `docs/security/audit.md` updated with findings and fixes; confirm all blockers resolved.
-58. [ ] **Run closed playtest sessions**
-    - Implementation: Facilitate self-led or invited playtests, capturing feedback on pet behaviour, overlays, and social features.
-    - Definition of Done: Feedback summary saved to `docs/qa/reports/playtest.md`; actionable items added to backlog and addressed where feasible.
+5. **[ ] Prompt:** _"Expand the Watch Face Format v2 skeleton. Enhance `res/raw/watchface.xml` with initial layout elements, verify the service metadata and preview assets, and build a release bundle with `./gradlew :app:assembleRelease` to confirm the resource packaging."_
+   - **Purpose:** Flesh out declarative structure and previews.
+   - **Acceptance:** Release bundle contains WFF resource; previews render.
+   - **Artifacts:** AAB artifact, manifest diff, screenshots.
+   - **Fail?:** Correct resource paths or metadata and rebuild.
 
-### Phase 10 · Launch & Operations
-59. [ ] **Prepare Google Play release assets**
-    - Implementation: Compile store listing text, screenshots, promo images, privacy disclosures, and Wear OS policy checklists.
-    - Definition of Done: Assets stored in `docs/release/play_store/`; lint README references; confirm checklist complete.
-60. [ ] **Finalize build signing & packaging**
-    - Implementation: Configure release keystore, assemble release APK/AAB, and verify signature.
-    - Definition of Done: `./gradlew bundleRelease` succeeds; signature verified with `apksigner`; logs archived in `docs/release/build_notes.md`.
-61. [ ] **Publish support & telemetry playbook**
-    - Implementation: Document incident response steps, alert thresholds, and content update cadence in `docs/ops/runbook.md`.
-    - Definition of Done: Runbook cross-references analytics plan; markdownlint passes; confirm monitoring hooks exist.
-62. [ ] **Conduct launch readiness review**
-    - Implementation: Review all checklists, QA reports, and outstanding risks to confirm launch criteria met.
-    - Definition of Done: Launch checklist stored in `docs/ops/launch_checklist.md` marked complete; any open issues resolved.
-63. [ ] **Perform post-launch retrospective setup**
-    - Implementation: Create `docs/ops/retro_template.md` capturing metrics to review, questions to answer, and backlog follow-up process.
-    - Definition of Done: Template linted; schedule first retrospective session in backlog tracker; log confirmation.
-64. [ ] **Archive roadmap status**
-    - Implementation: Summarize completed tasks, outstanding backlog items, and lessons learned in `docs/project/roadmap_summary.md`.
-    - Definition of Done: Summary references task evidence; markdownlint passes; ensure AGENTS checklist updated to reflect completion.
+6. **[ ] Prompt (optional Kotlin track):** _"Introduce the Jetpack Watch Face renderer. Add the `androidx.wear.watchface:watchface` dependencies, implement the `WatchFaceService`, `ComplicationSlotsManager`, and `UserStyleSchema`, and prove the renderer with a passing unit test preview."_
+   - **Purpose:** Code-rendered face (if not using WFF).
+   - **Acceptance:** Unit test renders preview and compiles.
+   - **Artifacts:** Sample screenshot.
+   - **Fail?:** Reconcile dependencies/Compose Canvas usage.
+
+---
+
+### Phase 2 — Quality Gates (Local)
+
+7. **[ ] Prompt:** _"Establish static analysis and style enforcement. Add ktlint with Spotless, configure Android Lint to treat new issues as fatal (with a baseline), and wire in a Detekt ruleset, then verify with `./gradlew spotlessApply detekt lint`."_
+   - **Purpose:** Enforce Kotlin style and code health.
+   - **Acceptance:** `./gradlew spotlessApply detekt lint` passes.
+   - **Artifacts:** Lint HTML report, Detekt SARIF, Spotless status.
+   - **Fail?:** Fix violations or adjust rules narrowly.
+
+8. **[ ] Prompt:** _"Add unit tests for the non-UI logic. Implement `src/test` coverage for time formatting, color scheme selection, and complication ID mapping, then confirm `./gradlew testDebugUnitTest` passes with ≥70% coverage on the core utilities."_
+   - **Purpose:** Cover non-UI logic (style schema parsing, config).
+   - **Acceptance:** `./gradlew testDebugUnitTest` green, coverage ≥ 70% for core utils.
+   - **Artifacts:** JUnit XML, coverage report.
+   - **Fail?:** Add tests/fix logic.
+
+9. **[ ] Prompt:** _"Create screenshot tests for the previews. For WFF, write an instrumentation test that loads `watchface.xml` and captures frames via the wear-watchface screenshot API (use Paparazzi/Compose for the Kotlin track). Commit the golden images to `app/src/androidTest/assets/goldens/` and surface them in CI."_
+   - **Purpose:** Lock visual baselines (dark/light/AOD).
+   - **Acceptance:** Golden images generated & committed under `app/src/androidTest/assets/goldens/`.
+   - **Artifacts:** Generated PNGs uploaded by CI.
+   - **Fail?:** Update goldens only after design sign-off.
+
+---
+
+### Phase 3 — Performance & Battery Scaffolding
+
+10. **[ ] Prompt:** _"Stand up the baseline profile module and ensure Macrobenchmark-generated rules ship in release builds."_
+    - **Purpose:** Improve startup/render perf; reduce CPU.
+    - **Steps:**
+      1. Add `baselineprofile` module with **Macrobenchmark** to exercise face config screen and render path.
+      2. Generate & include baseline profile in release builds.
+    - **Acceptance:** `./gradlew :baselineprofile:generateBaselineProfile` produces rules; included in AAB.
+    - **Artifacts:** Baseline profile file; macrobenchmark HTML/CSV.
+    - **Fail?:** Verify profile merging per Compose/Wear guidance.
+
+11. **[ ] Prompt:** _"Complete the battery and performance guideline audit for the watch face."_
+    - **Purpose:** Enforce Google’s watch face power best practices.
+    - **Steps:**
+      * Audit animation cadence, complication update frequency, and phone interactions against **Optimize watch faces** guide.
+    - **Acceptance:** Checklist signed with notes on update rates/AOD behavior.
+    - **Artifacts:** `docs/qa/battery-checklist.md`.
+    - **Fail?:** Reduce updates/animations; re-test.
+
+---
+
+### Phase 4 — CI Foundation (GitHub Actions)
+
+12. **[ ] Prompt:** _"Provision the CI secrets required for builds and publishing."_
+    - **Purpose:** Secure keys for build/publish.
+    - **Steps:**
+      * Add repo secrets: `PLAY_SERVICE_ACCOUNT_JSON`, `UPLOAD_KEYSTORE_BASE64`, `UPLOAD_KEY_ALIAS`, `UPLOAD_KEY_PASSWORD`, `STORE_PASSWORD`.
+    - **Acceptance:** Secrets present & referenced in workflow; no secrets in code.
+    - **Artifacts:** Screenshot of secrets page (sensitive fields redacted).
+    - **Fail?:** Rotate keys and retry.
+
+13. **[ ] Prompt:** _"Wire the PR build and lint workflow in GitHub Actions."_
+    - **Purpose:** Automatic checks on PR.
+    - **Steps:**
+      * Ensure `.github/workflows/android.yml` runs `./gradlew spotlessCheck detekt lint assembleDebug` with cached Gradle and Android SDK setup.
+    - **Acceptance:** PRs show passing checks; SARIF uploaded.
+    - **Artifacts:** Lint/Detekt reports as build artifacts.
+    - **Fail?:** Fix build/lint errors.
+
+14. **[ ] Prompt:** _"Extend CI to execute the unit test suite and surface the results."_
+    - **Purpose:** Enforce correctness gates.
+    - **Steps:**
+      * Extend workflow to run `./gradlew testDebugUnitTest` and publish reports.
+    - **Acceptance:** Tests pass; coverage comment on PR.
+    - **Artifacts:** Test reports uploaded.
+    - **Fail?:** Fix tests or code.
+
+15. **[ ] Prompt:** _"Add the Wear OS emulator job to run connected tests in CI."_
+    - **Purpose:** Run instrumentation/screenshot tests headless.
+    - **Steps:**
+      * Use **ReactiveCircus/android-emulator-runner** with a Wear OS x86_64 system image; start emulator; run `connectedDebugAndroidTest`.
+    - **Acceptance:** Emulator boots in CI; `androidTest` suite passes; screenshots uploaded.
+    - **Artifacts:** Instrumentation logs, screenshots.
+    - **Fail?:** Bump RAM/timeouts; pre-download system images; retry.
+
+16. **[ ] Prompt:** _"Schedule the nightly Macrobenchmark workflow to capture baseline profiles."_
+    - **Purpose:** Generate baseline profile in CI nightly.
+    - **Steps:**
+      * Nightly workflow triggers `:baselineprofile:collect` then commits asset as artifact (not auto-commit).
+    - **Acceptance:** Baseline profile artifact attached to nightly run.
+    - **Artifacts:** Baseline profile, perf metrics.
+    - **Fail?:** Skip battery check on no-battery hosts if needed.
+
+---
+
+### Phase 5 — Signing & Play Integration
+
+17. **[ ] Prompt:** _"Enable Play App Signing in the Google Play Console and capture evidence."_
+    - **Purpose:** Use Google-managed signing; CI only needs upload key.
+    - **Steps:**
+      * In Play Console, enable **App signing by Google Play**; download upload certificate; store **upload keystore** in CI (Base64).
+    - **Acceptance:** Play shows “App signing enabled.”
+    - **Artifacts:** App signing status screenshot.
+    - **Fail?:** Complete identity verification; retry.
+
+18. **[ ] Prompt:** _"Configure Gradle release signing and build types to use CI-provided credentials."_
+    - **Purpose:** Deterministic release builds in CI.
+    - **Steps:**
+      * In `app/build.gradle.kts`, configure `signingConfigs { release }` reading env vars; enable R8; set `versionCode` auto from tags.
+    - **Acceptance:** `./gradlew :app:bundleRelease` uses release keystore in CI.
+    - **Artifacts:** Build scans/logs.
+    - **Fail?:** Fix keystore passwords/aliases.
+
+19. **[ ] Prompt:** _"Integrate Gradle Play Publisher and validate the release task graph."_
+    - **Purpose:** Automate upload to internal/closed tracks.
+    - **Steps:**
+      * Add plugin `com.github.triplet.play` and `play { serviceAccountCredentials.set(...) track.set("internal") }`.
+    - **Acceptance:** Dry run: `./gradlew publishRelease --dry-run` resolves tasks.
+    - **Artifacts:** Gradle config diff.
+    - **Fail?:** Fix scopes on service account JSON.
+
+20. **[ ] Prompt:** _"Finalize the tag-driven internal release workflow in GitHub Actions."_
+    - **Purpose:** One-button internal release from a tag.
+    - **Steps:**
+      * Ensure `.github/workflows/release.yml` builds `bundleRelease`, runs tests, then `publishRelease` to **internal** on tag push.
+    - **Acceptance:** Tagging `v0.1.0` uploads AAB to internal track.
+    - **Artifacts:** Play Console artifacts screenshot, CI logs.
+    - **Fail?:** Inspect GPP error output and fix listing/consent.
+
+---
+
+### Phase 6 — Store Listing & Testing Tracks
+
+21. **[ ] Prompt:** _"Version-control the Google Play store listing metadata and publish it through CI."_
+    - **Purpose:** Keep Play listing under version control.
+    - **Steps:**
+      * Add `fastlane/metadata` or GPP metadata files (`src/main/play/`): title, short/long description, changelog, screenshots (generated by tests), icons.
+    - **Acceptance:** `./gradlew publishListing` updates Play listing.
+    - **Artifacts:** CI logs + Play change diff.
+    - **Fail?:** Fix locale folders or graphic specs.
+
+22. **[ ] Prompt:** _"Create and populate the Google Play testing tracks for internal, closed, and open testers."_
+    - **Purpose:** Gradual validation.
+    - **Steps:**
+      * In Play Console: **Internal**, **Closed**, **Open** tracks; add testers (email lists/Google Groups).
+    - **Acceptance:** Testers can install from **Internal** link.
+    - **Artifacts:** Track screenshots, tester list (redacted).
+    - **Fail?:** Reconcile tester emails; wait for indexing.
+
+23. **[ ] Prompt:** _"Verify the Wear OS target API policy compliance and document the evidence."_
+    - **Purpose:** Compliance gate.
+    - **Steps:**
+      * Confirm `targetSdkVersion=34` for Wear OS app submission.
+    - **Acceptance:** Play pre-launch report shows correct target API.
+    - **Artifacts:** Pre-launch report PDF.
+    - **Fail?:** Update `targetSdk` and resubmit.
+
+---
+
+### Phase 7 — Feature Completeness for Watch Face
+
+24. **[ ] Prompt:** _"Implement the complication slots and schema within the Watch Face Format layout."_
+    - **Purpose:** Add standard complications (steps, heart rate, battery).
+    - **Steps:**
+      * Define slots and bounds in WFF; for phone battery or advanced data, consider a small provider app.
+    - **Acceptance:** Emulator shows selectable complications in system editor; data renders.
+    - **Artifacts:** Screenshots from emulator.
+    - **Fail?:** Verify slot IDs and data types.
+
+25. **[ ] Prompt:** _"Design and validate the always-on display and power-saving modes for the watch face."_
+    - **Purpose:** Great battery behavior.
+    - **Steps:**
+      * Provide simplified `ambient` group in WFF; throttle updates; avoid constant phone interactions & heavy animations to pass Play warnings.
+    - **Acceptance:** Macrobenchmark shows stable frame times; no Play warning during review.
+    - **Artifacts:** Perf numbers; Play review notes.
+    - **Fail?:** Reduce animation frequency/bitmap size.
+
+26. **[ ] Prompt:** _"Automate generation of multi-density previews and Play Store screenshots."_
+    - **Purpose:** Auto-produce Play assets.
+    - **Steps:**
+      * Instrumentation test renders preset styles (light/dark/AOD) at multiple densities, saves PNGs; CI uploads to `src/main/play/listings/en-US/graphics/phone-screenshots/`.
+    - **Acceptance:** Generated screenshots meet Play specs; `publishListing` succeeds.
+    - **Artifacts:** PNGs as CI artifacts and committed copies.
+    - **Fail?:** Adjust emulator density and renderer.
+
+---
+
+### Phase 8 — Pre-Release Gates
+
+27. **[ ] Prompt:** _"Run a Google Play pre-launch report smoke test and address findings."_
+    - **Purpose:** Automated device lab sanity.
+    - **Steps:**
+      * Upload to **Internal**; trigger PLR; review crashes, ANRs, permissions.
+    - **Acceptance:** Zero critical issues; medium issues triaged.
+    - **Artifacts:** PLR HTML/PDF.
+    - **Fail?:** Fix and re-upload.
+
+28. **[ ] Prompt:** _"Complete the accessibility review for the watch face and document adjustments."_
+    - **Purpose:** Legibility on small displays.
+    - **Steps:**
+      * Check contrast ratios and tap targets per Wear guidance.
+    - **Acceptance:** `docs/ux/accessibility.md` updated; issues resolved.
+    - **Artifacts:** Before/after screenshots.
+    - **Fail?:** Adjust palettes/typography.
+
+29. **[ ] Prompt:** _"Promote the build to the closed testing track and collect feedback."_
+    - **Purpose:** External validation.
+    - **Steps:**
+      * Promote internal → closed; collect feedback for 7–14 days.
+    - **Acceptance:** No crash spikes; battery feedback positive.
+    - **Artifacts:** Crash-free sessions %, user notes.
+    - **Fail?:** Patch, re-test.
+
+---
+
+### Phase 9 — Release & Post-Release
+
+30. **[ ] Prompt:** _"Execute a staged production rollout via Gradle Play Publisher."_
+    - **Purpose:** Safe release.
+    - **Steps:**
+      * Use GPP: `./gradlew publishRelease -Ptrack=production -ProlloutFraction=0.1`.
+    - **Acceptance:** 10% staged rollout created in Play; monitoring enabled.
+    - **Artifacts:** Rollout screenshot; CI logs.
+    - **Fail?:** Halt rollout; hotfix via internal → production.
+
+31. **[ ] Prompt:** _"Establish monitoring dashboards and alerting for post-release health."_
+    - **Purpose:** Catch regressions.
+    - **Steps:**
+      * Enable ANR/Crash alerts; track Play vitals; set alerting in observability tool.
+    - **Acceptance:** Alert rules confirmed; dashboard link recorded.
+    - **Artifacts:** Dashboard URL in `docs/devops/monitoring.md`.
+    - **Fail?:** Adjust filters and thresholds.
+
+32. **[ ] Prompt:** _"Cut the production tag, publish the changelog, and write the release retrospective."_
+    - **Purpose:** Close the loop.
+    - **Steps:**
+      * Tag `v1.0.0`; generate `CHANGELOG.md` from commits; write retro in `docs/operations/retrospectives.md`.
+    - **Acceptance:** Tag pushed; changelog and retro committed.
+    - **Artifacts:** Release page link; changelog diff.
+    - **Fail?:** Fix versioning script and retry.
+
+---
+
+### GitHub Actions — Starter Workflows (reference)
+See `.github/workflows/android.yml` and `release.yml` in this repo for ready-to-run configurations that align with the checklist requirements.
+
+### Gradle & Manifest References
+- Top-level `build.gradle.kts` configures AGP/Kotlin versions and Play Publisher.
+- `app/build.gradle.kts` targets API 34, enables release minification, and wires Play Publisher defaults.
+- `AndroidManifest.xml` registers `CosmoBondWatchFaceService` pointing to `@raw/watchface`.
+
+### Test & Evidence Menu
+Use these commands when relevant tasks call for validation:
+- `./gradlew clean assembleDebug`
+- `./gradlew spotlessCheck detekt lint`
+- `./gradlew testDebugUnitTest`
+- `./gradlew connectedDebugAndroidTest`
+- `./gradlew :baselineprofile:collect`
+- `./gradlew publishRelease --dry-run`
+
+### Done Definition (applies to every box)
+- All acceptance checks in the item pass.
+- Tests relevant to the item executed successfully; logs attached.
+- On-device/emulator validation completed when required; screenshots saved.
+- Battery/perf and accessibility reviewed when applicable.
+- Risks/decisions captured in `docs/`.
