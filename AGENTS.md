@@ -14,6 +14,69 @@
   5. Use version control aggressively; avoid large untracked change sets.
   6. Debug quickly with print statements and share the captured output when looping.
 
+### Companion Experience Charter
+- **Presence management:** Companion complications and tiles must pause progression the moment the user switches to any non-CosmoBond watch face, then resume instantly when the face returns to foreground. Persist timers and state snapshots so no passive stats advance while hidden.
+- **Status widget fallback:** When the CosmoBond face is not visible (for example, while Spotify or messaging overlays the display), surface an optional miniature status widget. The pet should stroll, hover, or perch from the screen edge, then auto-roost in negative space that avoids primary UI controls. Provide a long-press drag affordance so the wearer can reposition the pet with a finger and remember the offset per-app context.
+- **Expressive wellbeing cues:** Never rely on text prompts to request care. Use facial expressions, posture, particle effects, and idle animations that escalate from mild hunger (subtle stomach rumbles) to severe neglect (emaciated model, slowed movement) before the pet eventually runs away. Reinforce positive states with sparkles, confident stance, and synchronized breathing.
+- **Audio affinity:** Mirror the wearer’s listening habits by detecting ambient playback metadata (with explicit user consent) and queueing matching ambience—humming along to podcasts, bobbing to playlists, or curling up quietly for white-noise tracks. Offer privacy toggles and offline fallback soundscapes curated per pet archetype.
+- **Evolution design:** Tie evolutionary checkpoints to adaptive wellness goals. Let the onboarding flow capture each user’s priorities (movement, mindfulness, rest, exploration, etc.), then align evolution triggers with achievable yet stretching habits. Provide dynamic alternatives—if the user masters a goal quickly, escalate to variant quests such as “explore three new hiking routes this month” or “maintain HRV gains for two consecutive weeks.”
+- **Care system guardrails:** Track feeding, grooming, play, training, and socialization metrics separately so evolution requirements can mix categories. Make failure states recoverable via caretaker missions instead of immediate regressions.
+
+### Social & Live Interaction Backlog
+- **Co-op caregiving:** Allow paired Galaxy Watch users to temporarily link habitats, sharing chore rotations, synchronized feeding timers, and joint mini-games that unlock duo emotes.
+- **Event-based evolutions:** Detect large events (festivals, marathons, conferences) via location/agenda opt-ins and enable special evolution branches, rare accessories, or commemorative traits earned only during those windows.
+- **Playful pranks:** Introduce opt-in mischievous actions (e.g., swapping accessory colors, sending surprise confetti bursts, photobombing friend’s pet selfies) with cooldowns and gentle consent prompts.
+- **Habitat trading post:** Schedule weekly meetup windows where players can exchange habitat décor or training tips in-app, supported by bite-sized conversation starters and safety filters.
+- **Pet mail & AR postcards:** Let companions exchange animated postcards or short AR clips that appear on the recipient’s watch, reinforcing long-distance engagement.
+- **Neighborhood leaderboards:** Surface hyperlocal rankings (steps, mindfulness streaks, adventure logs) that rotate themes to avoid fatigue and keep achievements equitable for diverse lifestyles.
+- **Community care quests:** Publish cooperative challenges (e.g., “collectively log 10k mindful minutes this weekend”) with shared progress bars and global cosmetic unlocks when goals are met.
+
+### Starter Companion Roster
+Select three launch companions from this ideation list. Each includes a signature trait to shape animations, evolution paths, and accessory sets:
+1. **Nebula Kitsune:** A vulpine wanderer with shimmering tails that light up constellations.
+2. **Aqua Glider Manta:** A floating manta-ray friend that swims through air currents, leaving bubble trails.
+3. **Meteor Sproutling:** A plant-rock hybrid whose leaves unfurl meteor sparks during stretches.
+4. **Aurora Puff Drake:** A mini dragon that puffs aurora ribbons when celebrating goals.
+5. **Cosmo Corgi:** A stubby-legged explorer whose jetpack boots fire when sprinting.
+6. **Lumen Firefly:** A cluster of synchronized fireflies forming one companion entity.
+7. **Chrono Owl:** A wise owl that rotates its head to track schedule adherence.
+8. **Orbit Otter:** Performs zero-g flips and loves water intake reminders.
+9. **Prism Jelly:** A translucent jelly creature that reacts to mood via color gradients.
+10. **Solar Sprinter Lynx:** Shifts coat patterns based on sunlight exposure and outdoor achievements.
+11. **Harmonic Hedgehog:** Spikes resonate with music beats, ideal for audio-synced behaviors.
+12. **Nimbus Capybara:** Chill vibes companion that invites mindfulness breaks with gentle rainclouds.
+13. **Comet Chinchilla:** Dashes in dust trails, motivating interval training.
+14. **Galaxy Grove Sprite:** A tree spirit with seasonal foliage evolutions tied to circadian health.
+15. **Astro Axolotl:** Regenerates glowing fins whenever the user completes recovery routines.
+
+### Retention Expectations & Ritual Design
+- **Engagement cadence:** Craft daily micro-rituals (feed, play, quick training) taking <90 seconds, weekly depth loops (adventures, co-op quests), and monthly aspirational milestones (rare evolutions, habitat overhauls). Track activation, day-7, and day-30 retention with explicit thresholds per ritual type.
+- **Notification philosophy:** Favor ambient nudges through pet behavior rather than push spam. When notifications are required, cap at two actionable alerts per day, contextualized with streak progress and sent during empirically successful engagement windows.
+- **Re-engagement safety net:** If a pet flees due to neglect, provide a compassionate return quest (e.g., “complete two self-care tasks to earn back trust”) to avoid permanent loss while still reinforcing accountability.
+- **Analytics instrumentation:** Log interaction categories, streak outcomes, social feature usage, and evolution progress. Correlate with health goals to ensure personalized triggers feel attainable; revise thresholds if churn indicators spike.
+- **Content refresh schedule:** Maintain a rotating calendar of limited-time accessories, social quests, and ambient animations so returning players discover novelty without overwhelming new users.
+
+### QA Rigor Enhancements
+- **Companion simulation suite:** Build automated scenarios that fast-forward lifecycle states (happy → neglected → runaway → reunion) and assert UI/animation fidelity in each stage. Capture golden videos or frame sequences for regression tracking.
+- **Device matrix:** Expand beyond Watch8 Classic to include smaller/larger bezels and different brightness profiles. Document pass/fail matrices in `docs/qa/device_matrix.md` with firmware versions and ambient-mode screenshots.
+- **Complication/tile contract tests:** Validate pause/resume semantics by programmatically switching watch faces and confirming timers, animations, and data flows halt and resume without drift.
+- **Audio consent verification:** Unit test preference toggles ensuring pet audio mirroring only activates when explicit consent is stored, and that revoking access silences features immediately.
+- **Social sandbox:** Mock co-op sessions to verify prank consent, cooldown timers, and cross-account state sync.
+
+### Repository Structure & Standards Deep Dive
+- **Modular boundaries:** Keep watch face declarative assets in `app/src/main/res/raw/` and Kotlin orchestration in `app/src/main/java/com/cosmobond/...`. Create dedicated packages for evolution logic, social networking, and analytics sinks to prevent monolith controllers.
+- **Documentation map:** Expand `docs/` with subfolders (`docs/design/companions`, `docs/retention`, `docs/social`) containing personas, ritual maps, and state charts. Update the decision log whenever structure changes.
+- **Naming conventions:** Use `Companion` prefix for pet-related classes (`CompanionStateMachine`, `CompanionAudioSync`), `Habitat` for environment modules, and suffix tests with `Test`/`Spec` consistently.
+- **Asset governance:** Store layered art in `art/source/` (PSD/AI) with exported runtime assets in `art/export/`. Include README files describing export settings, compression, and color profiles.
+
+### File Management & Coding Practices — Extra Steps
+- **State persistence:** Centralize pet state serialization in a single repository (e.g., `CompanionStateStore`) with migration tests whenever schema changes.
+- **Feature flags:** Introduce remote-config toggles for experimental social features or evolution variants to stage rollouts safely.
+- **Accessibility reviews:** Document accessible color pairs and animation comfort settings; ensure every new animation ships with reduced-motion alternatives.
+- **Localization readiness:** Prepare strings for internationalization from day one, storing copy in `res/values/strings_companion.xml` with developer-facing descriptions.
+- **Performance budgets:** Set frame-time budgets (≤16ms for interactive scenes, ≤33ms ambient) and monitor with Baseline Profiles plus macrobenchmarks.
+- **Security hygiene:** Sanitize network payloads for social features, rotate OAuth tokens regularly, and limit scopes to least-privilege.
+
 ## Ready-to-Run Repository Snapshot
 This repository already includes baseline policy files, directory scaffolding, GitHub Actions workflows, and a minimal Watch Face Format XML. Review the structure before claiming tasks:
 - `.github/workflows/android.yml` and `release.yml` implement PR checks and internal releases.
