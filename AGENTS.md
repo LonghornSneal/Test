@@ -49,6 +49,153 @@ Select three launch companions from this ideation list. Each includes a signatur
 14. **Galaxy Grove Sprite:** A tree spirit with seasonal foliage evolutions tied to circadian health.
 15. **Astro Axolotl:** Regenerates glowing fins whenever the user completes recovery routines.
 
+### DigiPet Watch Face Expansion Checklist
+
+- **Universal watch face requirements:** Each DigiPet remains a fully functional CosmoBond watch face. Reserve space for time,
+  date, battery, and at least two configurable complications so wearers can tailor health, productivity, or communication data
+  without obscuring the companion. Use ambient-mode variants that keep the time legible while dimming pet animations.
+
+#### Sensor-Driven DigiPets
+
+- [ ] **CardioCritter — Heart Rate Fitness Monster**
+  - **Watch face baseline:** Highlight primary time/date complications, add workout progress rings, and mirror key vitals in
+    sub-complications without hiding the clock.
+  - **Concept:** Thrives on heart-health consistency; syncs to resting HR, workouts, and gym visits to reflect care.
+  - **Appearance cues:** Rosy, athletic animations during healthy HR/workouts; pale, slouched stance with broken-heart icon when
+    readings stay unhealthy.
+  - **Implementation hooks:** Use Health Services heart-rate samples, workout sessions, and optional geofenced gym detection;
+    throttle polling for battery; evolve after multi-day healthy ranges; trigger Nearby Connections runaway when long-term HR
+    neglect persists.
+- [ ] **StepSprite — Step Count Companion**
+  - **Watch face baseline:** Pair time/date with a step-progress complication ring and configurable secondary slots for goal
+    streaks.
+  - **Concept:** Feeds on step goals and celebrates streaks; idleness drains energy and risks escape.
+  - **Appearance cues:** Happy, fast animations when goals met; sluggish, yawning sprite with boredom icon on sedentary days.
+  - **Implementation hooks:** Subscribe to step-count deltas via Health Services or Google Fit; add idle reminders; evolve after
+    multi-day goal streaks; treat steps and manual feeds as hunger refills.
+- [ ] **SomnoSloth — Sleepy Sloth Pet**
+  - **Watch face baseline:** Surface time/date alongside last-night sleep summary complications and sunrise/sunset context.
+  - **Concept:** Mirrors user sleep quality and encourages wind-down rituals; prolonged poor sleep risks runaway.
+  - **Appearance cues:** Snoring, hanging sloth overnight; messy fur and dark circles after insufficient rest; zen smile after
+    quality sleep streaks.
+  - **Implementation hooks:** Pull sleep sessions from Samsung Health or Health Services; animate state transitions at sleep
+    start/end; track streaks for evolution; push gentle bedtime reminders.
+- [ ] **LumiLizard — Light & Dark Reactive Pet**
+  - **Watch face baseline:** Blend time/date with ambient light indicators; offer sunrise/sunset complication slots.
+  - **Concept:** Reacts to ambient light/time-of-day balance; encourages daylight exposure and restful nights.
+  - **Appearance cues:** Sun-dragon form with warm glow in daylight; moonlit chameleon with bat wings in darkness or nighttime
+    wakefulness.
+  - **Implementation hooks:** Sample ambient light sensor; merge with local time/sunrise calculations; log daylight minutes; set
+    dual evolution paths for sun- vs moon-focused care.
+- [ ] **DecibelDog — Sound-Sensitive Pup**
+  - **Watch face baseline:** Keep central time/date clear while adding subtle volume meters as complications.
+  - **Concept:** Responds to ambient noise, user speech, and music; thrives on interactive sound play.
+  - **Appearance cues:** Relaxed pup in quiet; paws over ears in loud spaces; tail-wag head tilt when hearing owner; dancing/howl
+    when music detected.
+  - **Implementation hooks:** Sample microphone amplitude bursts with RECORD_AUDIO consent; optionally integrate speech
+    recognition sessions; tie dance mode to media-session metadata; evolve via cumulative interaction minutes.
+- [ ] **RoverFox — Location & Travel Explorer Pet**
+  - **Watch face baseline:** Combine time/date with distance-traveled and next-location badge complications.
+  - **Concept:** Celebrates exploration, new GPS locations, and walking adventures; neglect triggers wandering off.
+  - **Appearance cues:** Backpacked fox with souvenir icons for new locales; restless pacing when stationary for days.
+  - **Implementation hooks:** Use FusedLocationProvider (phone or watch) with batching; log unique locations/badges; limit GPS
+    sampling to motion events; enable Nearby Connections adoption when abandonment thresholds met.
+- [ ] **Mounty — Elevation & Climbing Pet**
+  - **Watch face baseline:** Integrate time/date with floor-count or elevation-gain complications and summit progress meters.
+  - **Concept:** Gains energy from stair climbs and hikes; sedentary flat days reduce morale.
+  - **Appearance cues:** Goat bounding up slopes on ascents; grazing boredom when flat; celebratory summit flag for milestones.
+  - **Implementation hooks:** Read barometer/pressure sensor for floor detection; filter via step activity; compare totals to
+    mountain benchmarks; trigger evolution at cumulative elevation goals.
+- [ ] **Thermagon — Temperature-Driven Dragon**
+  - **Watch face baseline:** Pair time/date with skin/ambient temperature complications and fever alerts without clutter.
+  - **Concept:** Reacts to temperature extremes; encourages climate awareness and safe ranges.
+  - **Appearance cues:** Blue shivering dragon in cold; red panting dragon when hot; dual-element adult form after adaptation.
+  - **Implementation hooks:** Access skin-temp API or weather service; set comfort thresholds; notify on fever-like spikes; unlock
+    seasonal evolutions after experiencing varied climates.
+- [ ] **ZenPanda — Stress & Calm Companion**
+  - **Watch face baseline:** Show time/date with stress or HRV complications plus breathing timer shortcuts.
+  - **Concept:** Biofeedback pet that mirrors stress levels and rewards mindfulness practices.
+  - **Appearance cues:** Meditative lotus pose when calm; pacing with stress clouds during tension; levitating guru form at peak
+    evolution.
+  - **Implementation hooks:** Consume HRV/stress metrics from Samsung Health or derived HR data; embed guided breathing micro-app;
+    log calm minutes for streak-based evolution; escalate visual cues before notifications.
+- [ ] **JiggleJelly — Motion-Interactive Play Pet**
+  - **Watch face baseline:** Maintain clear clock/date while dedicating a complication to play-state/energy and minimizing motion
+    occlusion.
+  - **Concept:** Responds to wrist gestures and playful shakes; kinetic energy keeps it alive.
+  - **Appearance cues:** Squishy blob deforming with shakes; dangling from top when watch inverted; dull, flattened jelly when
+    ignored.
+  - **Implementation hooks:** Use accelerometer/gyroscope listeners during active sessions; detect shakes/tilts/flicks; convert
+    activity into energy points; fall back to manual feeds when motion data unavailable.
+
+#### Activity & Habit-Driven DigiPets
+
+- [ ] **LexiOwl — Language Learning Owl**
+  - **Watch face baseline:** Preserve time/date readability while surfacing daily lesson streak and vocabulary complication slots.
+  - **Concept:** Thrives on language practice, speaking drills, and streak maintenance; neglect prompts it to seek new knowledge
+    elsewhere.
+  - **Appearance cues:** Cap-and-book owl hooting happily after lessons; expectant stare holding flashcards when sessions missed.
+  - **Implementation hooks:** Integrate with language apps via notifications/APIs or manual logging; support speech recognition
+    practice; evolve with streaks and vocabulary milestones.
+- [ ] **EchoParrot — Voice Assistant Mimic Pet**
+  - **Watch face baseline:** Keep clock/date front-and-center with a conversation counter complication and mic access toggle.
+  - **Concept:** Mimics user speech and celebrates frequent voice interactions; grows lonely during silence.
+  - **Appearance cues:** Vibrant parrot flapping and lip-syncing during chats; drooping bird asking questions when unheard.
+  - **Implementation hooks:** Provide push-to-talk sessions with SpeechRecognizer/TextToSpeech; optionally monitor media session
+    or call states via companion; store safe vocabulary snippets for emergent dialogue.
+- [ ] **Memophant — Note-Taking Elephant**
+  - **Watch face baseline:** Combine time/date with quick-note shortcut and pending reminder complication.
+  - **Concept:** Encourages capturing notes/tasks; rewards consistent information logging and recall.
+  - **Appearance cues:** Elephant cataloging sticky notes when fed; concerned trunk offering reminders when backlog grows.
+  - **Implementation hooks:** Sync with note/task APIs or in-app ledger; allow voice dictation; schedule pet-driven reminders;
+    quiz user on past entries for bonus morale.
+- [ ] **BusyBee — Productivity & To-Do Bee**
+  - **Watch face baseline:** Balance time/date with task-progress gauges and honey-meter complication slots.
+  - **Concept:** Gains energy from completed tasks and focus sessions; overwhelmed by unchecked queues.
+  - **Appearance cues:** Celebratory waggle dance after completions; buried-under-paper animation when overdue tasks pile up.
+  - **Implementation hooks:** Tie into Google Tasks/Todoist APIs or pet-native checklist; reward Pomodoro timers; log completion
+    streaks for evolution; send gentle two-per-day reminders respecting notification cap.
+- [ ] **BuddyPup — Social Interaction Dog**
+  - **Watch face baseline:** Keep time/date visible with social-activity complication summarizing calls/messages/meetups.
+  - **Concept:** Reflects user’s communication cadence; motivates regular outreach and shared moments.
+  - **Appearance cues:** Tail-wagging pup delivering envelopes post-interaction; lonely whimper animation after prolonged silence.
+  - **Implementation hooks:** Mirror call/message counts via companion notification listener (with consent); allow manual logging
+    of in-person meetups; support Nearby co-play when two pets are close; evolve via sustained social goals.
+- [ ] **BeatBunny — Music-Loving Dancing Rabbit**
+  - **Watch face baseline:** Anchor clock/date while showcasing now-playing or tempo complications and keeping dance space clear.
+  - **Concept:** Lives for music playback and rhythm games; languishes without regular listening.
+  - **Appearance cues:** Genre-specific dances with musical notes; bored flop when environment is silent for days.
+  - **Implementation hooks:** Detect active media sessions/notifications; optional mic beat checks; offer tap-to-rhythm mini-games;
+    evolve through cumulative listening minutes and genre diversity.
+- [ ] **BookWorm — Reading & Knowledge Pet**
+  - **Watch face baseline:** Combine time/date with reading streak progress and quick journal entry complication.
+  - **Concept:** Feeds on books/articles consumed; metamorphoses as user builds a reading habit.
+  - **Appearance cues:** Page-munching caterpillar during sessions; cocooning when neglected; butterfly form after major goals.
+  - **Implementation hooks:** Track reading app usage via usage stats/APIs or manual timers; integrate fact-of-the-day prompts;
+    evolve on streaks, completed books, and total minutes read.
+- [ ] **ShutterBug — Photography & Creativity Pet**
+  - **Watch face baseline:** Show time/date with photo-count complication and camera remote shortcut without obscuring dial.
+  - **Concept:** Thrives on new photos and creative prompts; fades when no moments are captured.
+  - **Appearance cues:** Ladybug flashing camera after shots; colorless carapace when photo drought persists; vibrant shell when
+    gallery grows.
+  - **Implementation hooks:** Companion monitors camera roll for new media (READ_MEDIA_IMAGES); surface daily photo challenges;
+    optionally sync thumbnails to phone app; evolve as albums fill and prompt quests completed.
+- [ ] **TranquiliTurtle — Meditation & Mindfulness Turtle**
+  - **Watch face baseline:** Keep time/date legible with mindfulness-minute complication and quick-start breathing control.
+  - **Concept:** Rewards guided breathing, meditation, and calm streaks; hides in shell when routines lapse.
+  - **Appearance cues:** Floating lotus pose during sessions; shell-withdrawn turtle signaling missed practices; radiant aura at
+    master tier.
+  - **Implementation hooks:** Pull mindfulness minutes from Health Services or built-in exercises; include pet-led breathing UI;
+    track streaks and total minutes; gently prompt when stress trends high.
+- [ ] **VoltVampire — Tech Use & Battery Pet**
+  - **Watch face baseline:** Present time/date with dual battery complications (watch/phone) and charging reminders without
+    obscuring the dial.
+  - **Concept:** Feeds on healthy charging habits; weakens when devices regularly hit critical battery or over-discharge.
+  - **Appearance cues:** Glowing bat sipping energy during charges; pale, swooning sprite when batteries near zero; regal vampire
+    persona after sustained battery stewardship.
+  - **Implementation hooks:** Monitor watch battery locally and sync phone battery via Data Layer; award timely-charge points;
+    trigger low-battery nudges; log deep discharges to influence runaway/death sequences.
+
 ### Retention Expectations & Ritual Design
 - **Engagement cadence:** Craft daily micro-rituals (feed, play, quick training) taking <90 seconds, weekly depth loops (adventures, co-op quests), and monthly aspirational milestones (rare evolutions, habitat overhauls). Track activation, day-7, and day-30 retention with explicit thresholds per ritual type.
 - **Notification philosophy:** Favor ambient nudges through pet behavior rather than push spam. When notifications are required, cap at two actionable alerts per day, contextualized with streak progress and sent during empirically successful engagement windows.
