@@ -32,8 +32,21 @@
 
 ### DigiPet Watch Face Expansion Checklist
 
+- [ ] **Scaffold DigiPet evidence folders before starting any pet work.** Create the `docs/pets/<pet>/` directory structure (including subfolders such as `animations/`, `metrics/`, or additional evidence folders) before coding so artifact capture is turnkey. For example:
+
+```
+docs/
+└── pets/
+    └── cardiocritter/
+        ├── animations/
+        ├── metrics/
+        └── commands/
+```
+
+Archive gradle or shell command logs under a dedicated folder (e.g., `commands/`), store animation captures or storyboard frames in `animations/`, and export metrics/telemetry evidence into `metrics/` so reviewers can audit inputs quickly.
+
 - **Universal watch face requirements:** Each DigiPet remains a fully functional CosmoBond watch face. Reserve space for time, date, battery, and at least two configurable complications so wearers can tailor health, productivity, or communication data without obscuring the companion. Use ambient-mode variants that keep the time legible while dimming pet animations.
-- **Shared DigiPet Evidence Primer:** All DigiPets must retain uninterrupted timekeeping, include automated state-transition coverage, capture before/after visuals for happy vs. neglected states, and document key metrics in `docs/pets/<pet>/` alongside the relevant gradle command log. Reference this primer in each pet-specific acceptance checklist.
+- **Shared DigiPet Evidence Primer:** All DigiPets must retain uninterrupted timekeeping, include automated state-transition coverage, capture before/after visuals for happy vs. neglected states, and document key metrics in `docs/pets/<pet>/` alongside the relevant gradle command log. Contributors must create `docs/pets/<pet>/` (plus subfolders such as `animations/` or `metrics/`) if they are missing. Reference this primer in each pet-specific acceptance checklist.
 
 #### Sensor-Driven DigiPets
 
