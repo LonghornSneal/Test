@@ -30,7 +30,395 @@
 - **Pet mail & AR postcards:** Let companions exchange animated postcards or short AR clips that appear on the recipient’s watch, reinforcing long-distance engagement.
 - **Neighborhood leaderboards:** Surface hyperlocal rankings (steps, mindfulness streaks, adventure logs) that rotate themes to avoid fatigue and keep achievements equitable for diverse lifestyles.
 
+### Retention Expectations & Ritual Design
+- **Engagement cadence:** Craft daily micro-rituals (feed, play, quick training) taking <90 seconds, weekly depth loops (adventures, co-op quests), and monthly aspirational milestones (rare evolutions, habitat overhauls). Track activation, day-7, and day-30 retention with explicit thresholds per ritual type.
+- **Notification philosophy:** Favor ambient nudges through pet behavior rather than push spam. When notifications are required, cap at two actionable alerts per day, contextualized with streak progress and sent during empirically successful engagement windows.
+- **Re-engagement safety net:** If a pet flees due to neglect, provide a compassionate return quest (e.g., “complete two self-care tasks to earn back trust”) to avoid permanent loss while still reinforcing accountability.
+- **Analytics instrumentation:** Log interaction categories, streak outcomes, social feature usage, and evolution progress. Correlate with health goals to ensure personalized triggers feel attainable; revise thresholds if churn indicators spike.
+- **Content refresh schedule:** Maintain a rotating calendar of limited-time accessories, social quests, and ambient animations so returning players discover novelty without overwhelming new users.
+
+### QA Rigor Enhancements
+- **Companion simulation suite:** Build automated scenarios that fast-forward lifecycle states (happy → neglected → runaway → reunion) and assert UI/animation fidelity in each stage. Capture golden videos or frame sequences for regression tracking.
+- **Device matrix:** Expand beyond Watch8 Classic to include smaller/larger bezels and different brightness profiles. Document pass/fail matrices in `docs/qa/device_matrix.md` with firmware versions and ambient-mode screenshots.
+- **Complication/tile contract tests:** Validate pause/resume semantics by programmatically switching watch faces and confirming timers, animations, and data flows halt and resume without drift.
+- **Audio consent verification:** Unit test preference toggles ensuring pet audio mirroring only activates when explicit consent is stored, and that revoking access silences features immediately.
+- **Social sandbox:** Mock co-op sessions to verify prank consent, cooldown timers, and cross-account state sync.
+
+### Repository Structure & Standards Deep Dive
+- **Modular boundaries:** Keep watch face declarative assets in `app/src/main/res/raw/` and Kotlin orchestration in `app/src/main/java/com/cosmobond/...`. Create dedicated packages for evolution logic, social networking, and analytics sinks to prevent monolith controllers.
+- **Documentation map:** Expand `docs/` with subfolders (`docs/design/companions`, `docs/retention`, `docs/social`) containing personas, ritual maps, and state charts. Update the decision log whenever structure changes.
+- **Naming conventions:** Use `Companion` prefix for pet-related classes (`CompanionStateMachine`, `CompanionAudioSync`), `Habitat` for environment modules, and suffix tests with `Test`/`Spec` consistently.
+- **Asset governance:** Store layered art in `art/source/` (PSD/AI) with exported runtime assets in `art/export/`. Include README files describing export settings, compression, and color profiles.
+
+### File Management & Coding Practices — Extra Steps
+- **State persistence:** Centralize pet state serialization in a single repository (e.g., `CompanionStateStore`) with migration tests whenever schema changes.
+- **Feature flags:** Introduce remote-config toggles for experimental social features or evolution variants to stage rollouts safely.
+- **Accessibility reviews:** Document accessible color pairs and animation comfort settings; ensure every new animation ships with reduced-motion alternatives.
+- **Localization readiness:** Prepare strings for internationalization from day one, storing copy in `res/values/strings_companion.xml` with developer-facing descriptions.
+- **Performance budgets:** Set frame-time budgets (≤16ms for interactive scenes, ≤33ms ambient) and monitor with Baseline Profiles plus macrobenchmarks.
+- **Security hygiene:** Sanitize network payloads for social features, rotate OAuth tokens regularly, and limit scopes to least-privilege.
+
+## Ready-to-Run Repository Snapshot
+This repository already includes baseline policy files, directory scaffolding, GitHub Actions workflows, and a minimal Watch Face Format XML. Review the structure before claiming tasks:
+- `.github/workflows/android.yml` and `release.yml` implement PR checks and internal releases.
+- `app/` contains a starter Wear OS module with `res/raw/watchface.xml` and a placeholder `CosmoBondWatchFaceService`.
+- `docs/`, `art/`, and related directories are pre-created so that documentation tasks can start immediately.
+
+---
+
+## CI/CD Checklist for the Galaxy Watch Face
+Follow the tasks in order. Each item lists its purpose, precise steps, acceptance checks, required artifacts, and recovery guidance.
+
+### Pre-Checklist Prerequisites
+
+- [ ] **Design brief finalized:** Dial layout, typography, color palette, complication plan, and animation storyboards approved.
+- [ ] **Asset requirements gathered:** Vector/raster assets, fonts, and ambient-mode variants stored in an accessible location.
+- [ ] **Feature scope prioritized:** Feature list with interactive behaviors, data integrations, and configuration options locked for v1.0.
+- [ ] **Account and secret access secured:** Google Play Console, signing keys, analytics credentials, and related secrets available for automation.
+- [ ] **Validation plan prepared:** Target device matrix, manual test scenarios, and acceptance criteria documented for handoff.
+
+### Phase 0 — Baseline Verification & Policy Alignment
+
+1. **[ ] Prompt:** _"Audit the repository guardrails. Inspect `README.md`, `CODEOWNERS`, `CONTRIBUTING.md`, `LICENSE`, `.gitignore`, `.editorconfig`, and `.gitattributes`; record any needed adjustments in `docs/project/decision_log.md`; capture current branch protection status and document how to request updates."_
+   - **Purpose:** Confirm guardrails and initial documentation are present.
+   - **Acceptance:** Baseline files reviewed; issues noted in `docs/project/decision_log.md`; branch protections documented.
+   - **Artifacts:** Decision log entry, branch protection screenshot.
+   - **Fail?:** Address missing protections or file updates, recommit.
+
+2. **[ ] Prompt:** _"Lock the platform versions and compliance targets. Confirm JDK 17, AGP 8.5.x+, Kotlin 1.9+, Gradle wrapper, Android SDK API 34, and Wear OS emulator images, then update `docs/setup/tooling.md` with the versions, download links, and Wear OS 5/6 lineage references."_
+   - **Steps:**
+     1. Create `docs/setup/tooling.md` (and the parent directory) if it does not already exist before documenting the tooling snapshot.
+     2. Capture each required tool in the doc using a consistent bullet list or table that includes: tool name, pinned version, official download or installation link, and the Wear OS 5/6 lineage references that justify the target selections.
+   - **Purpose:** Freeze host/tool versions for repeatability.
+   - **Acceptance:** `docs/setup/tooling.md` describes tooling, cites Play target API 34 requirement.
+   - **Artifacts:** Tooling doc diff.
+   - **Fail?:** Adjust mismatched versions and re-document.
+
+3. **[ ] Prompt:** _"Confirm the rendering track. Update `docs/tech/architecture.md` to summarize the Watch Face Format v2 + Kotlin host approach, set minSdk/targetSdk to 34, and cite the supporting Google/Samsung guidance. If you pivot to the Kotlin-rendered path, adjust downstream notes accordingly."_
+   - **Purpose:** Document Watch Face Format v2 choice (or switch to Kotlin track if required).
+   - **Acceptance:** Architecture doc captures decision with references.
+   - **Artifacts:** Architecture doc diff.
+   - **Fail?:** If opting into Kotlin-rendered path, update downstream steps and checklist notes accordingly.
+
+---
+
+### Phase 1 — Android Project Skeleton
+
+> **USER NOTE — first on-watch testing unlock:** Task 4 produces a debug build you can sideload to the Galaxy Watch8 Classic for initial smoke checks once completed. AI agents should ignore this line.
+
+4. **[ ] Prompt:** _"Validate the Wear OS project scaffolding. Review `app/build.gradle.kts`, `settings.gradle.kts`, and `AndroidManifest.xml`; run `./gradlew :app:assembleDebug` on JDK 17; capture the build logs and record any dependency updates needed in the decision log."_
+   - **Purpose:** Ensure the existing module builds and aligns with naming/package expectations.
+   - **Steps:**
+     1. Inspect `app/build.gradle.kts`, `settings.gradle.kts`, and `app/src/main/AndroidManifest.xml` for namespace, module includes, and SDK configuration.
+     2. Execute `./gradlew :app:assembleDebug` from the repository root and save the terminal output to `docs/project/logs/phase1-task4-build.txt`.
+     3. Verify the generated APK under `app/build/outputs/apk/debug/` and note Gradle wrapper details in `docs/project/decision_log.md`.
+     4. Record any dependency or configuration follow-ups in the same decision log entry.
+   - **Acceptance:** Debug build succeeds; notes recorded in decision log.
+   - **Artifacts:** Build log, Gradle wrapper version, decision log entry.
+   - **Fail?:** Resolve version mismatches or missing dependencies and rerun.
+
+5. **[ ] Prompt:** _"Expand the Watch Face Format v2 skeleton. Enhance `res/raw/watchface.xml` with initial layout elements, verify the service metadata and preview assets, and build a release bundle with `./gradlew :app:assembleRelease` to confirm the resource packaging."_
+   - **Purpose:** Flesh out declarative structure and previews.
+   - **Steps:**
+     1. Update `app/src/main/res/raw/watchface.xml` with the initial layout groups, elements, and complication bindings.
+     2. Cross-check `app/src/main/AndroidManifest.xml` and `app/src/main/res/xml/watch_face_config.xml` (if introduced) for matching service metadata and preview references.
+     3. Ensure preview assets live under `app/src/main/res/drawable-nodpi/` or the appropriate density directory referenced by the manifest.
+     4. Run `./gradlew :app:assembleRelease` and archive the AAB from `app/build/outputs/bundle/release/` alongside captured build logs in `docs/project/logs/`.
+   - **Acceptance:** Release bundle contains WFF resource; previews render.
+   - **Artifacts:** AAB artifact, manifest diff, screenshots.
+   - **Fail?:** Correct resource paths or metadata and rebuild.
+
+6. **[ ] Prompt (optional Kotlin track):** _"Introduce the Jetpack Watch Face renderer. Add the `androidx.wear.watchface:watchface` dependencies, implement the `WatchFaceService`, `ComplicationSlotsManager`, and `UserStyleSchema`, and prove the renderer with a passing unit test preview."_
+   - **Purpose:** Code-rendered face (if not using WFF).
+   - **Steps:**
+     1. Add the required `androidx.wear.watchface` dependencies to `app/build.gradle.kts`, including the `watchface`, `watchface-style`, and `watchface-complications-data-source` artifacts.
+     2. Implement `CosmoBondWatchFaceService` and related renderer classes under `app/src/main/java/com/cosmobond/watchface/`, wiring a `ComplicationSlotsManager` and `UserStyleSchema` implementation.
+     3. Create unit test previews in `app/src/test/java/com/cosmobond/watchface/` that exercise the renderer and validate slot registration.
+     4. Run `./gradlew testDebugUnitTest --tests "*WatchFaceRenderer*"` (or the specific class name) and capture the passing output for the task evidence.
+   - **Acceptance:** Unit test renders preview and compiles.
+   - **Artifacts:** Sample screenshot.
+   - **Fail?:** Reconcile dependencies/Compose Canvas usage.
+
+---
+
+### Phase 2 — Quality Gates (Local)
+
+7. **[ ] Prompt:** _"Establish static analysis and style enforcement. Add ktlint with Spotless, configure Android Lint to treat new issues as fatal (with a baseline), and wire in a Detekt ruleset, then verify with `./gradlew spotlessApply detekt lint`."_
+   - **Purpose:** Enforce Kotlin style and code health.
+   - **Steps:**
+     1. Configure Spotless with ktlint inside `build.gradle.kts` or `app/build.gradle.kts`, and add any project-wide settings to `gradle/spotless.klint.gradle` if needed.
+     2. Add Detekt configuration under `config/detekt/detekt.yml` (create the directory if missing) and enable fatal new issues via `app/build.gradle.kts` lintOptions baseline setup.
+     3. Generate or update `app/lint-baseline.xml` after resolving findings so the lint task can treat new issues as fatal.
+     4. Run `./gradlew spotlessApply detekt lint` and store the command output plus generated reports (`app/build/reports/`) in `docs/qa/static-analysis/`.
+   - **Acceptance:** `./gradlew spotlessApply detekt lint` passes.
+   - **Artifacts:** Lint HTML report, Detekt SARIF, Spotless status.
+   - **Fail?:** Fix violations or adjust rules narrowly.
+
+8. **[ ] Prompt:** _"Add unit tests for the non-UI logic. Implement `src/test` coverage for time formatting, color scheme selection, and complication ID mapping, then confirm `./gradlew testDebugUnitTest` passes with ≥70% coverage on the core utilities."_
+   - **Purpose:** Cover non-UI logic (style schema parsing, config).
+   - **Steps:**
+     1. Identify the core utility classes under `app/src/main/java/com/cosmobond/` that handle time formatting, palette selection, and complication ID mapping.
+     2. Add corresponding test cases to `app/src/test/java/com/cosmobond/` ensuring edge cases and expected mappings are asserted.
+     3. Execute `./gradlew testDebugUnitTest` and collect the JUnit XML plus JaCoCo coverage report from `app/build/reports/tests/` and `app/build/reports/jacoco/`.
+     4. Summarize the achieved coverage percentage and notable findings in `docs/qa/unit-testing.md` (or create the file if absent).
+   - **Acceptance:** `./gradlew testDebugUnitTest` green, coverage ≥ 70% for core utils.
+   - **Artifacts:** JUnit XML, coverage report.
+   - **Fail?:** Add tests/fix logic.
+
+9. **[ ] Prompt:** _"Create screenshot tests for the previews. For WFF, write an instrumentation test that loads `watchface.xml` and captures frames via the wear-watchface screenshot API (use Paparazzi/Compose for the Kotlin track). Commit the golden images to `app/src/androidTest/assets/goldens/` and surface them in CI."_
+   - **Purpose:** Lock visual baselines (dark/light/AOD).
+   - **Steps:**
+     1. Set up instrumentation or Paparazzi tests under `app/src/androidTest/java/com/cosmobond/watchface/` that exercise `app/src/main/res/raw/watchface.xml` configurations.
+     2. Ensure golden directories exist at `app/src/androidTest/assets/goldens/` and save dark, light, and ambient PNGs there with deterministic filenames.
+     3. Run `./gradlew connectedDebugAndroidTest` (for device/emulator flows) or the Paparazzi Gradle task and export the generated screenshots/logs to `docs/qa/screenshots/`.
+     4. Update CI configuration notes in `docs/project/decision_log.md` describing how the goldens will be verified on pull requests.
+   - **Acceptance:** Golden images generated & committed under `app/src/androidTest/assets/goldens/`.
+   - **Artifacts:** Generated PNGs uploaded by CI.
+   - **Fail?:** Update goldens only after design sign-off.
+
+---
+
+### Phase 3 — Performance & Battery Scaffolding
+
+10. **[ ] Prompt:** _"Stand up the baseline profile module and ensure Macrobenchmark-generated rules ship in release builds."_ _(claimed by @assistant, 2025-11-10 13:40 UTC)_
+    - **Purpose:** Improve startup/render perf; reduce CPU.
+    - **Steps:**
+      1. Scaffold the `baselineprofile/` Macrobenchmark module (Gradle script, manifest, and source folders) so it targets the `:app` module and runs on a debuggable variant.
+      2. Register the module in `settings.gradle.kts` with `include(":baselineprofile")` and sync the project.
+      3. Apply the Macrobenchmark/Baseline Profile plugins and configurations in `baselineprofile/build.gradle.kts`, including the `androidx.benchmark` dependencies and instrumentation runner pointing at the app under test.
+      4. Add starter benchmark classes under `baselineprofile/src/main/java/...` that warm up the watch face configuration screen and primary render path before profile capture.
+      5. Generate the baseline profile and copy the resulting `baseline-prof.txt` into `app/src/main/baseline-prof.txt` so it ships with release builds.
+    - **Acceptance:**
+      * `./gradlew :baselineprofile:generateBaselineProfile` completes successfully and refreshes `app/src/main/baseline-prof.txt`.
+      * `./gradlew :app:assembleRelease` finishes without errors, confirming the packaged artifact contains the refreshed profile.
+    - **Artifacts:**
+      * `art/perf/baselineprofile-generateBaselineProfile.log` and `art/perf/app-assembleRelease.log` capturing the command outputs.
+      * Updated `docs/perf/baselineprofile.md` summarizing the module structure, Macrobenchmark coverage, and profile storage path.
+    - **Fail?:** Verify profile merging per Compose/Wear guidance.
+
+11. **[ ] Prompt:** _"Complete the battery and performance guideline audit for the watch face."_
+    - **Purpose:** Enforce Google’s watch face power best practices.
+    - **Steps:**
+      * Audit animation cadence, complication update frequency, and phone interactions against **Optimize watch faces** guide.
+    - **Acceptance:** Checklist signed with notes on update rates/AOD behavior.
+    - **Artifacts:** `docs/qa/battery-checklist.md`.
+    - **Fail?:** Reduce updates/animations; re-test.
+
+---
+
+### Phase 4 — CI Foundation (GitHub Actions)
+
+12. **[ ] Prompt:** _"Wire the PR build and lint workflow in GitHub Actions."_
+    - **Purpose:** Automatic checks on PR.
+    - **Steps:**
+      * Ensure `.github/workflows/android.yml` runs `./gradlew spotlessCheck detekt lint assembleDebug` with cached Gradle and Android SDK setup.
+    - **Acceptance:** PRs show passing checks; SARIF uploaded.
+    - **Artifacts:** Lint/Detekt reports as build artifacts.
+    - **Fail?:** Fix build/lint errors.
+
+13. **[ ] Prompt:** _"Extend CI to execute the unit test suite and surface the results."_
+    - **Purpose:** Enforce correctness gates.
+    - **Steps:**
+      * Extend workflow to run `./gradlew testDebugUnitTest` and publish reports.
+    - **Acceptance:** Tests pass; coverage comment on PR.
+    - **Artifacts:** Test reports uploaded.
+    - **Fail?:** Fix tests or code.
+
+14. **[ ] Prompt:** _"Add the Wear OS emulator job to run connected tests in CI."_
+    - **Purpose:** Run instrumentation/screenshot tests headless.
+    - **Steps:**
+      * Use **ReactiveCircus/android-emulator-runner** with a Wear OS x86_64 system image; start emulator; run `connectedDebugAndroidTest`.
+    - **Acceptance:** Emulator boots in CI; `androidTest` suite passes; screenshots uploaded.
+    - **Artifacts:** Instrumentation logs, screenshots.
+    - **Fail?:** Bump RAM/timeouts; pre-download system images; retry.
+
+15. **[ ] Prompt:** _"Schedule the nightly Macrobenchmark workflow to capture baseline profiles."_
+    - **Purpose:** Generate baseline profile in CI nightly.
+    - **Steps:**
+      * Nightly workflow triggers `:baselineprofile:collect` then commits asset as artifact (not auto-commit).
+    - **Acceptance:** Baseline profile artifact attached to nightly run.
+    - **Artifacts:** Baseline profile, perf metrics.
+    - **Fail?:** Skip battery check on no-battery hosts if needed.
+
+---
+
+### Phase 5 — Signing & Play Integration
+
+16. **[ ] Prompt:** _"Enable Play App Signing in the Google Play Console and capture evidence."_
+    - **Purpose:** Use Google-managed signing; CI only needs upload key.
+    - **Steps:**
+      * In Play Console, enable **App signing by Google Play**; download upload certificate; export a dedicated upload keystore and base64-encode it for CI.
+      * Create a Play Console service account with release-upload rights and download the JSON credentials for later use in Task 18.
+    - **Acceptance:** Play shows “App signing enabled,” and the service-account JSON + upload keystore are archived for CI secrets.
+    - **Artifacts:** App signing status screenshot; redacted note of service-account JSON location.
+    - **Fail?:** Complete identity verification; retry.
+
+17. **[ ] Prompt:** _"Configure Gradle release signing and build types to use CI-provided credentials."_
+    - **Purpose:** Deterministic release builds in CI.
+    - **Steps:**
+      * In `app/build.gradle.kts`, configure `signingConfigs { release }` reading env vars; enable R8; set `versionCode` auto from tags.
+    - **Acceptance:** `./gradlew :app:bundleRelease` uses release keystore in CI.
+    - **Artifacts:** Build scans/logs.
+    - **Fail?:** Fix keystore passwords/aliases.
+
+18. **[ ] Prompt:** _"Provision the CI secrets required for builds and publishing."_
+    - **Purpose:** Secure keys for build/publish.
+    - **Prerequisites:** Phase 5 Task 16 (Play App Signing + service account JSON) and Task 17 (Gradle release signing + upload keystore) are completed.
+    - **Steps:**
+      1. Confirm Task 16's service-account JSON is stored in the secure vault, then immediately upload it as the `PLAY_SERVICE_ACCOUNT_JSON` GitHub secret.
+      2. Right after completing Task 17, base64-encode the upload keystore generated there and add/update the `UPLOAD_KEYSTORE_BASE64`, `UPLOAD_KEY_ALIAS`, `UPLOAD_KEY_PASSWORD`, and `STORE_PASSWORD` secrets.
+      3. Update CI workflow references (Tasks 12–15, 19–20) to read these secrets via environment variables only—no plaintext commits.
+    - **Acceptance:** GitHub secrets reference the Task 16 service-account JSON and Task 17 upload keystore; workflows consume them without leaking secrets in code or logs.
+    - **Artifacts:** Screenshot of the GitHub secrets page (sensitive fields redacted) plus links back to the Task 16/17 evidence in `docs/`.
+    - **Fail?:** Rotate keys from Tasks 16/17 and retry.
+
+19. **[ ] Prompt:** _"Integrate Gradle Play Publisher and validate the release task graph."_
+    - **Purpose:** Automate upload to internal/closed tracks.
+    - **Steps:**
+      * Add plugin `com.github.triplet.play` and `play { serviceAccountCredentials.set(...) track.set("internal") }`.
+    - **Acceptance:** Dry run: `./gradlew publishRelease --dry-run` resolves tasks.
+    - **Artifacts:** Gradle config diff.
+    - **Fail?:** Fix scopes on service account JSON.
+
+20. **[ ] Prompt:** _"Finalize the tag-driven internal release workflow in GitHub Actions."_
+    - **Purpose:** One-button internal release from a tag.
+    - **Steps:**
+      * Ensure `.github/workflows/release.yml` builds `bundleRelease`, runs tests, then `publishRelease` to **internal** on tag push.
+    - **Acceptance:** Tagging `v0.1.0` uploads AAB to internal track.
+    - **Artifacts:** Play Console artifacts screenshot, CI logs.
+    - **Fail?:** Inspect GPP error output and fix listing/consent.
+
+---
+
+### Phase 6 — Feature Completeness for Watch Face
+
+21. **[ ] Prompt:** _"Implement the complication slots and schema within the Watch Face Format layout."_ _(claimed by @agent, 2025-11-10 02:56 UTC)_
+    - **Purpose:** Add standard complications (steps, heart rate, battery).
+    - **Steps:**
+      * **Watch Face Format track:** Define slots and bounds in WFF; for phone battery or advanced data, consider a small provider app.
+      * **Kotlin-rendered track:** Configure `ComplicationSlotsManager` inside the renderer host (`WatchFaceService`) and register `ComplicationSlot`s with supported data types; surface data via `Renderer.CanvasRenderer` drawing logic or Compose bridge.
+    - **Acceptance:** Either (a) the WFF-based face exposes selectable complications in the system editor and renders live data, or (b) the Kotlin-rendered face registers the same slots through `ComplicationSlotsManager` and displays updates in the custom renderer without regression. Document which path is implemented.
+    - **Artifacts:** Screenshots from emulator (WFF) or renderer preview captures showing complications (Kotlin track).
+    - **Fail?:** Verify slot IDs and data types.
+
+22. **[ ] Prompt:** _"Design and validate the always-on display and power-saving modes for the watch face."_ _(claimed by @agent, 2025-11-10 02:56 UTC)_
+    - **Purpose:** Great battery behavior.
+    - **Steps:**
+      * **Watch Face Format track:** Provide simplified `ambient` group in WFF; throttle updates; avoid constant phone interactions & heavy animations to pass Play warnings.
+      * **Kotlin-rendered track:** Implement ambient callbacks in `Renderer.CanvasRenderer` (or Compose renderer) to switch palettes, disable anti-aliasing, and gate animation timers; ensure `setAmbientMode`/`onPropertiesChanged` paths cover low-bit and burn-in protection cases.
+    - **Acceptance:** Either (a) Macrobenchmark confirms stable frame times and no Play warnings for the WFF ambient group, or (b) profiling of the Kotlin renderer shows compliant ambient transitions (documented renders plus profiler output) with the same lack of Play warnings. Make the chosen validation explicit.
+    - **Artifacts:** Perf numbers; Play review notes; Kotlin track may substitute renderer logs + ambient screenshots if applicable.
+    - **Fail?:** Reduce animation frequency/bitmap size.
+
+23. **[ ] Prompt:** _"Automate generation of multi-density previews and Play Store screenshots."_ _(claimed by @agent, 2025-11-10 02:56 UTC)_
+    - **Purpose:** Auto-produce Play assets.
+    - **Steps:**
+      * **Watch Face Format track:** Instrumentation test renders preset styles (light/dark/AOD) at multiple densities, saves PNGs; CI uploads to `src/main/play/listings/en-US/graphics/phone-screenshots/`.
+      * **Kotlin-rendered track:** Add Compose or view-based screenshot tooling (e.g., Paparazzi or AndroidX Screenshot tests) that exercise the Kotlin renderer/`Renderer.CanvasRenderer` surfaces across densities and styles, exporting assets to the same Play listings path.
+    - **Acceptance:** Either pipeline generates Play-compliant screenshots and `publishListing` succeeds; note whether instrumentation or Paparazzi/Screenshot tests produced the assets.
+    - **Artifacts:** PNGs as CI artifacts and committed copies, plus test logs for the corresponding tooling.
+    - **Fail?:** Adjust emulator density and renderer.
+
+---
+
+### Phase 7 — Store Listing & Testing Tracks
+
+24. **[ ] Prompt:** _"Version-control the Google Play store listing metadata and publish it through CI."_
+    - **Purpose:** Keep Play listing under version control.
+    - **Steps:**
+      * Add `fastlane/metadata` or GPP metadata files (`src/main/play/`): title, short/long description, changelog, screenshots (generated by tests), icons.
+    - **Acceptance:** `./gradlew publishListing` updates Play listing.
+    - **Artifacts:** CI logs + Play change diff.
+    - **Fail?:** Fix locale folders or graphic specs.
+
+25. **[ ] Prompt:** _"Create and populate the Google Play testing tracks for internal, closed, and open testers."_
+    - **Purpose:** Gradual validation.
+    - **Steps:**
+      * In Play Console: **Internal**, **Closed**, **Open** tracks; add testers (email lists/Google Groups).
+    - **Acceptance:** Testers can install from **Internal** link.
+    - **Artifacts:** Track screenshots, tester list (redacted).
+    - **Fail?:** Reconcile tester emails; wait for indexing.
+
+26. **[ ] Prompt:** _"Draft the privacy policy, complete the Data Safety questionnaire, and archive the evidence."_
+    - **Purpose:** Lock down Play compliance artifacts before advancing.
+    - **Steps:**
+      * Draft/update the privacy policy and data handling disclosures with PM/legal input.
+      * Complete the Google Play Data Safety questionnaire; export the review summary.
+      * Store the policy, questionnaire exports, and supporting notes under `docs/security/` (or the designated security docs folder).
+      * Capture screenshots or PDFs showing the questionnaire submission before proceeding to pre-release gates.
+    - **Acceptance:** Privacy policy and Data Safety entries approved in Play Console; repository contains the synced documentation.
+    - **Artifacts:** `docs/security/` assets; Play Console submission evidence.
+    - **Fail?:** Resolve policy gaps or questionnaire blockers with PM/legal and resubmit.
+
+27. **[ ] Prompt:** _"Verify the Wear OS target API policy compliance and document the evidence."_
+    - **Purpose:** Compliance gate.
+    - **Steps:**
+      * Confirm `targetSdkVersion=34` for Wear OS app submission.
+    - **Acceptance:** Play pre-launch report shows correct target API.
+    - **Artifacts:** Pre-launch report PDF.
+    - **Fail?:** Update `targetSdk` and resubmit.
+
+---
+
+### Phase 8 — Pre-Release Gates
+
+28. **[ ] Prompt:** _"Run a Google Play pre-launch report smoke test and address findings."_
+    - **Purpose:** Automated device lab sanity.
+    - **Steps:**
+      * Upload to **Internal**; trigger PLR; review crashes, ANRs, permissions.
+    - **Acceptance:** Zero critical issues; medium issues triaged.
+    - **Artifacts:** PLR HTML/PDF.
+    - **Fail?:** Fix and re-upload.
+
+29. **[ ] Prompt:** _"Complete the accessibility review for the watch face and document adjustments."_
+    - **Purpose:** Legibility on small displays.
+    - **Steps:**
+      * Check contrast ratios and tap targets per Wear guidance.
+    - **Acceptance:** `docs/ux/accessibility.md` updated; issues resolved.
+    - **Artifacts:** Before/after screenshots.
+    - **Fail?:** Adjust palettes/typography.
+
+30. **[ ] Prompt:** _"Promote the build to the closed testing track and collect feedback."_
+    - **Purpose:** External validation.
+    - **Steps:**
+      * Promote internal → closed; collect feedback for 7–14 days.
+    - **Acceptance:** No crash spikes; battery feedback positive.
+    - **Artifacts:** Crash-free sessions %, user notes.
+    - **Fail?:** Patch, re-test.
+
+---
+
+### Phase 9 — Release & Post-Release
+
+31. **[ ] Prompt:** _"Execute a staged production rollout via Gradle Play Publisher."_
+    - **Purpose:** Safe release.
+    - **Steps:**
+      * Use GPP: `./gradlew publishRelease -Ptrack=production -ProlloutFraction=0.1`.
+    - **Acceptance:** 10% staged rollout created in Play; monitoring enabled.
+    - **Artifacts:** Rollout screenshot; CI logs.
+    - **Fail?:** Halt rollout; hotfix via internal → production.
+
+32. **[ ] Prompt:** _"Establish monitoring dashboards and alerting for post-release health."_
+    - **Purpose:** Catch regressions.
+    - **Steps:**
+      * Enable ANR/Crash alerts; track Play vitals; set alerting in observability tool.
+    - **Acceptance:** Alert rules confirmed; dashboard link recorded.
+    - **Artifacts:** Dashboard URL in `docs/devops/monitoring.md`.
+    - **Fail?:** Adjust filters and thresholds.
+
+33. **[ ] Prompt:** _"Cut the production tag, publish the changelog, and write the release retrospective."_
+    - **Purpose:** Close the loop.
+    - **Steps:**
+      * Tag `v1.0.0`; generate `CHANGELOG.md` from commits; write retro in `docs/operations/retrospectives.md`.
+    - **Acceptance:** Tag pushed; changelog and retro committed.
+    - **Artifacts:** Release page link; changelog diff.
+    - **Fail?:** Fix versioning script and retry.
+
+---
+
 ### DigiPet Watch Face Expansion Backlog _(Optional — post-baseline)_
+
+> **Reminder:** Per the workflow rule above, only work on this backlog after all baseline CI/CD phases (Phases 1–9) relevant to your assignment are completed and documented.
 
 > **Unlock condition:** Tackle these DigiPet expansion items only after finishing the baseline CI/CD phases (Phases 1–9) relevant to your assignment. They are exempt from the strict sequencing rule once unlocked, allowing agents to pick the pet initiative that best matches current priorities.
 
@@ -500,392 +888,6 @@
     * Animation capture for charging feast, low-battery swoon, and regal evolution.
     * Notification copy and escalation ladder documented in `docs/pets/voltvampire/`.
     * `docs/pets/voltvampire/animation.md` updated with export settings, optimization output, and asset verification screenshots.
-
-### Retention Expectations & Ritual Design
-- **Engagement cadence:** Craft daily micro-rituals (feed, play, quick training) taking <90 seconds, weekly depth loops (adventures, co-op quests), and monthly aspirational milestones (rare evolutions, habitat overhauls). Track activation, day-7, and day-30 retention with explicit thresholds per ritual type.
-- **Notification philosophy:** Favor ambient nudges through pet behavior rather than push spam. When notifications are required, cap at two actionable alerts per day, contextualized with streak progress and sent during empirically successful engagement windows.
-- **Re-engagement safety net:** If a pet flees due to neglect, provide a compassionate return quest (e.g., “complete two self-care tasks to earn back trust”) to avoid permanent loss while still reinforcing accountability.
-- **Analytics instrumentation:** Log interaction categories, streak outcomes, social feature usage, and evolution progress. Correlate with health goals to ensure personalized triggers feel attainable; revise thresholds if churn indicators spike.
-- **Content refresh schedule:** Maintain a rotating calendar of limited-time accessories, social quests, and ambient animations so returning players discover novelty without overwhelming new users.
-
-### QA Rigor Enhancements
-- **Companion simulation suite:** Build automated scenarios that fast-forward lifecycle states (happy → neglected → runaway → reunion) and assert UI/animation fidelity in each stage. Capture golden videos or frame sequences for regression tracking.
-- **Device matrix:** Expand beyond Watch8 Classic to include smaller/larger bezels and different brightness profiles. Document pass/fail matrices in `docs/qa/device_matrix.md` with firmware versions and ambient-mode screenshots.
-- **Complication/tile contract tests:** Validate pause/resume semantics by programmatically switching watch faces and confirming timers, animations, and data flows halt and resume without drift.
-- **Audio consent verification:** Unit test preference toggles ensuring pet audio mirroring only activates when explicit consent is stored, and that revoking access silences features immediately.
-- **Social sandbox:** Mock co-op sessions to verify prank consent, cooldown timers, and cross-account state sync.
-
-### Repository Structure & Standards Deep Dive
-- **Modular boundaries:** Keep watch face declarative assets in `app/src/main/res/raw/` and Kotlin orchestration in `app/src/main/java/com/cosmobond/...`. Create dedicated packages for evolution logic, social networking, and analytics sinks to prevent monolith controllers.
-- **Documentation map:** Expand `docs/` with subfolders (`docs/design/companions`, `docs/retention`, `docs/social`) containing personas, ritual maps, and state charts. Update the decision log whenever structure changes.
-- **Naming conventions:** Use `Companion` prefix for pet-related classes (`CompanionStateMachine`, `CompanionAudioSync`), `Habitat` for environment modules, and suffix tests with `Test`/`Spec` consistently.
-- **Asset governance:** Store layered art in `art/source/` (PSD/AI) with exported runtime assets in `art/export/`. Include README files describing export settings, compression, and color profiles.
-
-### File Management & Coding Practices — Extra Steps
-- **State persistence:** Centralize pet state serialization in a single repository (e.g., `CompanionStateStore`) with migration tests whenever schema changes.
-- **Feature flags:** Introduce remote-config toggles for experimental social features or evolution variants to stage rollouts safely.
-- **Accessibility reviews:** Document accessible color pairs and animation comfort settings; ensure every new animation ships with reduced-motion alternatives.
-- **Localization readiness:** Prepare strings for internationalization from day one, storing copy in `res/values/strings_companion.xml` with developer-facing descriptions.
-- **Performance budgets:** Set frame-time budgets (≤16ms for interactive scenes, ≤33ms ambient) and monitor with Baseline Profiles plus macrobenchmarks.
-- **Security hygiene:** Sanitize network payloads for social features, rotate OAuth tokens regularly, and limit scopes to least-privilege.
-
-## Ready-to-Run Repository Snapshot
-This repository already includes baseline policy files, directory scaffolding, GitHub Actions workflows, and a minimal Watch Face Format XML. Review the structure before claiming tasks:
-- `.github/workflows/android.yml` and `release.yml` implement PR checks and internal releases.
-- `app/` contains a starter Wear OS module with `res/raw/watchface.xml` and a placeholder `CosmoBondWatchFaceService`.
-- `docs/`, `art/`, and related directories are pre-created so that documentation tasks can start immediately.
-
----
-
-## CI/CD Checklist for the Galaxy Watch Face
-Follow the tasks in order. Each item lists its purpose, precise steps, acceptance checks, required artifacts, and recovery guidance.
-
-### Pre-Checklist Prerequisites
-
-- [ ] **Design brief finalized:** Dial layout, typography, color palette, complication plan, and animation storyboards approved.
-- [ ] **Asset requirements gathered:** Vector/raster assets, fonts, and ambient-mode variants stored in an accessible location.
-- [ ] **Feature scope prioritized:** Feature list with interactive behaviors, data integrations, and configuration options locked for v1.0.
-- [ ] **Account and secret access secured:** Google Play Console, signing keys, analytics credentials, and related secrets available for automation.
-- [ ] **Validation plan prepared:** Target device matrix, manual test scenarios, and acceptance criteria documented for handoff.
-
-### Phase 0 — Baseline Verification & Policy Alignment
-
-1. **[ ] Prompt:** _"Audit the repository guardrails. Inspect `README.md`, `CODEOWNERS`, `CONTRIBUTING.md`, `LICENSE`, `.gitignore`, `.editorconfig`, and `.gitattributes`; record any needed adjustments in `docs/project/decision_log.md`; capture current branch protection status and document how to request updates."_
-   - **Purpose:** Confirm guardrails and initial documentation are present.
-   - **Acceptance:** Baseline files reviewed; issues noted in `docs/project/decision_log.md`; branch protections documented.
-   - **Artifacts:** Decision log entry, branch protection screenshot.
-   - **Fail?:** Address missing protections or file updates, recommit.
-
-2. **[ ] Prompt:** _"Lock the platform versions and compliance targets. Confirm JDK 17, AGP 8.5.x+, Kotlin 1.9+, Gradle wrapper, Android SDK API 34, and Wear OS emulator images, then update `docs/setup/tooling.md` with the versions, download links, and Wear OS 5/6 lineage references."_
-   - **Steps:**
-     1. Create `docs/setup/tooling.md` (and the parent directory) if it does not already exist before documenting the tooling snapshot.
-     2. Capture each required tool in the doc using a consistent bullet list or table that includes: tool name, pinned version, official download or installation link, and the Wear OS 5/6 lineage references that justify the target selections.
-   - **Purpose:** Freeze host/tool versions for repeatability.
-   - **Acceptance:** `docs/setup/tooling.md` describes tooling, cites Play target API 34 requirement.
-   - **Artifacts:** Tooling doc diff.
-   - **Fail?:** Adjust mismatched versions and re-document.
-
-3. **[ ] Prompt:** _"Confirm the rendering track. Update `docs/tech/architecture.md` to summarize the Watch Face Format v2 + Kotlin host approach, set minSdk/targetSdk to 34, and cite the supporting Google/Samsung guidance. If you pivot to the Kotlin-rendered path, adjust downstream notes accordingly."_
-   - **Purpose:** Document Watch Face Format v2 choice (or switch to Kotlin track if required).
-   - **Acceptance:** Architecture doc captures decision with references.
-   - **Artifacts:** Architecture doc diff.
-   - **Fail?:** If opting into Kotlin-rendered path, update downstream steps and checklist notes accordingly.
-
----
-
-### Phase 1 — Android Project Skeleton
-
-> **USER NOTE — first on-watch testing unlock:** Task 4 produces a debug build you can sideload to the Galaxy Watch8 Classic for initial smoke checks once completed. AI agents should ignore this line.
-
-4. **[ ] Prompt:** _"Validate the Wear OS project scaffolding. Review `app/build.gradle.kts`, `settings.gradle.kts`, and `AndroidManifest.xml`; run `./gradlew :app:assembleDebug` on JDK 17; capture the build logs and record any dependency updates needed in the decision log."_
-   - **Purpose:** Ensure the existing module builds and aligns with naming/package expectations.
-   - **Steps:**
-     1. Inspect `app/build.gradle.kts`, `settings.gradle.kts`, and `app/src/main/AndroidManifest.xml` for namespace, module includes, and SDK configuration.
-     2. Execute `./gradlew :app:assembleDebug` from the repository root and save the terminal output to `docs/project/logs/phase1-task4-build.txt`.
-     3. Verify the generated APK under `app/build/outputs/apk/debug/` and note Gradle wrapper details in `docs/project/decision_log.md`.
-     4. Record any dependency or configuration follow-ups in the same decision log entry.
-   - **Acceptance:** Debug build succeeds; notes recorded in decision log.
-   - **Artifacts:** Build log, Gradle wrapper version, decision log entry.
-   - **Fail?:** Resolve version mismatches or missing dependencies and rerun.
-
-5. **[ ] Prompt:** _"Expand the Watch Face Format v2 skeleton. Enhance `res/raw/watchface.xml` with initial layout elements, verify the service metadata and preview assets, and build a release bundle with `./gradlew :app:assembleRelease` to confirm the resource packaging."_
-   - **Purpose:** Flesh out declarative structure and previews.
-   - **Steps:**
-     1. Update `app/src/main/res/raw/watchface.xml` with the initial layout groups, elements, and complication bindings.
-     2. Cross-check `app/src/main/AndroidManifest.xml` and `app/src/main/res/xml/watch_face_config.xml` (if introduced) for matching service metadata and preview references.
-     3. Ensure preview assets live under `app/src/main/res/drawable-nodpi/` or the appropriate density directory referenced by the manifest.
-     4. Run `./gradlew :app:assembleRelease` and archive the AAB from `app/build/outputs/bundle/release/` alongside captured build logs in `docs/project/logs/`.
-   - **Acceptance:** Release bundle contains WFF resource; previews render.
-   - **Artifacts:** AAB artifact, manifest diff, screenshots.
-   - **Fail?:** Correct resource paths or metadata and rebuild.
-
-6. **[ ] Prompt (optional Kotlin track):** _"Introduce the Jetpack Watch Face renderer. Add the `androidx.wear.watchface:watchface` dependencies, implement the `WatchFaceService`, `ComplicationSlotsManager`, and `UserStyleSchema`, and prove the renderer with a passing unit test preview."_
-   - **Purpose:** Code-rendered face (if not using WFF).
-   - **Steps:**
-     1. Add the required `androidx.wear.watchface` dependencies to `app/build.gradle.kts`, including the `watchface`, `watchface-style`, and `watchface-complications-data-source` artifacts.
-     2. Implement `CosmoBondWatchFaceService` and related renderer classes under `app/src/main/java/com/cosmobond/watchface/`, wiring a `ComplicationSlotsManager` and `UserStyleSchema` implementation.
-     3. Create unit test previews in `app/src/test/java/com/cosmobond/watchface/` that exercise the renderer and validate slot registration.
-     4. Run `./gradlew testDebugUnitTest --tests "*WatchFaceRenderer*"` (or the specific class name) and capture the passing output for the task evidence.
-   - **Acceptance:** Unit test renders preview and compiles.
-   - **Artifacts:** Sample screenshot.
-   - **Fail?:** Reconcile dependencies/Compose Canvas usage.
-
----
-
-### Phase 2 — Quality Gates (Local)
-
-7. **[ ] Prompt:** _"Establish static analysis and style enforcement. Add ktlint with Spotless, configure Android Lint to treat new issues as fatal (with a baseline), and wire in a Detekt ruleset, then verify with `./gradlew spotlessApply detekt lint`."_
-   - **Purpose:** Enforce Kotlin style and code health.
-   - **Steps:**
-     1. Configure Spotless with ktlint inside `build.gradle.kts` or `app/build.gradle.kts`, and add any project-wide settings to `gradle/spotless.klint.gradle` if needed.
-     2. Add Detekt configuration under `config/detekt/detekt.yml` (create the directory if missing) and enable fatal new issues via `app/build.gradle.kts` lintOptions baseline setup.
-     3. Generate or update `app/lint-baseline.xml` after resolving findings so the lint task can treat new issues as fatal.
-     4. Run `./gradlew spotlessApply detekt lint` and store the command output plus generated reports (`app/build/reports/`) in `docs/qa/static-analysis/`.
-   - **Acceptance:** `./gradlew spotlessApply detekt lint` passes.
-   - **Artifacts:** Lint HTML report, Detekt SARIF, Spotless status.
-   - **Fail?:** Fix violations or adjust rules narrowly.
-
-8. **[ ] Prompt:** _"Add unit tests for the non-UI logic. Implement `src/test` coverage for time formatting, color scheme selection, and complication ID mapping, then confirm `./gradlew testDebugUnitTest` passes with ≥70% coverage on the core utilities."_
-   - **Purpose:** Cover non-UI logic (style schema parsing, config).
-   - **Steps:**
-     1. Identify the core utility classes under `app/src/main/java/com/cosmobond/` that handle time formatting, palette selection, and complication ID mapping.
-     2. Add corresponding test cases to `app/src/test/java/com/cosmobond/` ensuring edge cases and expected mappings are asserted.
-     3. Execute `./gradlew testDebugUnitTest` and collect the JUnit XML plus JaCoCo coverage report from `app/build/reports/tests/` and `app/build/reports/jacoco/`.
-     4. Summarize the achieved coverage percentage and notable findings in `docs/qa/unit-testing.md` (or create the file if absent).
-   - **Acceptance:** `./gradlew testDebugUnitTest` green, coverage ≥ 70% for core utils.
-   - **Artifacts:** JUnit XML, coverage report.
-   - **Fail?:** Add tests/fix logic.
-
-9. **[ ] Prompt:** _"Create screenshot tests for the previews. For WFF, write an instrumentation test that loads `watchface.xml` and captures frames via the wear-watchface screenshot API (use Paparazzi/Compose for the Kotlin track). Commit the golden images to `app/src/androidTest/assets/goldens/` and surface them in CI."_
-   - **Purpose:** Lock visual baselines (dark/light/AOD).
-   - **Steps:**
-     1. Set up instrumentation or Paparazzi tests under `app/src/androidTest/java/com/cosmobond/watchface/` that exercise `app/src/main/res/raw/watchface.xml` configurations.
-     2. Ensure golden directories exist at `app/src/androidTest/assets/goldens/` and save dark, light, and ambient PNGs there with deterministic filenames.
-     3. Run `./gradlew connectedDebugAndroidTest` (for device/emulator flows) or the Paparazzi Gradle task and export the generated screenshots/logs to `docs/qa/screenshots/`.
-     4. Update CI configuration notes in `docs/project/decision_log.md` describing how the goldens will be verified on pull requests.
-   - **Acceptance:** Golden images generated & committed under `app/src/androidTest/assets/goldens/`.
-   - **Artifacts:** Generated PNGs uploaded by CI.
-   - **Fail?:** Update goldens only after design sign-off.
-
----
-
-### Phase 3 — Performance & Battery Scaffolding
-
-10. **[ ] Prompt:** _"Stand up the baseline profile module and ensure Macrobenchmark-generated rules ship in release builds."_ _(claimed by @assistant, 2025-11-10 13:40 UTC)_
-    - **Purpose:** Improve startup/render perf; reduce CPU.
-    - **Steps:**
-      1. Scaffold the `baselineprofile/` Macrobenchmark module (Gradle script, manifest, and source folders) so it targets the `:app` module and runs on a debuggable variant.
-      2. Register the module in `settings.gradle.kts` with `include(":baselineprofile")` and sync the project.
-      3. Apply the Macrobenchmark/Baseline Profile plugins and configurations in `baselineprofile/build.gradle.kts`, including the `androidx.benchmark` dependencies and instrumentation runner pointing at the app under test.
-      4. Add starter benchmark classes under `baselineprofile/src/main/java/...` that warm up the watch face configuration screen and primary render path before profile capture.
-      5. Generate the baseline profile and copy the resulting `baseline-prof.txt` into `app/src/main/baseline-prof.txt` so it ships with release builds.
-    - **Acceptance:**
-      * `./gradlew :baselineprofile:generateBaselineProfile` completes successfully and refreshes `app/src/main/baseline-prof.txt`.
-      * `./gradlew :app:assembleRelease` finishes without errors, confirming the packaged artifact contains the refreshed profile.
-    - **Artifacts:**
-      * `art/perf/baselineprofile-generateBaselineProfile.log` and `art/perf/app-assembleRelease.log` capturing the command outputs.
-      * Updated `docs/perf/baselineprofile.md` summarizing the module structure, Macrobenchmark coverage, and profile storage path.
-    - **Fail?:** Verify profile merging per Compose/Wear guidance.
-
-11. **[ ] Prompt:** _"Complete the battery and performance guideline audit for the watch face."_
-    - **Purpose:** Enforce Google’s watch face power best practices.
-    - **Steps:**
-      * Audit animation cadence, complication update frequency, and phone interactions against **Optimize watch faces** guide.
-    - **Acceptance:** Checklist signed with notes on update rates/AOD behavior.
-    - **Artifacts:** `docs/qa/battery-checklist.md`.
-    - **Fail?:** Reduce updates/animations; re-test.
-
----
-
-### Phase 4 — CI Foundation (GitHub Actions)
-
-12. **[ ] Prompt:** _"Wire the PR build and lint workflow in GitHub Actions."_
-    - **Purpose:** Automatic checks on PR.
-    - **Steps:**
-      * Ensure `.github/workflows/android.yml` runs `./gradlew spotlessCheck detekt lint assembleDebug` with cached Gradle and Android SDK setup.
-    - **Acceptance:** PRs show passing checks; SARIF uploaded.
-    - **Artifacts:** Lint/Detekt reports as build artifacts.
-    - **Fail?:** Fix build/lint errors.
-
-13. **[ ] Prompt:** _"Extend CI to execute the unit test suite and surface the results."_
-    - **Purpose:** Enforce correctness gates.
-    - **Steps:**
-      * Extend workflow to run `./gradlew testDebugUnitTest` and publish reports.
-    - **Acceptance:** Tests pass; coverage comment on PR.
-    - **Artifacts:** Test reports uploaded.
-    - **Fail?:** Fix tests or code.
-
-14. **[ ] Prompt:** _"Add the Wear OS emulator job to run connected tests in CI."_
-    - **Purpose:** Run instrumentation/screenshot tests headless.
-    - **Steps:**
-      * Use **ReactiveCircus/android-emulator-runner** with a Wear OS x86_64 system image; start emulator; run `connectedDebugAndroidTest`.
-    - **Acceptance:** Emulator boots in CI; `androidTest` suite passes; screenshots uploaded.
-    - **Artifacts:** Instrumentation logs, screenshots.
-    - **Fail?:** Bump RAM/timeouts; pre-download system images; retry.
-
-15. **[ ] Prompt:** _"Schedule the nightly Macrobenchmark workflow to capture baseline profiles."_
-    - **Purpose:** Generate baseline profile in CI nightly.
-    - **Steps:**
-      * Nightly workflow triggers `:baselineprofile:collect` then commits asset as artifact (not auto-commit).
-    - **Acceptance:** Baseline profile artifact attached to nightly run.
-    - **Artifacts:** Baseline profile, perf metrics.
-    - **Fail?:** Skip battery check on no-battery hosts if needed.
-
----
-
-### Phase 5 — Signing & Play Integration
-
-16. **[ ] Prompt:** _"Enable Play App Signing in the Google Play Console and capture evidence."_
-    - **Purpose:** Use Google-managed signing; CI only needs upload key.
-    - **Steps:**
-      * In Play Console, enable **App signing by Google Play**; download upload certificate; export a dedicated upload keystore and base64-encode it for CI.
-      * Create a Play Console service account with release-upload rights and download the JSON credentials for later use in Task 18.
-    - **Acceptance:** Play shows “App signing enabled,” and the service-account JSON + upload keystore are archived for CI secrets.
-    - **Artifacts:** App signing status screenshot; redacted note of service-account JSON location.
-    - **Fail?:** Complete identity verification; retry.
-
-17. **[ ] Prompt:** _"Configure Gradle release signing and build types to use CI-provided credentials."_
-    - **Purpose:** Deterministic release builds in CI.
-    - **Steps:**
-      * In `app/build.gradle.kts`, configure `signingConfigs { release }` reading env vars; enable R8; set `versionCode` auto from tags.
-    - **Acceptance:** `./gradlew :app:bundleRelease` uses release keystore in CI.
-    - **Artifacts:** Build scans/logs.
-    - **Fail?:** Fix keystore passwords/aliases.
-
-18. **[ ] Prompt:** _"Provision the CI secrets required for builds and publishing."_
-    - **Purpose:** Secure keys for build/publish.
-    - **Prerequisites:** Phase 5 Task 16 (Play App Signing + service account JSON) and Task 17 (Gradle release signing + upload keystore) are completed.
-    - **Steps:**
-      1. Confirm Task 16's service-account JSON is stored in the secure vault, then immediately upload it as the `PLAY_SERVICE_ACCOUNT_JSON` GitHub secret.
-      2. Right after completing Task 17, base64-encode the upload keystore generated there and add/update the `UPLOAD_KEYSTORE_BASE64`, `UPLOAD_KEY_ALIAS`, `UPLOAD_KEY_PASSWORD`, and `STORE_PASSWORD` secrets.
-      3. Update CI workflow references (Tasks 12–15, 19–20) to read these secrets via environment variables only—no plaintext commits.
-    - **Acceptance:** GitHub secrets reference the Task 16 service-account JSON and Task 17 upload keystore; workflows consume them without leaking secrets in code or logs.
-    - **Artifacts:** Screenshot of the GitHub secrets page (sensitive fields redacted) plus links back to the Task 16/17 evidence in `docs/`.
-    - **Fail?:** Rotate keys from Tasks 16/17 and retry.
-
-19. **[ ] Prompt:** _"Integrate Gradle Play Publisher and validate the release task graph."_
-    - **Purpose:** Automate upload to internal/closed tracks.
-    - **Steps:**
-      * Add plugin `com.github.triplet.play` and `play { serviceAccountCredentials.set(...) track.set("internal") }`.
-    - **Acceptance:** Dry run: `./gradlew publishRelease --dry-run` resolves tasks.
-    - **Artifacts:** Gradle config diff.
-    - **Fail?:** Fix scopes on service account JSON.
-
-20. **[ ] Prompt:** _"Finalize the tag-driven internal release workflow in GitHub Actions."_
-    - **Purpose:** One-button internal release from a tag.
-    - **Steps:**
-      * Ensure `.github/workflows/release.yml` builds `bundleRelease`, runs tests, then `publishRelease` to **internal** on tag push.
-    - **Acceptance:** Tagging `v0.1.0` uploads AAB to internal track.
-    - **Artifacts:** Play Console artifacts screenshot, CI logs.
-    - **Fail?:** Inspect GPP error output and fix listing/consent.
-
----
-
-### Phase 6 — Feature Completeness for Watch Face
-
-21. **[ ] Prompt:** _"Implement the complication slots and schema within the Watch Face Format layout."_ _(claimed by @agent, 2025-11-10 02:56 UTC)_
-    - **Purpose:** Add standard complications (steps, heart rate, battery).
-    - **Steps:**
-      * **Watch Face Format track:** Define slots and bounds in WFF; for phone battery or advanced data, consider a small provider app.
-      * **Kotlin-rendered track:** Configure `ComplicationSlotsManager` inside the renderer host (`WatchFaceService`) and register `ComplicationSlot`s with supported data types; surface data via `Renderer.CanvasRenderer` drawing logic or Compose bridge.
-    - **Acceptance:** Either (a) the WFF-based face exposes selectable complications in the system editor and renders live data, or (b) the Kotlin-rendered face registers the same slots through `ComplicationSlotsManager` and displays updates in the custom renderer without regression. Document which path is implemented.
-    - **Artifacts:** Screenshots from emulator (WFF) or renderer preview captures showing complications (Kotlin track).
-    - **Fail?:** Verify slot IDs and data types.
-
-22. **[ ] Prompt:** _"Design and validate the always-on display and power-saving modes for the watch face."_ _(claimed by @agent, 2025-11-10 02:56 UTC)_
-    - **Purpose:** Great battery behavior.
-    - **Steps:**
-      * **Watch Face Format track:** Provide simplified `ambient` group in WFF; throttle updates; avoid constant phone interactions & heavy animations to pass Play warnings.
-      * **Kotlin-rendered track:** Implement ambient callbacks in `Renderer.CanvasRenderer` (or Compose renderer) to switch palettes, disable anti-aliasing, and gate animation timers; ensure `setAmbientMode`/`onPropertiesChanged` paths cover low-bit and burn-in protection cases.
-    - **Acceptance:** Either (a) Macrobenchmark confirms stable frame times and no Play warnings for the WFF ambient group, or (b) profiling of the Kotlin renderer shows compliant ambient transitions (documented renders plus profiler output) with the same lack of Play warnings. Make the chosen validation explicit.
-    - **Artifacts:** Perf numbers; Play review notes; Kotlin track may substitute renderer logs + ambient screenshots if applicable.
-    - **Fail?:** Reduce animation frequency/bitmap size.
-
-23. **[ ] Prompt:** _"Automate generation of multi-density previews and Play Store screenshots."_ _(claimed by @agent, 2025-11-10 02:56 UTC)_
-    - **Purpose:** Auto-produce Play assets.
-    - **Steps:**
-      * **Watch Face Format track:** Instrumentation test renders preset styles (light/dark/AOD) at multiple densities, saves PNGs; CI uploads to `src/main/play/listings/en-US/graphics/phone-screenshots/`.
-      * **Kotlin-rendered track:** Add Compose or view-based screenshot tooling (e.g., Paparazzi or AndroidX Screenshot tests) that exercise the Kotlin renderer/`Renderer.CanvasRenderer` surfaces across densities and styles, exporting assets to the same Play listings path.
-    - **Acceptance:** Either pipeline generates Play-compliant screenshots and `publishListing` succeeds; note whether instrumentation or Paparazzi/Screenshot tests produced the assets.
-    - **Artifacts:** PNGs as CI artifacts and committed copies, plus test logs for the corresponding tooling.
-    - **Fail?:** Adjust emulator density and renderer.
-
----
-
-### Phase 7 — Store Listing & Testing Tracks
-
-24. **[ ] Prompt:** _"Version-control the Google Play store listing metadata and publish it through CI."_
-    - **Purpose:** Keep Play listing under version control.
-    - **Steps:**
-      * Add `fastlane/metadata` or GPP metadata files (`src/main/play/`): title, short/long description, changelog, screenshots (generated by tests), icons.
-    - **Acceptance:** `./gradlew publishListing` updates Play listing.
-    - **Artifacts:** CI logs + Play change diff.
-    - **Fail?:** Fix locale folders or graphic specs.
-
-25. **[ ] Prompt:** _"Create and populate the Google Play testing tracks for internal, closed, and open testers."_
-    - **Purpose:** Gradual validation.
-    - **Steps:**
-      * In Play Console: **Internal**, **Closed**, **Open** tracks; add testers (email lists/Google Groups).
-    - **Acceptance:** Testers can install from **Internal** link.
-    - **Artifacts:** Track screenshots, tester list (redacted).
-    - **Fail?:** Reconcile tester emails; wait for indexing.
-
-26. **[ ] Prompt:** _"Draft the privacy policy, complete the Data Safety questionnaire, and archive the evidence."_
-    - **Purpose:** Lock down Play compliance artifacts before advancing.
-    - **Steps:**
-      * Draft/update the privacy policy and data handling disclosures with PM/legal input.
-      * Complete the Google Play Data Safety questionnaire; export the review summary.
-      * Store the policy, questionnaire exports, and supporting notes under `docs/security/` (or the designated security docs folder).
-      * Capture screenshots or PDFs showing the questionnaire submission before proceeding to pre-release gates.
-    - **Acceptance:** Privacy policy and Data Safety entries approved in Play Console; repository contains the synced documentation.
-    - **Artifacts:** `docs/security/` assets; Play Console submission evidence.
-    - **Fail?:** Resolve policy gaps or questionnaire blockers with PM/legal and resubmit.
-
-27. **[ ] Prompt:** _"Verify the Wear OS target API policy compliance and document the evidence."_
-    - **Purpose:** Compliance gate.
-    - **Steps:**
-      * Confirm `targetSdkVersion=34` for Wear OS app submission.
-    - **Acceptance:** Play pre-launch report shows correct target API.
-    - **Artifacts:** Pre-launch report PDF.
-    - **Fail?:** Update `targetSdk` and resubmit.
-
----
-
-### Phase 8 — Pre-Release Gates
-
-28. **[ ] Prompt:** _"Run a Google Play pre-launch report smoke test and address findings."_
-    - **Purpose:** Automated device lab sanity.
-    - **Steps:**
-      * Upload to **Internal**; trigger PLR; review crashes, ANRs, permissions.
-    - **Acceptance:** Zero critical issues; medium issues triaged.
-    - **Artifacts:** PLR HTML/PDF.
-    - **Fail?:** Fix and re-upload.
-
-29. **[ ] Prompt:** _"Complete the accessibility review for the watch face and document adjustments."_
-    - **Purpose:** Legibility on small displays.
-    - **Steps:**
-      * Check contrast ratios and tap targets per Wear guidance.
-    - **Acceptance:** `docs/ux/accessibility.md` updated; issues resolved.
-    - **Artifacts:** Before/after screenshots.
-    - **Fail?:** Adjust palettes/typography.
-
-30. **[ ] Prompt:** _"Promote the build to the closed testing track and collect feedback."_
-    - **Purpose:** External validation.
-    - **Steps:**
-      * Promote internal → closed; collect feedback for 7–14 days.
-    - **Acceptance:** No crash spikes; battery feedback positive.
-    - **Artifacts:** Crash-free sessions %, user notes.
-    - **Fail?:** Patch, re-test.
-
----
-
-### Phase 9 — Release & Post-Release
-
-31. **[ ] Prompt:** _"Execute a staged production rollout via Gradle Play Publisher."_
-    - **Purpose:** Safe release.
-    - **Steps:**
-      * Use GPP: `./gradlew publishRelease -Ptrack=production -ProlloutFraction=0.1`.
-    - **Acceptance:** 10% staged rollout created in Play; monitoring enabled.
-    - **Artifacts:** Rollout screenshot; CI logs.
-    - **Fail?:** Halt rollout; hotfix via internal → production.
-
-32. **[ ] Prompt:** _"Establish monitoring dashboards and alerting for post-release health."_
-    - **Purpose:** Catch regressions.
-    - **Steps:**
-      * Enable ANR/Crash alerts; track Play vitals; set alerting in observability tool.
-    - **Acceptance:** Alert rules confirmed; dashboard link recorded.
-    - **Artifacts:** Dashboard URL in `docs/devops/monitoring.md`.
-    - **Fail?:** Adjust filters and thresholds.
-
-33. **[ ] Prompt:** _"Cut the production tag, publish the changelog, and write the release retrospective."_
-    - **Purpose:** Close the loop.
-    - **Steps:**
-      * Tag `v1.0.0`; generate `CHANGELOG.md` from commits; write retro in `docs/operations/retrospectives.md`.
-    - **Acceptance:** Tag pushed; changelog and retro committed.
-    - **Artifacts:** Release page link; changelog diff.
-    - **Fail?:** Fix versioning script and retry.
-
----
 
 ### GitHub Actions — Starter Workflows (reference)
 See `.github/workflows/android.yml` and `release.yml` in this repo for ready-to-run configurations that align with the checklist requirements.
