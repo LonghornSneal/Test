@@ -4,6 +4,7 @@
 - **Platform focus:** Build the CosmoBond Galaxy Watch8 Classic experience using Watch Face Format v2 with a lightweight Kotlin host for configuration and complications.
 - **Toolchain expectations:** Android Gradle Plugin 8.5+, Kotlin 1.9+, Gradle wrapper (JDK 17), GitHub Actions for CI/CD, Gradle Play Publisher for distribution, Google Play internal→production release tracks.
 - **Workflow rule:** Progress strictly in checklist order across the baseline CI/CD phases. Claim an item by appending `_(claimed by @agent, YYYY-MM-DD HH:mm UTC)_` to the task line before making changes. Complete all acceptance checks before marking `[x]` and append `_Completed: summary (timestamp)_`. Use `_Blocked: reason (timestamp)_` if stalled. Do not pull from the DigiPet backlog until every baseline phase item relevant to the current scope is complete and documented.
+  *_Example formatting:_ `- [ ] Task name _(claimed by @agent, 2025-05-01 14:00 UTC)_` → `- [x] Task name _(Completed: summary (2025-05-02 09:15 UTC))`_.*
 - **Quality bar:** Each completed item must include updated/created tests, executed commands, screenshots or logs when specified, and documentation of decisions in `docs/`.
 - **Documentation lint:** Run `npx markdownlint "**/*.md"` (or manually audit if tooling unavailable) after editing Markdown files and record the result in the task evidence.
 - **Execution principles:**
@@ -292,7 +293,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 
 ### Phase 6 — Feature Completeness for Watch Face
 
-21. **[ ] Prompt:** _"Implement the complication slots and schema within the Watch Face Format layout."_ _(claimed by @agent, 2025-11-10 02:56 UTC)_
+21. **[ ] Prompt:** _"Implement the complication slots and schema within the Watch Face Format layout."_
     - **Purpose:** Add standard complications (steps, heart rate, battery).
     - **Steps:**
       * **Watch Face Format track:** Define slots and bounds in WFF; for phone battery or advanced data, consider a small provider app.
@@ -301,7 +302,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
     - **Artifacts:** Screenshots from emulator (WFF) or renderer preview captures showing complications (Kotlin track).
     - **Fail?:** Verify slot IDs and data types.
 
-22. **[ ] Prompt:** _"Design and validate the always-on display and power-saving modes for the watch face."_ _(claimed by @agent, 2025-11-10 02:56 UTC)_
+22. **[ ] Prompt:** _"Design and validate the always-on display and power-saving modes for the watch face."_
     - **Purpose:** Great battery behavior.
     - **Steps:**
       * **Watch Face Format track:** Provide simplified `ambient` group in WFF; throttle updates; avoid constant phone interactions & heavy animations to pass Play warnings.
@@ -310,7 +311,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
     - **Artifacts:** Perf numbers; Play review notes; Kotlin track may substitute renderer logs + ambient screenshots if applicable.
     - **Fail?:** Reduce animation frequency/bitmap size.
 
-23. **[ ] Prompt:** _"Automate generation of multi-density previews and Play Store screenshots."_ _(claimed by @agent, 2025-11-10 02:56 UTC)_
+23. **[ ] Prompt:** _"Automate generation of multi-density previews and Play Store screenshots."_
     - **Purpose:** Auto-produce Play assets.
     - **Steps:**
       * **Watch Face Format track:** Instrumentation test renders preset styles (light/dark/AOD) at multiple densities, saves PNGs; CI uploads to `src/main/play/listings/en-US/graphics/phone-screenshots/`.
