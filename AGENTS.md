@@ -253,18 +253,33 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 
 4. **[ ] Prompt:** _"Validate the Wear OS project scaffolding. Review `app/build.gradle.kts`, `settings.gradle.kts`, and `AndroidManifest.xml`; run `./gradlew :app:assembleDebug` on JDK 17; capture the build logs and record any dependency updates needed in the decision log."_
    - **Purpose:** Ensure the existing module builds and aligns with naming/package expectations.
+   - **Steps:**
+     1. Inspect `app/build.gradle.kts`, `settings.gradle.kts`, and `app/src/main/AndroidManifest.xml` for namespace, module includes, and SDK configuration.
+     2. Execute `./gradlew :app:assembleDebug` from the repository root and save the terminal output to `docs/project/logs/phase1-task4-build.txt`.
+     3. Verify the generated APK under `app/build/outputs/apk/debug/` and note Gradle wrapper details in `docs/project/decision_log.md`.
+     4. Record any dependency or configuration follow-ups in the same decision log entry.
    - **Acceptance:** Debug build succeeds; notes recorded in decision log.
    - **Artifacts:** Build log, Gradle wrapper version, decision log entry.
    - **Fail?:** Resolve version mismatches or missing dependencies and rerun.
 
 5. **[ ] Prompt:** _"Expand the Watch Face Format v2 skeleton. Enhance `res/raw/watchface.xml` with initial layout elements, verify the service metadata and preview assets, and build a release bundle with `./gradlew :app:assembleRelease` to confirm the resource packaging."_
    - **Purpose:** Flesh out declarative structure and previews.
+   - **Steps:**
+     1. Update `app/src/main/res/raw/watchface.xml` with the initial layout groups, elements, and complication bindings.
+     2. Cross-check `app/src/main/AndroidManifest.xml` and `app/src/main/res/xml/watch_face_config.xml` (if introduced) for matching service metadata and preview references.
+     3. Ensure preview assets live under `app/src/main/res/drawable-nodpi/` or the appropriate density directory referenced by the manifest.
+     4. Run `./gradlew :app:assembleRelease` and archive the AAB from `app/build/outputs/bundle/release/` alongside captured build logs in `docs/project/logs/`.
    - **Acceptance:** Release bundle contains WFF resource; previews render.
    - **Artifacts:** AAB artifact, manifest diff, screenshots.
    - **Fail?:** Correct resource paths or metadata and rebuild.
 
 6. **[ ] Prompt (optional Kotlin track):** _"Introduce the Jetpack Watch Face renderer. Add the `androidx.wear.watchface:watchface` dependencies, implement the `WatchFaceService`, `ComplicationSlotsManager`, and `UserStyleSchema`, and prove the renderer with a passing unit test preview."_
    - **Purpose:** Code-rendered face (if not using WFF).
+   - **Steps:**
+     1. Add the required `androidx.wear.watchface` dependencies to `app/build.gradle.kts`, including the `watchface`, `watchface-style`, and `watchface-complications-data-source` artifacts.
+     2. Implement `CosmoBondWatchFaceService` and related renderer classes under `app/src/main/java/com/cosmobond/watchface/`, wiring a `ComplicationSlotsManager` and `UserStyleSchema` implementation.
+     3. Create unit test previews in `app/src/test/java/com/cosmobond/watchface/` that exercise the renderer and validate slot registration.
+     4. Run `./gradlew testDebugUnitTest --tests "*WatchFaceRenderer*"` (or the specific class name) and capture the passing output for the task evidence.
    - **Acceptance:** Unit test renders preview and compiles.
    - **Artifacts:** Sample screenshot.
    - **Fail?:** Reconcile dependencies/Compose Canvas usage.
@@ -275,18 +290,33 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 
 7. **[ ] Prompt:** _"Establish static analysis and style enforcement. Add ktlint with Spotless, configure Android Lint to treat new issues as fatal (with a baseline), and wire in a Detekt ruleset, then verify with `./gradlew spotlessApply detekt lint`."_
    - **Purpose:** Enforce Kotlin style and code health.
+   - **Steps:**
+     1. Configure Spotless with ktlint inside `build.gradle.kts` or `app/build.gradle.kts`, and add any project-wide settings to `gradle/spotless.klint.gradle` if needed.
+     2. Add Detekt configuration under `config/detekt/detekt.yml` (create the directory if missing) and enable fatal new issues via `app/build.gradle.kts` lintOptions baseline setup.
+     3. Generate or update `app/lint-baseline.xml` after resolving findings so the lint task can treat new issues as fatal.
+     4. Run `./gradlew spotlessApply detekt lint` and store the command output plus generated reports (`app/build/reports/`) in `docs/qa/static-analysis/`.
    - **Acceptance:** `./gradlew spotlessApply detekt lint` passes.
    - **Artifacts:** Lint HTML report, Detekt SARIF, Spotless status.
    - **Fail?:** Fix violations or adjust rules narrowly.
 
 8. **[ ] Prompt:** _"Add unit tests for the non-UI logic. Implement `src/test` coverage for time formatting, color scheme selection, and complication ID mapping, then confirm `./gradlew testDebugUnitTest` passes with ≥70% coverage on the core utilities."_
    - **Purpose:** Cover non-UI logic (style schema parsing, config).
+   - **Steps:**
+     1. Identify the core utility classes under `app/src/main/java/com/cosmobond/` that handle time formatting, palette selection, and complication ID mapping.
+     2. Add corresponding test cases to `app/src/test/java/com/cosmobond/` ensuring edge cases and expected mappings are asserted.
+     3. Execute `./gradlew testDebugUnitTest` and collect the JUnit XML plus JaCoCo coverage report from `app/build/reports/tests/` and `app/build/reports/jacoco/`.
+     4. Summarize the achieved coverage percentage and notable findings in `docs/qa/unit-testing.md` (or create the file if absent).
    - **Acceptance:** `./gradlew testDebugUnitTest` green, coverage ≥ 70% for core utils.
    - **Artifacts:** JUnit XML, coverage report.
    - **Fail?:** Add tests/fix logic.
 
 9. **[ ] Prompt:** _"Create screenshot tests for the previews. For WFF, write an instrumentation test that loads `watchface.xml` and captures frames via the wear-watchface screenshot API (use Paparazzi/Compose for the Kotlin track). Commit the golden images to `app/src/androidTest/assets/goldens/` and surface them in CI."_
    - **Purpose:** Lock visual baselines (dark/light/AOD).
+   - **Steps:**
+     1. Set up instrumentation or Paparazzi tests under `app/src/androidTest/java/com/cosmobond/watchface/` that exercise `app/src/main/res/raw/watchface.xml` configurations.
+     2. Ensure golden directories exist at `app/src/androidTest/assets/goldens/` and save dark, light, and ambient PNGs there with deterministic filenames.
+     3. Run `./gradlew connectedDebugAndroidTest` (for device/emulator flows) or the Paparazzi Gradle task and export the generated screenshots/logs to `docs/qa/screenshots/`.
+     4. Update CI configuration notes in `docs/project/decision_log.md` describing how the goldens will be verified on pull requests.
    - **Acceptance:** Golden images generated & committed under `app/src/androidTest/assets/goldens/`.
    - **Artifacts:** Generated PNGs uploaded by CI.
    - **Fail?:** Update goldens only after design sign-off.
