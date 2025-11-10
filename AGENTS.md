@@ -91,6 +91,30 @@
    - For Canvas/Kotlin fallback, edit `app/src/main/java/.../renderer/<Pet>Renderer.kt` to load the matching drawable previews when Watch Face Format assets are unavailable (e.g., ambient low-bit mode).
 6. **Verification:** Run `./gradlew :app:assembleDebug` to ensure the build packages new raw assets, then preview on device/emulator to confirm state transitions map to the expected animations. Capture before/after GIFs or frame dumps and save them under `docs/pets/<pet>/`.
 7. **Documentation update:** Append an entry to `docs/pets/<pet>/animation.md` summarizing export settings, optimization parameters, and integration commit hash before completing the checklist item.
+- ###### Generative animation sourcing options
+
+- **Sora 2**
+  - **Access:** Visit <https://openai.com/sora> and sign in with the CosmoBond Studio account enrolled in the OpenAI Enterprise Video beta. If access is not yet enabled, file a request through the internal OpenAI Enterprise admin console and note the ticket ID in the sprint log before proceeding.
+  - **Prompting guidance:** Specify 60 fps playback, note “watch-safe center framing with neutral gradient background in CosmoBond palette,” and describe the pet state mood. Include “loop-ready intro/outro trim” to simplify frame alignment.
+  - **Asset handling:** Download the MP4 output via the session sidebar, then run `ffmpeg -i <input>.mp4 -vf fps=60 art/source/pets/<pet>/generative/sora2/<state>_%04d.png` to create the sequence. Move the generated PNGs into `art/export/pets/<pet>/<state>/` to keep parity with handcrafted exports.
+  - **License capture:** Export the usage license text from the Sora session metadata and append it to `docs/pets/<pet>/animation.md` under a “Generative sources” subsection, noting the request ID and any redistribution clauses.
+- **Veo 3.1**
+  - **Access:** Navigate to <https://veo.google.com> while authenticated with the CosmoBond Google Workspace account. Confirm the “Veo 3.1 Studio” toggle is active; if missing, submit a Workspace admin support ticket for beta enrollment and document the approval.
+  - **Prompting guidance:** Begin prompts with “Generate 60 fps animation suitable for 1:1 wearable display,” request “neutral studio backdrop matching CosmoBond watch-face safe zone,” and outline the pet’s target state and motion loop. Add “avoid camera cuts; maintain gentle parallax only.”
+  - **Asset handling:** Download the highest-quality MP4 from the Veo session, convert it with `ffmpeg -i <input>.mp4 -vf fps=60 art/source/pets/<pet>/generative/veo3_1/<state>_%04d.png`, then copy frames into `art/export/pets/<pet>/<state>/` for optimization.
+  - **License capture:** Save the Veo project page as PDF (including usage rights) and summarize redistribution allowances in `docs/pets/<pet>/animation.md`, linking to the stored PDF in `docs/pets/<pet>/references/` if size permits.
+- **Google Gemini**
+  - **Access:** Open <https://aistudio.google.com> and select the Gemini video generation lab. Ensure the CosmoBond Workspace license includes the “Video FX” add-on; if it does not, request activation through procurement and track the request in the checklist evidence.
+  - **Prompting guidance:** Use structured prompts that call for “60 frames per second output, neutral CosmoBond background, centered pet animation, watch-face safe framing,” and explicitly mention desired lighting and cycle duration. Include “single locked camera” to prevent perspective drift.
+  - **Asset handling:** Export the MP4 via the “Download” button, convert using `ffmpeg -i <input>.mp4 -vf fps=60 art/source/pets/<pet>/generative/gemini/<state>_%04d.png`, and move the resulting frames into `art/export/pets/<pet>/<state>/` before running the optimizer pipeline.
+  - **License capture:** Copy the Gemini asset usage notice from the generation details pane and store it in `docs/pets/<pet>/animation.md`, noting any attribution copy or embargo requirements.
+- **ChatGPT**
+  - **Access:** Log into <https://chat.openai.com> with the CosmoBond Enterprise seat that has the “Generative video” capability enabled. If the toggle is absent, submit a support ticket via the OpenAI admin portal and document approval before generating assets.
+  - **Prompting guidance:** Provide references or upload text briefs detailing the pet state, explicitly request “60 fps video, neutral CosmoBond background, centered subject, watch-safe crop,” and ask for “loop-friendly head and tail frames.” Reinforce avoidance of branded or proprietary elements.
+  - **Asset handling:** Download the MP4 from the ChatGPT session’s attachments list, convert via `ffmpeg -i <input>.mp4 -vf fps=60 art/source/pets/<pet>/generative/chatgpt/<state>_%04d.png`, then place frames into `art/export/pets/<pet>/<state>/` to align with the export directory structure.
+  - **License capture:** Save the session transcript and attached usage terms as Markdown or PDF and reference it in `docs/pets/<pet>/animation.md`, including any attribution or retention guidance supplied by OpenAI.
+- **Contraindications & privacy guardrails:** Never upload CosmoBond proprietary artwork, in-progress assets, or user-sourced media to these services. Verify each provider’s terms allow redistribution inside commercial watch faces and archive confirmation. Mask or remove any user-identifiable or sensitive data before crafting prompts or reference uploads.
+- Re-run `npx markdownlint "**/*.md"` after updating this guidance and record the lint status alongside the documentation lint rule checklist entry.
 - **Shared DigiPet Evidence Primer:** All DigiPets must retain uninterrupted timekeeping, include automated state-transition coverage, capture before/after visuals for happy vs. neglected states, and document key metrics in `docs/pets/<pet>/` alongside the relevant gradle command log. Reference this primer in each pet-specific acceptance checklist.
 
 #### Sensor-Driven DigiPets
