@@ -33,7 +33,7 @@
 ### DigiPet Watch Face Expansion Checklist
 
 - **Universal watch face requirements:** Each DigiPet remains a fully functional CosmoBond watch face. Reserve space for time, date, battery, and at least two configurable complications so wearers can tailor health, productivity, or communication data without obscuring the companion. Use ambient-mode variants that keep the time legible while dimming pet animations.
-- **Shared DigiPet Evidence Primer:** All DigiPets must retain uninterrupted timekeeping, include automated state-transition coverage, capture before/after visuals for happy vs. neglected states, and document key metrics in `docs/pets/<pet>/` alongside the relevant gradle command log. Reference this primer in each pet-specific acceptance checklist.
+- **Shared DigiPet Evidence Primer:** All DigiPets must retain uninterrupted timekeeping, include automated state-transition coverage, capture before/after visuals for happy vs. neglected states, and document key metrics in `docs/pets/<pet>/` alongside the relevant gradle command log (verify or create the folder and drop in a placeholder `README.md` before saving evidence). Reference this primer in each pet-specific acceptance checklist.
 
 #### Sensor-Driven DigiPets
 
@@ -71,7 +71,7 @@
   - **Artifacts:**
     * Streak calculator unit test output and animation capture for goal celebrations vs. idle slump.
     * Logs illustrating Health Services ingestion and manual override fallback.
-    * Documentation of idle reminder cadence and runaway timing in `docs/pets/stepsprite/`.
+    * Documentation of idle reminder cadence and runaway timing in `docs/pets/stepsprite/` (ensure the folder exists or create it with a placeholder `README.md` before storing updates).
 
 - [ ] **SomnoSloth — Sleepy Sloth Pet**
   - **Watch face baseline:** Surface time/date alongside last-night sleep summary complications and sunrise/sunset context.
@@ -89,7 +89,7 @@
   - **Artifacts:**
     * Timeline capture showing bedtime, sleep, and wake animations.
     * Sleep session parsing tests plus metrics summary stored with reminder configuration notes.
-    * Evidence of runaway recovery quest text and thresholds in `docs/pets/somnosloth/`.
+    * Evidence of runaway recovery quest text and thresholds in `docs/pets/somnosloth/` (ensure the folder exists or create it with a placeholder `README.md` before storing updates).
 
 - [ ] **LumiLizard — Light & Dark Reactive Pet**
   - **Watch face baseline:** Blend time/date with ambient light indicators; offer sunrise/sunset complication slots.
@@ -143,7 +143,7 @@
   - **Artifacts:**
     * Location throttling metrics and badge ledger stored in documentation.
     * Animation captures for discovery, idle pacing, and runaway adoption sequences.
-    * Consent and privacy note for location sharing appended to `docs/pets/roverfox/`.
+    * Consent and privacy note for location sharing appended to `docs/pets/roverfox/` (ensure the folder exists or create it with a placeholder `README.md` before storing updates).
 
 - [ ] **Mounty — Elevation & Climbing Pet**
   - **Watch face baseline:** Integrate time/date with floor-count or elevation-gain complications and summit progress meters.
@@ -161,7 +161,7 @@
   - **Artifacts:**
     * Calibration dataset showing raw vs. filtered elevation samples.
     * Animation captures for ascent, idle grazing, and summit celebration.
-    * Evolution threshold table recorded in `docs/pets/mounty/`.
+    * Evolution threshold table recorded in `docs/pets/mounty/` (ensure the folder exists or create it with a placeholder `README.md` before storing updates).
 
 - [ ] **Thermagon — Temperature-Driven Dragon**
   - **Watch face baseline:** Pair time/date with skin/ambient temperature complications and fever alerts without clutter.
@@ -215,7 +215,7 @@
   - **Artifacts:**
     * Gesture classifier evaluation report and accelerometer fixture data.
     * Animation captures for shake joy, inverted dangle, and flattened neglect states.
-    * Energy economy configuration written to `docs/pets/jigglejelly/`.
+    * Energy economy configuration written to `docs/pets/jigglejelly/` (ensure the folder exists or create it with a placeholder `README.md` before storing updates).
 
 #### Activity & Habit-Driven DigiPets
 
@@ -235,7 +235,7 @@
   - **Artifacts:**
     * API/notification sync log plus fallback manual entry workflow notes.
     * Animation captures for milestone celebration vs. expectant idle state.
-    * Streak decay schedule documented in `docs/pets/lexiowl/`.
+    * Streak decay schedule documented in `docs/pets/lexiowl/` (ensure the folder exists or create it with a placeholder `README.md` before storing updates).
 
 - [ ] **EchoParrot — Voice Assistant Mimic Pet**
   - **Watch face baseline:** Keep clock/date front-and-center with a conversation counter complication and mic access toggle.
@@ -253,7 +253,7 @@
   - **Artifacts:**
     * Conversation counter test logs and privacy toggle UX capture.
     * Audio session transcript samples with anonymization notes.
-    * Mood state change timeline recorded in `docs/pets/echoparrot/`.
+    * Mood state change timeline recorded in `docs/pets/echoparrot/` (ensure the folder exists or create it with a placeholder `README.md` before storing updates).
 
 - [ ] **Memophant — Note-Taking Elephant**
   - **Watch face baseline:** Combine time/date with quick-note shortcut and pending reminder complication.
@@ -271,7 +271,7 @@
   - **Artifacts:**
     * Sync transaction logs and caching strategy notes.
     * UX recording for reminder and quiz interactions.
-    * Backlog scoring rubric captured in `docs/pets/memophant/`.
+    * Backlog scoring rubric captured in `docs/pets/memophant/` (ensure the folder exists or create it with a placeholder `README.md` before storing updates).
 
 - [ ] **BusyBee — Productivity & To-Do Bee**
   - **Watch face baseline:** Balance time/date with task-progress gauges and honey-meter complication slots.
@@ -289,7 +289,7 @@
   - **Artifacts:**
     * Task provider sync log and reconciliation tests.
     * Animation capture for waggle dance, paperwork overwhelm, and runaway preview.
-    * Reminder schedule documentation in `docs/pets/busybee/`.
+    * Reminder schedule documentation in `docs/pets/busybee/` (ensure the folder exists or create it with a placeholder `README.md` before storing updates).
 
 - [ ] **BuddyPup — Social Interaction Dog**
   - **Watch face baseline:** Keep time/date visible with social-activity complication summarizing calls/messages/meetups.
@@ -307,7 +307,7 @@
   - **Artifacts:**
     * Interaction log sample plus privacy note for notification listener usage.
     * Animation captures for mail delivery, co-play joy, and lonely whimper states.
-    * Documentation of manual meetup entry workflow in `docs/pets/buddypup/`.
+    * Documentation of manual meetup entry workflow in `docs/pets/buddypup/` (ensure the folder exists or create it with a placeholder `README.md` before storing updates).
 
 - [ ] **BeatBunny — Music-Loving Dancing Rabbit**
   - **Watch face baseline:** Anchor clock/date while showcasing now-playing or tempo complications and keeping dance space clear.
@@ -325,7 +325,7 @@
   - **Artifacts:**
     * Media session/beat detection logs highlighting tempo sync.
     * Animation capture for genre variants and silence slump.
-    * Genre diversity scoring doc placed in `docs/pets/beatbunny/`.
+    * Genre diversity scoring doc placed in `docs/pets/beatbunny/` (ensure the folder exists or create it with a placeholder `README.md` before storing updates).
 
 - [ ] **BookWorm — Reading & Knowledge Pet**
   - **Watch face baseline:** Combine time/date with reading streak progress and quick journal entry complication.
@@ -343,7 +343,7 @@
   - **Artifacts:**
     * Usage stats ingestion logs with reconciliation script notes.
     * Animation captures for caterpillar, cocoon, and butterfly states.
-    * Milestone table and prompt rotation plan saved under `docs/pets/bookworm/`.
+    * Milestone table and prompt rotation plan saved under `docs/pets/bookworm/` (ensure the folder exists or create it with a placeholder `README.md` before storing updates).
 
 - [ ] **ShutterBug — Photography & Creativity Pet**
   - **Watch face baseline:** Show time/date with photo-count complication and camera remote shortcut without obscuring dial.
@@ -361,7 +361,7 @@
   - **Artifacts:**
     * Media sync audit log and permission rationale documentation.
     * Animation captures for vibrant, neutral, and faded shells.
-    * Prompt rotation schedule recorded in `docs/pets/shutterbug/`.
+    * Prompt rotation schedule recorded in `docs/pets/shutterbug/` (ensure the folder exists or create it with a placeholder `README.md` before storing updates).
 
 - [ ] **TranquiliTurtle — Meditation & Mindfulness Turtle**
   - **Watch face baseline:** Keep time/date legible with mindfulness-minute complication and quick-start breathing control.
@@ -379,7 +379,7 @@
   - **Artifacts:**
     * Session sync logs and reduced-motion configuration notes.
     * Animation captures for meditation, shell-withdrawn, and radiant aura states.
-    * Prompt schedule and inactivity thresholds documented in `docs/pets/tranquiliturtle/`.
+    * Prompt schedule and inactivity thresholds documented in `docs/pets/tranquiliturtle/` (ensure the folder exists or create it with a placeholder `README.md` before storing updates).
 
 - [ ] **VoltVampire — Tech Use & Battery Pet**
   - **Watch face baseline:** Present time/date with dual battery complications (watch/phone) and charging reminders without obscuring the dial.
@@ -397,7 +397,7 @@
   - **Artifacts:**
     * Battery sync logs and analytics summary stored with threshold configs.
     * Animation capture for charging feast, low-battery swoon, and regal evolution.
-    * Notification copy and escalation ladder documented in `docs/pets/voltvampire/`.
+    * Notification copy and escalation ladder documented in `docs/pets/voltvampire/` (ensure the folder exists or create it with a placeholder `README.md` before storing updates).
 
 ### Retention Expectations & Ritual Design
 - **Engagement cadence:** Craft daily micro-rituals (feed, play, quick training) taking <90 seconds, weekly depth loops (adventures, co-op quests), and monthly aspirational milestones (rare evolutions, habitat overhauls). Track activation, day-7, and day-30 retention with explicit thresholds per ritual type.
@@ -431,7 +431,7 @@
 This repository already includes baseline policy files, directory scaffolding, GitHub Actions workflows, and a minimal Watch Face Format XML. Review the structure before claiming tasks:
 - `.github/workflows/android.yml` and `release.yml` implement PR checks and internal releases.
 - `app/` contains a starter Wear OS module with `res/raw/watchface.xml` and a placeholder `CosmoBondWatchFaceService`.
-- `docs/`, `art/`, and related directories are pre-created so that documentation tasks can start immediately.
+- `docs/`, `art/`, and related directories are pre-created so that documentation tasks can start immediately. Verify the evidence folders `docs/pets/`, `docs/project/logs/`, and `docs/qa/static-analysis/` exist; create them if they are missing and add placeholder `README.md` (or similar) files so Git continues tracking the directories.
 
 ---
 
@@ -476,7 +476,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
    - **Purpose:** Ensure the existing module builds and aligns with naming/package expectations.
    - **Steps:**
      1. Inspect `app/build.gradle.kts`, `settings.gradle.kts`, and `app/src/main/AndroidManifest.xml` for namespace, module includes, and SDK configuration.
-     2. Execute `./gradlew :app:assembleDebug` from the repository root and save the terminal output to `docs/project/logs/phase1-task4-build.txt`.
+     2. Execute `./gradlew :app:assembleDebug` from the repository root and save the terminal output to `docs/project/logs/phase1-task4-build.txt` (verify `docs/project/logs/` exists first and create it with a placeholder `README.md` if needed).
      3. Verify the generated APK under `app/build/outputs/apk/debug/` and note Gradle wrapper details in `docs/project/decision_log.md`.
      4. Record any dependency or configuration follow-ups in the same decision log entry.
    - **Acceptance:** Debug build succeeds; notes recorded in decision log.
@@ -489,7 +489,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
      1. Update `app/src/main/res/raw/watchface.xml` with the initial layout groups, elements, and complication bindings.
      2. Cross-check `app/src/main/AndroidManifest.xml` and `app/src/main/res/xml/watch_face_config.xml` (if introduced) for matching service metadata and preview references.
      3. Ensure preview assets live under `app/src/main/res/drawable-nodpi/` or the appropriate density directory referenced by the manifest.
-     4. Run `./gradlew :app:assembleRelease` and archive the AAB from `app/build/outputs/bundle/release/` alongside captured build logs in `docs/project/logs/`.
+     4. Run `./gradlew :app:assembleRelease` and archive the AAB from `app/build/outputs/bundle/release/` alongside captured build logs in `docs/project/logs/` (confirm the folder exists before exporting and create it with a placeholder `README.md` if missing).
    - **Acceptance:** Release bundle contains WFF resource; previews render.
    - **Artifacts:** AAB artifact, manifest diff, screenshots.
    - **Fail?:** Correct resource paths or metadata and rebuild.
@@ -515,7 +515,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
      1. Configure Spotless with ktlint inside `build.gradle.kts` or `app/build.gradle.kts`, and add any project-wide settings to `gradle/spotless.klint.gradle` if needed.
      2. Add Detekt configuration under `config/detekt/detekt.yml` (create the directory if missing) and enable fatal new issues via `app/build.gradle.kts` lintOptions baseline setup.
      3. Generate or update `app/lint-baseline.xml` after resolving findings so the lint task can treat new issues as fatal.
-     4. Run `./gradlew spotlessApply detekt lint` and store the command output plus generated reports (`app/build/reports/`) in `docs/qa/static-analysis/`.
+     4. Run `./gradlew spotlessApply detekt lint` and store the command output plus generated reports (`app/build/reports/`) in `docs/qa/static-analysis/` (check that the directory exists and create it with a placeholder `README.md` if absent before copying files).
    - **Acceptance:** `./gradlew spotlessApply detekt lint` passes.
    - **Artifacts:** Lint HTML report, Detekt SARIF, Spotless status.
    - **Fail?:** Fix violations or adjust rules narrowly.
