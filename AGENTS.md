@@ -80,6 +80,40 @@
 - **VoltVampire states:**
   - `ambient_idle`, `charge_boost`, `battery_warning`, `energy_saver`, `runaway_departure`.
 
+###### Generative animation workflows
+
+- **Usage principles (all tools):**
+  - Confirm you have commercial-use rights for every generated clip, preserve attribution requirements, and avoid ingesting customer data, unreleased branding, or personal information into prompts.
+  - Log every final prompt, seed, sampler, upscale instruction, and download URL/hash in `art/export/pets/<pet>/export.log`. Attach companion metadata (model version, settings JSON, manual edits) next to the log as `art/export/pets/<pet>/<state>_prompt.json` or a combined `prompts.md` file.
+  - Normalize all outputs to 60 fps image sequences using `ffmpeg -i <input>.mp4 -vf "fps=60,scale=1024:-1:flags=lanczos" art/export/pets/<pet>/<state>/%04d.png` (replace scale as needed). Maintain the `%04d` zero-padded naming convention for downstream scripts.
+  - After PNG export, continue with the optimization flow below (animated WebP/WebM plus vector passes) before staging assets.
+
+- **Sora 2 (OpenAI):**
+  - **Request access:** File a request through the OpenAI enterprise admin portal; include project identifiers, intended commercial scope, and compliance contact. Await approval and API key distribution before queuing jobs.
+  - **Prompting:** Craft per-state prompts that describe the pet, lighting, and camera move, e.g., `"CosmoBond CardioCritter healthy_workout animation, energetic gym interior, tracking shot"`. Embed state tags (`[state:healthy_workout]`) so render histories align with the export log. Iterate with reference frames from prior assets when available.
+  - **Export:** Use the Sora dashboard or API to render 1080p clips; download MP4 masters plus JSON metadata. Re-render variations until motion loops cleanly for the targeted watch-face duration.
+  - **Conversion:** Execute the shared 60 fps PNG extraction command above. Inspect frames for motion blur artifacts; if present, request motion smoothing via Sora’s `motion_coherence` parameter before re-exporting.
+
+- **Veo 3.1 (Google DeepMind):**
+  - **Request access:** Submit an application through Google Labs with your @google.com sponsor (or vendor manager) noting Wear OS asset creation. Confirm data-handling agreements before uploading references.
+  - **Prompting:** Use Veo storyboards with the template `"<pet> <state> watch-face loop, 4s duration, flat lighting, seamless loop"`; attach still keyframes exported from `art/source/pets/<pet>/` as guides. Annotate the prompt with `[pet=<pet>][state=<state>]` for traceability.
+  - **Export:** Download WebM masters (VP9 + alpha when available). Capture the session parameters JSON for inclusion beside the export log.
+  - **Conversion:** Transcode with `ffmpeg -i <input>.webm -vf "fps=60" art/export/pets/<pet>/<state>/%04d.png`. Preserve alpha channels by adding `-pix_fmt rgba64le` when needed before optimization.
+
+- **Gemini (Google) video diffusion pipelines:**
+  - **Request access:** Coordinate with the internal AI enablement team to enable the Gemini Experimental Video API on the shared Google Cloud project, ensuring billing and data-retention settings align with CosmoBond policies.
+  - **Prompting:** Combine structured JSON prompts—`{"pet":"<pet>","state":"<state>","mood":"joyful","loop":true}`—with textual descriptors referencing approved lore. Store prompt payloads exactly as sent in the per-state metadata file.
+  - **Export:** Gemini returns MP4 or MOV outputs; request 8-bit color with alpha mats disabled (Gemini currently lacks alpha). For loops, set `"loop_duration":4`. Download the response bundle (video + metadata) and checksum it before archival.
+  - **Conversion:** Use the shared PNG extraction command. If Gemini outputs 30 fps, force frame doubling via `-vf "fps=60"`. Manually align loop endpoints in After Effects or Resolve if diffusion drift occurs.
+
+- **ChatGPT (Images/Canvas + Runway bridge):**
+  - **Request access:** Ensure the CosmoBond organization toggles on ChatGPT Workspace with Canvas beta. Pair it with the Runway integration (or comparable video canvas) through the admin console; store integration approval emails in `docs/vendors/`.
+  - **Prompting:** Within Canvas, provide storyboard panels and textual cues for each state. Use layer labels such as `ambient_idle_panel` and `runaway_departure_panel`. When escalating to video via the Runway bridge, include explicit duration (`4 seconds`), loop requirement, and pet emotion.
+  - **Export:** Download MP4 results from Runway (or exported Canvas timeline). Capture the session transcript and tool-specific settings (model, guidance scale) and append them to the per-state metadata file.
+  - **Conversion:** Apply the standard PNG sequence conversion. Validate color profiles by running `ffprobe` on the MP4 and, if necessary, insert `-vf "colorspace=bt709:iall=bt601-6-625"` before export to match watch-face gamut.
+
+- **Post-processing reminders:** After PNG extraction, run background cleanup or touch-ups in the source tool as necessary, then follow the optimization workflow below. Store any manual edit notes and privacy reviews alongside the prompts so future audits confirm compliance.
+
 ###### Animation export & integration workflow
 
 1. **Prep source timelines:** Open the pet’s master project under `art/source/pets/<pet>/` (After Effects, Blender, or Spine as defined in the pet brief). Confirm layers follow the state names above so exported folders inherit deterministic identifiers.
@@ -108,7 +142,7 @@
     * Satisfies the **Shared DigiPet Evidence Primer**.
     * Heart-rate zones drive visible animation swaps within 5 seconds of sensor updates without obscuring timekeeping.
     * Evolution unlocks only after configured healthy-range streak and runaway triggers when sustained unhealthy averages persist.
-    * Animation assets listed in the checklist are committed under `art/export/pets/cardiocritter/` with matching `@raw/@drawable` resources and documented in `docs/pets/cardiocritter/`.
+    * Animation assets listed in the checklist (see [Generative animation workflows](#generative-animation-workflows) for sourcing options) are committed under `art/export/pets/cardiocritter/` with matching `@raw/@drawable` resources and documented in `docs/pets/cardiocritter/`.
   - **Artifacts:**
     * Updated watchface layout diff plus animation reference sheet for cardio states.
     * Sensor replay logs showing heart-rate threshold transitions and resulting animations.
@@ -128,7 +162,7 @@
     * Satisfies the **Shared DigiPet Evidence Primer**.
     * Step goal completion updates the watch face within one minute and unlocks celebratory animations.
     * Consecutive idle periods trigger gentle nudges before runaway state initiates after configured neglect window.
-    * Animation assets listed in the checklist are committed under `art/export/pets/stepsprite/` with matching `@raw/@drawable` resources and documented in `docs/pets/stepsprite/`.
+    * Animation assets listed in the checklist (see [Generative animation workflows](#generative-animation-workflows) for sourcing options) are committed under `art/export/pets/stepsprite/` with matching `@raw/@drawable` resources and documented in `docs/pets/stepsprite/`.
   - **Artifacts:**
     * Streak calculator unit test output and animation capture for goal celebrations vs. idle slump.
     * Logs illustrating Health Services ingestion and manual override fallback.
@@ -148,7 +182,7 @@
     * Satisfies the **Shared DigiPet Evidence Primer**.
     * Sleep-quality streaks adjust SomnoSloth posture and mood immediately after nightly sync completes.
     * Bedtime reminder cadence adapts to user preference without exceeding notification caps and runaway triggers after repeated poor scores.
-    * Animation assets listed in the checklist are committed under `art/export/pets/somnosloth/` with matching `@raw/@drawable` resources and documented in `docs/pets/somnosloth/`.
+    * Animation assets listed in the checklist (see [Generative animation workflows](#generative-animation-workflows) for sourcing options) are committed under `art/export/pets/somnosloth/` with matching `@raw/@drawable` resources and documented in `docs/pets/somnosloth/`.
   - **Artifacts:**
     * Timeline capture showing bedtime, sleep, and wake animations.
     * Sleep session parsing tests plus metrics summary stored with reminder configuration notes.
@@ -168,7 +202,7 @@
     * Satisfies the **Shared DigiPet Evidence Primer**.
     * Light exposure scoring updates within 60 seconds of environmental change and selects matching animation palette.
     * Evolution branch (solar or lunar) only unlocks after sustained balance and runaway occurs if imbalance persists for configured days.
-    * Animation assets listed in the checklist are committed under `art/export/pets/lumilizard/` with matching `@raw/@drawable` resources and documented in `docs/pets/lumilizard/`.
+    * Animation assets listed in the checklist (see [Generative animation workflows](#generative-animation-workflows) for sourcing options) are committed under `art/export/pets/lumilizard/` with matching `@raw/@drawable` resources and documented in `docs/pets/lumilizard/`.
   - **Artifacts:**
     * Sensor sampling chart illustrating smoothing, throttling, and update cadence.
     * Palette/animation storyboard for sun vs. moon personas.
@@ -188,7 +222,7 @@
     * Satisfies the **Shared DigiPet Evidence Primer**.
     * Opt-in prompts and consent revocation immediately start/stop audio sampling with clear UI feedback.
     * Distinct animations trigger for quiet, conversational, and loud/music environments with hysteresis preventing flicker.
-    * Animation assets listed in the checklist are committed under `art/export/pets/decibeldog/` with matching `@raw/@drawable` resources and documented in `docs/pets/decibeldog/`.
+    * Animation assets listed in the checklist (see [Generative animation workflows](#generative-animation-workflows) for sourcing options) are committed under `art/export/pets/decibeldog/` with matching `@raw/@drawable` resources and documented in `docs/pets/decibeldog/`.
   - **Artifacts:**
     * Privacy consent flow recording and configuration notes.
     * Classification unit tests with audio fixture summaries.
@@ -208,7 +242,7 @@
     * Satisfies the **Shared DigiPet Evidence Primer**.
     * Location sampling respects motion gating and logs fewer than the allowed GPS polls per hour when stationary.
     * New locale discovery immediately awards badges and unlocks celebratory animations; runaway triggers after configured stationary duration.
-    * Animation assets listed in the checklist are committed under `art/export/pets/roverfox/` with matching `@raw/@drawable` resources and documented in `docs/pets/roverfox/`.
+    * Animation assets listed in the checklist (see [Generative animation workflows](#generative-animation-workflows) for sourcing options) are committed under `art/export/pets/roverfox/` with matching `@raw/@drawable` resources and documented in `docs/pets/roverfox/`.
   - **Artifacts:**
     * Location throttling metrics and badge ledger stored in documentation.
     * Animation captures for discovery, idle pacing, and runaway adoption sequences.
@@ -228,7 +262,7 @@
     * Satisfies the **Shared DigiPet Evidence Primer**.
     * Elevation gain updates appear on-watch within two minutes of climb completion with validated barometer smoothing.
     * Summit celebrations trigger exactly at goal thresholds and neglect decay follows documented pacing.
-    * Animation assets listed in the checklist are committed under `art/export/pets/mounty/` with matching `@raw/@drawable` resources and documented in `docs/pets/mounty/`.
+    * Animation assets listed in the checklist (see [Generative animation workflows](#generative-animation-workflows) for sourcing options) are committed under `art/export/pets/mounty/` with matching `@raw/@drawable` resources and documented in `docs/pets/mounty/`.
   - **Artifacts:**
     * Calibration dataset showing raw vs. filtered elevation samples.
     * Animation captures for ascent, idle grazing, and summit celebration.
@@ -248,7 +282,7 @@
     * Satisfies the **Shared DigiPet Evidence Primer**.
     * Alerts fire when thresholds breached and auto-clear after readings stabilize within comfort band.
     * Seasonal evolution requires documented exposure to both heat and cold patterns without conflicting with safety notifications.
-    * Animation assets listed in the checklist are committed under `art/export/pets/thermagon/` with matching `@raw/@drawable` resources and documented in `docs/pets/thermagon/`.
+    * Animation assets listed in the checklist (see [Generative animation workflows](#generative-animation-workflows) for sourcing options) are committed under `art/export/pets/thermagon/` with matching `@raw/@drawable` resources and documented in `docs/pets/thermagon/`.
   - **Artifacts:**
     * Alert log and notification copy stored with threshold configuration spreadsheet.
     * Animation captures for cold, hot, neutral, and dual-element states.
@@ -268,7 +302,7 @@
     * Satisfies the **Shared DigiPet Evidence Primer**.
     * Stress spikes surface progressive visual cues before notifications and guided breathing entry point launches within one tap.
     * Calm streak milestones unlock evolution tiers; neglecting practices triggers shell-withdrawn state before runaway.
-    * Animation assets listed in the checklist are committed under `art/export/pets/zenpanda/` with matching `@raw/@drawable` resources and documented in `docs/pets/zenpanda/`.
+    * Animation assets listed in the checklist (see [Generative animation workflows](#generative-animation-workflows) for sourcing options) are committed under `art/export/pets/zenpanda/` with matching `@raw/@drawable` resources and documented in `docs/pets/zenpanda/`.
   - **Artifacts:**
     * HRV-to-tier mapping chart plus associated unit tests.
     * Session logs demonstrating guided breathing launches and calm-minute accumulation.
@@ -288,7 +322,7 @@
     * Satisfies the **Shared DigiPet Evidence Primer**.
     * Gesture recognition distinguishes at least three motions with less than 5% false positives in recorded tests.
     * Energy decay and replenishment follow documented curve; runaway triggers after sustained inactivity unless manual feed logged.
-    * Animation assets listed in the checklist are committed under `art/export/pets/jigglejelly/` with matching `@raw/@drawable` resources and documented in `docs/pets/jigglejelly/`.
+    * Animation assets listed in the checklist (see [Generative animation workflows](#generative-animation-workflows) for sourcing options) are committed under `art/export/pets/jigglejelly/` with matching `@raw/@drawable` resources and documented in `docs/pets/jigglejelly/`.
   - **Artifacts:**
     * Gesture classifier evaluation report and accelerometer fixture data.
     * Animation captures for shake joy, inverted dangle, and flattened neglect states.
@@ -310,7 +344,7 @@
     * Satisfies the **Shared DigiPet Evidence Primer**.
     * Lesson completion sync updates LexiOwl demeanor before next session reminder and accounts for offline entries.
     * Vocabulary milestone unlocks trigger celebratory animations and log entries while missed sessions degrade morale.
-    * Animation assets listed in the checklist are committed under `art/export/pets/lexiowl/` with matching `@raw/@drawable` resources and documented in `docs/pets/lexiowl/`.
+    * Animation assets listed in the checklist (see [Generative animation workflows](#generative-animation-workflows) for sourcing options) are committed under `art/export/pets/lexiowl/` with matching `@raw/@drawable` resources and documented in `docs/pets/lexiowl/`.
   - **Artifacts:**
     * API/notification sync log plus fallback manual entry workflow notes.
     * Animation captures for milestone celebration vs. expectant idle state.
@@ -330,7 +364,7 @@
     * Satisfies the **Shared DigiPet Evidence Primer**.
     * Voice sessions respect consent toggles, immediately muting capture when disabled.
     * Interaction frequency changes animation state within the next poll cycle and runaway triggers after sustained silence.
-    * Animation assets listed in the checklist are committed under `art/export/pets/echoparrot/` with matching `@raw/@drawable` resources and documented in `docs/pets/echoparrot/`.
+    * Animation assets listed in the checklist (see [Generative animation workflows](#generative-animation-workflows) for sourcing options) are committed under `art/export/pets/echoparrot/` with matching `@raw/@drawable` resources and documented in `docs/pets/echoparrot/`.
   - **Artifacts:**
     * Conversation counter test logs and privacy toggle UX capture.
     * Audio session transcript samples with anonymization notes.
@@ -350,7 +384,7 @@
     * Satisfies the **Shared DigiPet Evidence Primer**.
     * Notes sync bi-directionally with provider within user-defined latency, updating Memophant mood accordingly.
     * Reminder and quiz flows respect notification caps and reduce backlog when completed; runaway triggers only after persistent neglect.
-    * Animation assets listed in the checklist are committed under `art/export/pets/memophant/` with matching `@raw/@drawable` resources and documented in `docs/pets/memophant/`.
+    * Animation assets listed in the checklist (see [Generative animation workflows](#generative-animation-workflows) for sourcing options) are committed under `art/export/pets/memophant/` with matching `@raw/@drawable` resources and documented in `docs/pets/memophant/`.
   - **Artifacts:**
     * Sync transaction logs and caching strategy notes.
     * UX recording for reminder and quiz interactions.
@@ -370,7 +404,7 @@
     * Satisfies the **Shared DigiPet Evidence Primer**.
     * Task completion sync updates BusyBee animations within the next refresh window; overdue thresholds trigger supportive prompts before runaway.
     * Reminder system never exceeds two actionable alerts per day and respects quiet hours settings.
-    * Animation assets listed in the checklist are committed under `art/export/pets/busybee/` with matching `@raw/@drawable` resources and documented in `docs/pets/busybee/`.
+    * Animation assets listed in the checklist (see [Generative animation workflows](#generative-animation-workflows) for sourcing options) are committed under `art/export/pets/busybee/` with matching `@raw/@drawable` resources and documented in `docs/pets/busybee/`.
   - **Artifacts:**
     * Task provider sync log and reconciliation tests.
     * Animation capture for waggle dance, paperwork overwhelm, and runaway preview.
@@ -390,7 +424,7 @@
     * Satisfies the **Shared DigiPet Evidence Primer**.
     * Social tally updates within five minutes of interactions and differentiates digital vs. in-person credits.
     * Co-play handshake succeeds between nearby devices and runaway triggers after documented silence duration.
-    * Animation assets listed in the checklist are committed under `art/export/pets/buddypup/` with matching `@raw/@drawable` resources and documented in `docs/pets/buddypup/`.
+    * Animation assets listed in the checklist (see [Generative animation workflows](#generative-animation-workflows) for sourcing options) are committed under `art/export/pets/buddypup/` with matching `@raw/@drawable` resources and documented in `docs/pets/buddypup/`.
   - **Artifacts:**
     * Interaction log sample plus privacy note for notification listener usage.
     * Animation captures for mail delivery, co-play joy, and lonely whimper states.
@@ -410,7 +444,7 @@
     * Satisfies the **Shared DigiPet Evidence Primer**.
     * Beat-driven animations sync within 500ms of tempo changes and pause gracefully when playback stops.
     * Diversity scoring unlocks evolution while extended silence triggers bored flop and eventual runaway.
-    * Animation assets listed in the checklist are committed under `art/export/pets/beatbunny/` with matching `@raw/@drawable` resources and documented in `docs/pets/beatbunny/`.
+    * Animation assets listed in the checklist (see [Generative animation workflows](#generative-animation-workflows) for sourcing options) are committed under `art/export/pets/beatbunny/` with matching `@raw/@drawable` resources and documented in `docs/pets/beatbunny/`.
   - **Artifacts:**
     * Media session/beat detection logs highlighting tempo sync.
     * Animation capture for genre variants and silence slump.
@@ -430,7 +464,7 @@
     * Satisfies the **Shared DigiPet Evidence Primer**.
     * Reading sessions register within tracked categories and update BookWorm form at milestone boundaries.
     * Fact-of-the-day prompts rotate without repetition during 14-day window and skip when streak is broken.
-    * Animation assets listed in the checklist are committed under `art/export/pets/bookworm/` with matching `@raw/@drawable` resources and documented in `docs/pets/bookworm/`.
+    * Animation assets listed in the checklist (see [Generative animation workflows](#generative-animation-workflows) for sourcing options) are committed under `art/export/pets/bookworm/` with matching `@raw/@drawable` resources and documented in `docs/pets/bookworm/`.
   - **Artifacts:**
     * Usage stats ingestion logs with reconciliation script notes.
     * Animation captures for caterpillar, cocoon, and butterfly states.
@@ -450,7 +484,7 @@
     * Satisfies the **Shared DigiPet Evidence Primer**.
     * New photo detection reflects on-watch within one sync cycle and challenge prompts rotate without repeating inside weekly set.
     * Neglect fades progress predictably and runaway occurs after documented drought duration.
-    * Animation assets listed in the checklist are committed under `art/export/pets/shutterbug/` with matching `@raw/@drawable` resources and documented in `docs/pets/shutterbug/`.
+    * Animation assets listed in the checklist (see [Generative animation workflows](#generative-animation-workflows) for sourcing options) are committed under `art/export/pets/shutterbug/` with matching `@raw/@drawable` resources and documented in `docs/pets/shutterbug/`.
   - **Artifacts:**
     * Media sync audit log and permission rationale documentation.
     * Animation captures for vibrant, neutral, and faded shells.
@@ -470,7 +504,7 @@
     * Satisfies the **Shared DigiPet Evidence Primer**.
     * Guided session completions update TranquiliTurtle aura before the next scheduled prompt and respect reduced-motion settings.
     * Stress-triggered nudges stay within notification policy and runaway occurs after confirmed inactivity threshold.
-    * Animation assets listed in the checklist are committed under `art/export/pets/tranquiliturtle/` with matching `@raw/@drawable` resources and documented in `docs/pets/tranquiliturtle/`.
+    * Animation assets listed in the checklist (see [Generative animation workflows](#generative-animation-workflows) for sourcing options) are committed under `art/export/pets/tranquiliturtle/` with matching `@raw/@drawable` resources and documented in `docs/pets/tranquiliturtle/`.
   - **Artifacts:**
     * Session sync logs and reduced-motion configuration notes.
     * Animation captures for meditation, shell-withdrawn, and radiant aura states.
@@ -490,7 +524,7 @@
     * Satisfies the **Shared DigiPet Evidence Primer**.
     * Battery sync stays within one-minute freshness between watch and phone, and charging habit analysis classifies sessions accurately.
     * Nudges respect notification caps and runaway/hibernation only triggers after repeated critical battery events.
-    * Animation assets listed in the checklist are committed under `art/export/pets/voltvampire/` with matching `@raw/@drawable` resources and documented in `docs/pets/voltvampire/`.
+    * Animation assets listed in the checklist (see [Generative animation workflows](#generative-animation-workflows) for sourcing options) are committed under `art/export/pets/voltvampire/` with matching `@raw/@drawable` resources and documented in `docs/pets/voltvampire/`.
   - **Artifacts:**
     * Battery sync logs and analytics summary stored with threshold configs.
     * Animation capture for charging feast, low-battery swoon, and regal evolution.
