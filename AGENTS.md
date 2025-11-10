@@ -471,9 +471,13 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 ###### Animation export & integration workflow
 
 1. **Prep source timelines:** Open the pet’s master project under `art/source/pets/<pet>/` (After Effects, Blender, or Spine as defined in the pet brief). Confirm layers follow the state names above so exported folders inherit deterministic identifiers.
-2. **Batch export:** Run `./gradlew :art:exportWatchFace --pet <pet>` (or use the matching script documented beside the project) to render Watch Face Format frame sequences into `art/export/pets/<pet>/<state>/`. For manual exports, render PNG sequences at 60 fps, trim to the watch-face safe zone, and drop them into the same directory structure.
-3. **Optimize assets:** Execute `./gradlew :art:optimizeWatchFace --pet <pet>` to convert sequences into animated WebP/WebM (ambient) and vector drawables (low-bit) variants. Verify the optimizer outputs `.wff` or `.xml` payloads and preview sprites per state.
-4. **Commit expectations:** Stage the generated directories plus optimized resources under `app/src/main/res/raw/` and `app/src/main/res/drawable/`. Include the export logs emitted under `art/export/pets/<pet>/export.log` so reviewers can trace tooling versions.
+2. **Render frame sequences:** Queue each state to render a 60 fps PNG sequence that respects the watch-face safe zone. Export to a temporary folder such as `art/tmp/exports/<pet>/<state>/frames/` so every frame is named with a zero-padded index (`0001.png`, `0002.png`, …). Reuse the render-queue/preset settings defined in your pet’s `art/source/pets/<pet>/` project so the color profile and premultiplied alpha match the rest of the assets.
+3. **Normalize & transcode:** Convert the rendered PNGs into repository-friendly assets with the maintained script under `art/mockups/render_watchface.sh`. Run it once per state, pointing at the freshly rendered frames:
+   ```bash
+   ./art/mockups/render_watchface.sh --pet <pet> --state <state> --input art/tmp/exports/<pet>/<state>/frames
+   ```
+   The script copies the frames into `art/export/pets/<pet>/<state>/frames/`, then generates WebM, animated WebP, and GIF previews under `art/export/pets/<pet>/<state>/renders/`. Execution details (arguments, ffmpeg version, and full stdout/stderr) are captured automatically in `art/export/pets/<pet>/logs/<timestamp>_<state>.log`.
+4. **Commit expectations:** Stage the updated `art/export/pets/<pet>/` subtree (frames, renders, metadata, and logs) together with the integrated resources under `app/src/main/res/raw/` and `app/src/main/res/drawable/`. Include the GIF preview when present so reviewers can eyeball the animation without rebuilding the project.
 5. **Wire into Watch Face Format:**
    - Update `app/src/main/res/raw/watchface.xml` so each `state` element references the new `@raw/<pet>_<state>` assets and defines transitions tied to the gameplay state machine.
    - For Canvas/Kotlin fallback, edit `app/src/main/java/.../renderer/<Pet>Renderer.kt` to load the matching drawable previews when Watch Face Format assets are unavailable (e.g., ambient low-bit mode).
