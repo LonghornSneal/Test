@@ -415,9 +415,10 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 23. **[ ] Prompt:** _"Automate generation of multi-density previews and Play Store screenshots."_
     - **Purpose:** Auto-produce Play assets.
     - **Steps:**
-      * Instrumentation test renders preset styles (light/dark/AOD) at multiple densities, saves PNGs; CI uploads to `src/main/play/listings/en-US/graphics/phone-screenshots/`.
-    - **Acceptance:** Generated screenshots meet Play specs; `publishListing` succeeds.
-    - **Artifacts:** PNGs as CI artifacts and committed copies.
+      * Instrumentation test renders preset styles (light/dark/AOD) at multiple densities, saves PNGs to `src/main/play/listings/<locale>/graphics/wear-screenshots/`; CI uploads to the matching Play listing locale folders.
+    - **Acceptance:** Generated Wear screenshots (square or round) meet Google Play specs; `publishListing` succeeds.
+    - **Artifacts:** Wear screenshot PNGs as CI artifacts and committed copies within the listing directories.
+    - _Reminder: Watch face listings must include Wear screenshots that satisfy Google Play dimension requirements._
     - **Fail?:** Adjust emulator density and renderer.
 
 ---
