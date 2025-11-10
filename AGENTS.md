@@ -38,7 +38,7 @@
 
 ##### Watch face animation asset checklist
 
-- **Shared directory schema:** Export every frame sequence or vector animation into `art/export/pets/<pet>/<state>/`. Mirror the same state name in the Watch Face Format payload (`app/src/main/res/raw/<pet>_<state>.xml` or `.wff`) and fallback preview sprites stored under `app/src/main/res/drawable/<pet>_<state>_preview.*`.
+- **Shared directory schema:** Export every frame sequence or vector animation into `art/export/pets/<pet>/<stage>/<state>/` (e.g., `stage1`, `stage2_evolved`). Mirror the stage-qualified state name in the Watch Face Format payload (`app/src/main/res/raw/<pet>_<stage>_<state>.xml` or `.wff`) and fallback preview sprites stored under `app/src/main/res/drawable/<pet>_<stage>_<state>_preview.*`. Use the matching resource identifiers `@raw/<pet>_<stage>_<state>` when wiring assets.
 - **CardioCritter states:**
   - `ambient_idle`, `healthy_workout`, `cooldown_breathing`, `unhealthy_slouch`, `runaway_departure`.
 - **StepSprite states:**
@@ -82,15 +82,15 @@
 
 ###### Animation export & integration workflow
 
-1. **Prep source timelines:** Open the pet’s master project under `art/source/pets/<pet>/` (After Effects, Blender, or Spine as defined in the pet brief). Confirm layers follow the state names above so exported folders inherit deterministic identifiers.
-2. **Batch export:** Run `./gradlew :art:exportWatchFace --pet <pet>` (or use the matching script documented beside the project) to render Watch Face Format frame sequences into `art/export/pets/<pet>/<state>/`. For manual exports, render PNG sequences at 60 fps, trim to the watch-face safe zone, and drop them into the same directory structure.
+1. **Prep source timelines:** Open the pet’s master project under `art/source/pets/<pet>/` (After Effects, Blender, or Spine as defined in the pet brief). Confirm each evolution stage duplicates the state-named layers or comps (e.g., `stage1/ambient_idle`, `stage2_evolved/ambient_idle`) so exported folders inherit deterministic `<stage>/<state>` identifiers.
+2. **Batch export:** Run `./gradlew :art:exportWatchFace --pet <pet>` (or use the matching script documented beside the project) to render Watch Face Format frame sequences into `art/export/pets/<pet>/<stage>/<state>/`. For manual exports, render PNG sequences at 60 fps, trim to the watch-face safe zone, and drop them into the same stage-qualified directory structure.
 3. **Optimize assets:** Execute `./gradlew :art:optimizeWatchFace --pet <pet>` to convert sequences into animated WebP/WebM (ambient) and vector drawables (low-bit) variants. Verify the optimizer outputs `.wff` or `.xml` payloads and preview sprites per state.
 4. **Commit expectations:** Stage the generated directories plus optimized resources under `app/src/main/res/raw/` and `app/src/main/res/drawable/`. Include the export logs emitted under `art/export/pets/<pet>/export.log` so reviewers can trace tooling versions.
 5. **Wire into Watch Face Format:**
-   - Update `app/src/main/res/raw/watchface.xml` so each `state` element references the new `@raw/<pet>_<state>` assets and defines transitions tied to the gameplay state machine.
-   - For Canvas/Kotlin fallback, edit `app/src/main/java/.../renderer/<Pet>Renderer.kt` to load the matching drawable previews when Watch Face Format assets are unavailable (e.g., ambient low-bit mode).
+   - Update `app/src/main/res/raw/watchface.xml` so each `state` element references the new `@raw/<pet>_<stage>_<state>` assets, and document transitions for every evolution stage in the gameplay state machine.
+   - For Canvas/Kotlin fallback, edit `app/src/main/java/.../renderer/<Pet>Renderer.kt` to load the matching stage-qualified drawable previews (`<pet>_<stage>_<state>_preview.*`) when Watch Face Format assets are unavailable (e.g., ambient low-bit mode).
 6. **Verification:** Run `./gradlew :app:assembleDebug` to ensure the build packages new raw assets, then preview on device/emulator to confirm state transitions map to the expected animations. Capture before/after GIFs or frame dumps and save them under `docs/pets/<pet>/`.
-7. **Documentation update:** Append an entry to `docs/pets/<pet>/animation.md` summarizing export settings, optimization parameters, and integration commit hash before completing the checklist item.
+7. **Documentation update:** Append an entry to `docs/pets/<pet>/animation.md` summarizing export settings, optimization parameters, integration commit hash, and a stage-by-stage map of exported states plus their unlock criteria before completing the checklist item.
 - **Shared DigiPet Evidence Primer:** All DigiPets must retain uninterrupted timekeeping, include automated state-transition coverage, capture before/after visuals for happy vs. neglected states, and document key metrics in `docs/pets/<pet>/` alongside the relevant gradle command log. Reference this primer in each pet-specific acceptance checklist.
 
 #### Sensor-Driven DigiPets
