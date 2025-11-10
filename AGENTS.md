@@ -651,28 +651,31 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 
 ### Phase 6 — Feature Completeness for Watch Face
 
-21. **[ ] Prompt:** _"Implement the complication slots and schema within the Watch Face Format layout."_
+21. **[ ] Prompt:** _"Implement the complication slots and schema within the Watch Face Format layout."_ _(claimed by @agent, 2025-11-10 02:56 UTC)_
     - **Purpose:** Add standard complications (steps, heart rate, battery).
     - **Steps:**
-      * Define slots and bounds in WFF; for phone battery or advanced data, consider a small provider app.
-    - **Acceptance:** Emulator shows selectable complications in system editor; data renders.
-    - **Artifacts:** Screenshots from emulator.
+      * **Watch Face Format track:** Define slots and bounds in WFF; for phone battery or advanced data, consider a small provider app.
+      * **Kotlin-rendered track:** Configure `ComplicationSlotsManager` inside the renderer host (`WatchFaceService`) and register `ComplicationSlot`s with supported data types; surface data via `Renderer.CanvasRenderer` drawing logic or Compose bridge.
+    - **Acceptance:** Either (a) the WFF-based face exposes selectable complications in the system editor and renders live data, or (b) the Kotlin-rendered face registers the same slots through `ComplicationSlotsManager` and displays updates in the custom renderer without regression. Document which path is implemented.
+    - **Artifacts:** Screenshots from emulator (WFF) or renderer preview captures showing complications (Kotlin track).
     - **Fail?:** Verify slot IDs and data types.
 
-22. **[ ] Prompt:** _"Design and validate the always-on display and power-saving modes for the watch face."_
+22. **[ ] Prompt:** _"Design and validate the always-on display and power-saving modes for the watch face."_ _(claimed by @agent, 2025-11-10 02:56 UTC)_
     - **Purpose:** Great battery behavior.
     - **Steps:**
-      * Provide simplified `ambient` group in WFF; throttle updates; avoid constant phone interactions & heavy animations to pass Play warnings.
-    - **Acceptance:** Macrobenchmark shows stable frame times; no Play warning during review.
-    - **Artifacts:** Perf numbers; Play review notes.
+      * **Watch Face Format track:** Provide simplified `ambient` group in WFF; throttle updates; avoid constant phone interactions & heavy animations to pass Play warnings.
+      * **Kotlin-rendered track:** Implement ambient callbacks in `Renderer.CanvasRenderer` (or Compose renderer) to switch palettes, disable anti-aliasing, and gate animation timers; ensure `setAmbientMode`/`onPropertiesChanged` paths cover low-bit and burn-in protection cases.
+    - **Acceptance:** Either (a) Macrobenchmark confirms stable frame times and no Play warnings for the WFF ambient group, or (b) profiling of the Kotlin renderer shows compliant ambient transitions (documented renders plus profiler output) with the same lack of Play warnings. Make the chosen validation explicit.
+    - **Artifacts:** Perf numbers; Play review notes; Kotlin track may substitute renderer logs + ambient screenshots if applicable.
     - **Fail?:** Reduce animation frequency/bitmap size.
 
-23. **[ ] Prompt:** _"Automate generation of multi-density previews and Play Store screenshots."_
+23. **[ ] Prompt:** _"Automate generation of multi-density previews and Play Store screenshots."_ _(claimed by @agent, 2025-11-10 02:56 UTC)_
     - **Purpose:** Auto-produce Play assets.
     - **Steps:**
-      * Instrumentation test renders preset styles (light/dark/AOD) at multiple densities, saves PNGs; CI uploads to `src/main/play/listings/en-US/graphics/phone-screenshots/`.
-    - **Acceptance:** Generated screenshots meet Play specs; `publishListing` succeeds.
-    - **Artifacts:** PNGs as CI artifacts and committed copies.
+      * **Watch Face Format track:** Instrumentation test renders preset styles (light/dark/AOD) at multiple densities, saves PNGs; CI uploads to `src/main/play/listings/en-US/graphics/phone-screenshots/`.
+      * **Kotlin-rendered track:** Add Compose or view-based screenshot tooling (e.g., Paparazzi or AndroidX Screenshot tests) that exercise the Kotlin renderer/`Renderer.CanvasRenderer` surfaces across densities and styles, exporting assets to the same Play listings path.
+    - **Acceptance:** Either pipeline generates Play-compliant screenshots and `publishListing` succeeds; note whether instrumentation or Paparazzi/Screenshot tests produced the assets.
+    - **Artifacts:** PNGs as CI artifacts and committed copies, plus test logs for the corresponding tooling.
     - **Fail?:** Adjust emulator density and renderer.
 
 ---
