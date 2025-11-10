@@ -38,47 +38,47 @@
 
 ##### Watch face animation asset checklist
 
-- **Shared directory schema:** Export every frame sequence or vector animation into `art/export/pets/<pet>/<state>/`. Mirror the same state name in the Watch Face Format payload (`app/src/main/res/raw/<pet>_<state>.xml` or `.wff`) and fallback preview sprites stored under `app/src/main/res/drawable/<pet>_<state>_preview.*`.
+- **Shared directory schema:** Export every frame sequence or vector animation into `art/export/pets/<pet>/<state>/`. Mirror the same state name in the Watch Face Format payload (`app/src/main/res/raw/<pet>_<state>.xml` or `.wff`) and fallback preview sprites stored under `app/src/main/res/drawable/<pet>_<state>_preview.*`. Ensure every pet supplies the runaway departure, adoption arrival, and reunion return sequences (`runaway_departure`, `adoption_arrival`, `reunion_return`) alongside their core emotional or gameplay states, placing the reunion arc exports in `art/export/pets/<pet>/adoption_arrival/` and `art/export/pets/<pet>/reunion_return/`.
 - **CardioCritter states:**
-  - `ambient_idle`, `healthy_workout`, `cooldown_breathing`, `unhealthy_slouch`, `runaway_departure`.
+  - `ambient_idle`, `healthy_workout`, `cooldown_breathing`, `unhealthy_slouch`, `runaway_departure`, `adoption_arrival`, `reunion_return`.
 - **StepSprite states:**
-  - `ambient_idle`, `goal_celebration`, `idle_slump`, `manual_feed`, `runaway_departure`.
+  - `ambient_idle`, `goal_celebration`, `idle_slump`, `manual_feed`, `runaway_departure`, `adoption_arrival`, `reunion_return`.
 - **SomnoSloth states:**
-  - `ambient_idle`, `sleep_cycle`, `rested_morning`, `sleep_deprived`, `runaway_departure`.
+  - `ambient_idle`, `sleep_cycle`, `rested_morning`, `sleep_deprived`, `runaway_departure`, `adoption_arrival`, `reunion_return`.
 - **LumiLizard states:**
-  - `ambient_idle`, `sun_charged`, `moonlit_watch`, `overexposed`, `runaway_departure`.
+  - `ambient_idle`, `sun_charged`, `moonlit_watch`, `overexposed`, `runaway_departure`, `adoption_arrival`, `reunion_return`.
 - **DecibelDog states:**
-  - `ambient_idle`, `quiet_relax`, `conversation_perk`, `music_dance`, `noise_overload`, `runaway_departure`.
+  - `ambient_idle`, `quiet_relax`, `conversation_perk`, `music_dance`, `noise_overload`, `runaway_departure`, `adoption_arrival`, `reunion_return`.
 - **RoverFox states:**
-  - `ambient_idle`, `explore_stride`, `souvenir_show`, `stationary_restless`, `runaway_departure`.
+  - `ambient_idle`, `explore_stride`, `souvenir_show`, `stationary_restless`, `runaway_departure`, `adoption_arrival`, `reunion_return`.
 - **Mounty states:**
-  - `ambient_idle`, `climb_push`, `summit_victory`, `overworked_exhausted`, `runaway_departure`.
+  - `ambient_idle`, `climb_push`, `summit_victory`, `overworked_exhausted`, `runaway_departure`, `adoption_arrival`, `reunion_return`.
 - **Thermagon states:**
-  - `ambient_idle`, `temperature_balance`, `heatwave_flush`, `cold_snap_shiver`, `runaway_departure`.
+  - `ambient_idle`, `temperature_balance`, `heatwave_flush`, `cold_snap_shiver`, `runaway_departure`, `adoption_arrival`, `reunion_return`.
 - **ZenPanda states:**
-  - `ambient_idle`, `calm_breathe`, `stress_alert`, `mindful_checkpoint`, `runaway_departure`.
+  - `ambient_idle`, `calm_breathe`, `stress_alert`, `mindful_checkpoint`, `runaway_departure`, `adoption_arrival`, `reunion_return`.
 - **JiggleJelly states:**
-  - `ambient_idle`, `playful_bounce`, `motion_stretch`, `neglected_still`, `runaway_departure`.
+  - `ambient_idle`, `playful_bounce`, `motion_stretch`, `neglected_still`, `runaway_departure`, `adoption_arrival`, `reunion_return`.
 - **LexiOwl states:**
-  - `ambient_idle`, `lesson_focus`, `quiz_success`, `missed_session`, `runaway_departure`.
+  - `ambient_idle`, `lesson_focus`, `quiz_success`, `missed_session`, `runaway_departure`, `adoption_arrival`, `reunion_return`.
 - **EchoParrot states:**
-  - `ambient_idle`, `voice_listen`, `command_echo`, `silence_wait`, `runaway_departure`.
+  - `ambient_idle`, `voice_listen`, `command_echo`, `silence_wait`, `runaway_departure`, `adoption_arrival`, `reunion_return`.
 - **Memophant states:**
-  - `ambient_idle`, `note_delivery`, `overdue_burdened`, `review_celebration`, `runaway_departure`.
+  - `ambient_idle`, `note_delivery`, `overdue_burdened`, `review_celebration`, `runaway_departure`, `adoption_arrival`, `reunion_return`.
 - **BusyBee states:**
-  - `ambient_idle`, `task_complete`, `overdue_swarm`, `planning_focus`, `runaway_departure`.
+  - `ambient_idle`, `task_complete`, `overdue_swarm`, `planning_focus`, `runaway_departure`, `adoption_arrival`, `reunion_return`.
 - **BuddyPup states:**
-  - `ambient_idle`, `social_greet`, `lonely_whimper`, `message_delivery`, `runaway_departure`.
+  - `ambient_idle`, `social_greet`, `lonely_whimper`, `message_delivery`, `runaway_departure`, `adoption_arrival`, `reunion_return`.
 - **BeatBunny states:**
-  - `ambient_idle`, `beat_drop`, `tempo_change`, `silence_pause`, `runaway_departure`.
+  - `ambient_idle`, `beat_drop`, `tempo_change`, `silence_pause`, `runaway_departure`, `adoption_arrival`, `reunion_return`.
 - **BookWorm states:**
-  - `ambient_idle`, `reading_glow`, `knowledge_share`, `stalled_progress`, `runaway_departure`.
+  - `ambient_idle`, `reading_glow`, `knowledge_share`, `stalled_progress`, `runaway_departure`, `adoption_arrival`, `reunion_return`.
 - **ShutterBug states:**
-  - `ambient_idle`, `photo_snap`, `gallery_proud`, `creative_block`, `runaway_departure`.
+  - `ambient_idle`, `photo_snap`, `gallery_proud`, `creative_block`, `runaway_departure`, `adoption_arrival`, `reunion_return`.
 - **TranquiliTurtle states:**
-  - `ambient_idle`, `meditation_pose`, `stress_warning`, `breath_coaching`, `runaway_departure`.
+  - `ambient_idle`, `meditation_pose`, `stress_warning`, `breath_coaching`, `runaway_departure`, `adoption_arrival`, `reunion_return`.
 - **VoltVampire states:**
-  - `ambient_idle`, `charge_boost`, `battery_warning`, `energy_saver`, `runaway_departure`.
+  - `ambient_idle`, `charge_boost`, `battery_warning`, `energy_saver`, `runaway_departure`, `adoption_arrival`, `reunion_return`.
 
 ###### Animation export & integration workflow
 
@@ -89,7 +89,8 @@
 5. **Wire into Watch Face Format:**
    - Update `app/src/main/res/raw/watchface.xml` so each `state` element references the new `@raw/<pet>_<state>` assets and defines transitions tied to the gameplay state machine.
    - For Canvas/Kotlin fallback, edit `app/src/main/java/.../renderer/<Pet>Renderer.kt` to load the matching drawable previews when Watch Face Format assets are unavailable (e.g., ambient low-bit mode).
-6. **Verification:** Run `./gradlew :app:assembleDebug` to ensure the build packages new raw assets, then preview on device/emulator to confirm state transitions map to the expected animations. Capture before/after GIFs or frame dumps and save them under `docs/pets/<pet>/`.
+   - Add transition wiring for the new adoption and reunion arcs (e.g., `<state id="reunion_return">`) and stash fallback preview sprites under `app/src/main/res/drawable/<pet>_reunion_return_preview.*` alongside the existing departure previews.
+6. **Verification:** Run `./gradlew :app:assembleDebug` to ensure the build packages new raw assets, then preview on device/emulator to confirm state transitions map to the expected animations—including departure, adoption, and reunion sequences. Capture before/after GIFs or frame dumps and save them under `docs/pets/<pet>/`.
 7. **Documentation update:** Append an entry to `docs/pets/<pet>/animation.md` summarizing export settings, optimization parameters, and integration commit hash before completing the checklist item.
 - **Shared DigiPet Evidence Primer:** All DigiPets must retain uninterrupted timekeeping, include automated state-transition coverage, capture before/after visuals for happy vs. neglected states, and document key metrics in `docs/pets/<pet>/` alongside the relevant gradle command log. Reference this primer in each pet-specific acceptance checklist.
 
