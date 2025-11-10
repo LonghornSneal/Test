@@ -3,7 +3,7 @@
 ## Agent Orientation
 - **Platform focus:** Build the CosmoBond Galaxy Watch8 Classic experience using Watch Face Format v2 with a lightweight Kotlin host for configuration and complications.
 - **Toolchain expectations:** Android Gradle Plugin 8.5+, Kotlin 1.9+, Gradle wrapper (JDK 17), GitHub Actions for CI/CD, Gradle Play Publisher for distribution, Google Play internal→production release tracks.
-- **Workflow rule:** Progress strictly in checklist order. Claim an item by appending `_(claimed by @agent, YYYY-MM-DD HH:mm UTC)_` to the task line before making changes. Complete all acceptance checks before marking `[x]` and append `_Completed: summary (timestamp)_`. Use `_Blocked: reason (timestamp)_` if stalled.
+- **Workflow rule:** Progress strictly in checklist order across the baseline CI/CD phases. Claim an item by appending `_(claimed by @agent, YYYY-MM-DD HH:mm UTC)_` to the task line before making changes. Complete all acceptance checks before marking `[x]` and append `_Completed: summary (timestamp)_`. Use `_Blocked: reason (timestamp)_` if stalled. Do not pull from the DigiPet backlog until every baseline phase item relevant to the current scope is complete and documented.
 - **Quality bar:** Each completed item must include updated/created tests, executed commands, screenshots or logs when specified, and documentation of decisions in `docs/`.
 - **Documentation lint:** Run `npx markdownlint "**/*.md"` (or manually audit if tooling unavailable) after editing Markdown files and record the result in the task evidence.
 - **Execution principles:**
@@ -30,7 +30,9 @@
 - **Pet mail & AR postcards:** Let companions exchange animated postcards or short AR clips that appear on the recipient’s watch, reinforcing long-distance engagement.
 - **Neighborhood leaderboards:** Surface hyperlocal rankings (steps, mindfulness streaks, adventure logs) that rotate themes to avoid fatigue and keep achievements equitable for diverse lifestyles.
 
-### DigiPet Watch Face Expansion Checklist
+### DigiPet Watch Face Expansion Backlog _(Optional — post-baseline)_
+
+> **Unlock condition:** Tackle these DigiPet expansion items only after finishing the baseline CI/CD phases (Phases 1–9) relevant to your assignment. They are exempt from the strict sequencing rule once unlocked, allowing agents to pick the pet initiative that best matches current priorities.
 
 - **Universal watch face requirements:** Each DigiPet remains a fully functional CosmoBond watch face. Reserve space for time, date, battery, and at least two configurable complications so wearers can tailor health, productivity, or communication data without obscuring the companion. Use ambient-mode variants that keep the time legible while dimming pet animations.
 - **Shared DigiPet Evidence Primer:** All DigiPets must retain uninterrupted timekeeping, include automated state-transition coverage, capture before/after visuals for happy vs. neglected states, and document key metrics in `docs/pets/<pet>/` alongside the relevant gradle command log. Reference this primer in each pet-specific acceptance checklist.
