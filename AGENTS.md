@@ -568,12 +568,15 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 ### Phase 4 — CI Foundation (GitHub Actions)
 
 12. **[ ] Prompt:** _"Provision the CI secrets required for builds and publishing."_
-    - **Purpose:** Secure keys for build/publish.
-    - **Steps:**
-      * Add repo secrets: `PLAY_SERVICE_ACCOUNT_JSON`, `UPLOAD_KEYSTORE_BASE64`, `UPLOAD_KEY_ALIAS`, `UPLOAD_KEY_PASSWORD`, `STORE_PASSWORD`.
-    - **Acceptance:** Secrets present & referenced in workflow; no secrets in code.
-    - **Artifacts:** Screenshot of secrets page (sensitive fields redacted).
-    - **Fail?:** Rotate keys and retry.
+   - **Purpose:** Secure keys for build/publish.
+   - **Prerequisites:** Phase 5 Task 17 (Play App Signing + service account JSON) and Task 18 (Gradle release signing + upload keystore) are completed.
+   - **Steps:**
+     1. Confirm Task 17's service-account JSON is stored in the secure vault, then immediately upload it as the `PLAY_SERVICE_ACCOUNT_JSON` GitHub secret.
+     2. Right after completing Task 18, base64-encode the upload keystore generated there and add/update the `UPLOAD_KEYSTORE_BASE64`, `UPLOAD_KEY_ALIAS`, `UPLOAD_KEY_PASSWORD`, and `STORE_PASSWORD` secrets.
+     3. Update CI workflow references (Tasks 13–16, 19–20) to read these secrets via environment variables only—no plaintext commits.
+   - **Acceptance:** GitHub secrets reference the Task 17 service-account JSON and Task 18 upload keystore; workflows consume them without leaking secrets in code or logs.
+   - **Artifacts:** Screenshot of the GitHub secrets page (sensitive fields redacted) plus links back to the Task 17/18 evidence in `docs/`.
+   - **Fail?:** Rotate keys from Tasks 17/18 and retry.
 
 13. **[ ] Prompt:** _"Wire the PR build and lint workflow in GitHub Actions."_
     - **Purpose:** Automatic checks on PR.
@@ -614,9 +617,10 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 17. **[ ] Prompt:** _"Enable Play App Signing in the Google Play Console and capture evidence."_
     - **Purpose:** Use Google-managed signing; CI only needs upload key.
     - **Steps:**
-      * In Play Console, enable **App signing by Google Play**; download upload certificate; store **upload keystore** in CI (Base64).
-    - **Acceptance:** Play shows “App signing enabled.”
-    - **Artifacts:** App signing status screenshot.
+      * In Play Console, enable **App signing by Google Play**; download upload certificate; export a dedicated upload keystore and base64-encode it for CI.
+      * Create a Play Console service account with release-upload rights and download the JSON credentials for later use in Task 12.
+    - **Acceptance:** Play shows “App signing enabled,” and the service-account JSON + upload keystore are archived for CI secrets.
+    - **Artifacts:** App signing status screenshot; redacted note of service-account JSON location.
     - **Fail?:** Complete identity verification; retry.
 
 18. **[ ] Prompt:** _"Configure Gradle release signing and build types to use CI-provided credentials."_
