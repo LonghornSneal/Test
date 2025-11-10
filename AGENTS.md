@@ -33,6 +33,16 @@
 ### DigiPet Watch Face Expansion Checklist
 
 - **Universal watch face requirements:** Each DigiPet remains a fully functional CosmoBond watch face. Reserve space for time, date, battery, and at least two configurable complications so wearers can tailor health, productivity, or communication data without obscuring the companion. Use ambient-mode variants that keep the time legible while dimming pet animations.
+
+#### Watch face animation workflow
+
+- **Supported emotional states:** Every DigiPet must ship the full animation set for `happy/idle`, `warning`, `neglected`, `evolution`, `runaway`, and `ambient` scenes. Provide explicit triggers in planning docs so state swaps are deterministic and testable.
+- **Asset locations & conventions:** Store frame sequences in `app/src/main/res/drawable-nodpi/<pet>_<state>_<frame>.webp` (lowercase pet identifiers, zero-padded frame numbers, `_ambient` reserved for low-motion variants). House reference boards, timing sheets, and exported previews under `docs/pets/<pet>/animations/`. Render frames at 480×480 px maximum (square aspect, alpha supported) and keep per-frame files under 200 KB; flag oversize assets before review.
+- **Integration steps:**
+  1. Update `app/src/main/res/raw/watchface.xml` to register each animation with dedicated `<Group>` containers and `<ImageSequence>` elements that point to the corresponding drawable resources (happy/idle as default, other states grouped by severity).
+  2. Bind the image sequences to pet state flags in the Watch Face Format data pipeline so transitions respect priority (runaway overrides evolution, which overrides neglected, etc.).
+  3. Extend `CosmoBondWatchFaceService.kt` (or delegated helpers) to observe DigiPet status updates and swap active sequences/groups at runtime; document the scene selection logic alongside any throttling or easing behavior.
+- **Acceptance checks:** Confirm ambient and reduced-motion fallbacks gracefully degrade (static keyframe or slowed loop) without exceeding ambient power budgets; verify total animation payload stays within 5 MB per pet. Capture evidence clips (GIF or WebM) showcasing each state, attach them to `docs/pets/<pet>/animations/`, and record markdownlint/test results before closing tasks.
 - **Shared DigiPet Evidence Primer:** All DigiPets must retain uninterrupted timekeeping, include automated state-transition coverage, capture before/after visuals for happy vs. neglected states, and document key metrics in `docs/pets/<pet>/` alongside the relevant gradle command log. Reference this primer in each pet-specific acceptance checklist.
 
 #### Sensor-Driven DigiPets
