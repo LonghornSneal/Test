@@ -273,11 +273,11 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 
 ### Phase 2 — Quality Gates (Local)
 
-7. **[ ] Prompt:** _"Establish static analysis and style enforcement. Add ktlint with Spotless, configure Android Lint to treat new issues as fatal (with a baseline), and wire in a Detekt ruleset, then verify with `./gradlew spotlessApply detekt lint`."_
+7. **[ ] Prompt:** _"Establish static analysis and style enforcement. Add ktlint with Spotless, configure Android Lint to treat new issues as fatal (with a baseline), and wire in a Detekt ruleset, then verify with `./gradlew spotlessCheck detekt lint` (run `./gradlew spotlessApply` if formatting fixes are needed)."_
    - **Purpose:** Enforce Kotlin style and code health.
-   - **Acceptance:** `./gradlew spotlessApply detekt lint` passes.
+   - **Acceptance:** `./gradlew spotlessCheck detekt lint` passes with no violations.
    - **Artifacts:** Lint HTML report, Detekt SARIF, Spotless status.
-   - **Fail?:** Fix violations or adjust rules narrowly.
+   - **Fail?:** Fix violations or adjust rules narrowly; use `./gradlew spotlessApply` to auto-correct formatting before re-running the checks.
 
 8. **[ ] Prompt:** _"Add unit tests for the non-UI logic. Implement `src/test` coverage for time formatting, color scheme selection, and complication ID mapping, then confirm `./gradlew testDebugUnitTest` passes with ≥70% coverage on the core utilities."_
    - **Purpose:** Cover non-UI logic (style schema parsing, config).
