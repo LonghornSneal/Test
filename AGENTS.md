@@ -455,6 +455,9 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
    - **Fail?:** Address missing protections or file updates, recommit.
 
 2. **[ ] Prompt:** _"Lock the platform versions and compliance targets. Confirm JDK 17, AGP 8.5.x+, Kotlin 1.9+, Gradle wrapper, Android SDK API 34, and Wear OS emulator images, then update `docs/setup/tooling.md` with the versions, download links, and Wear OS 5/6 lineage references."_
+   - **Steps:**
+     1. Create `docs/setup/tooling.md` (and the parent directory) if it does not already exist before documenting the tooling snapshot.
+     2. Capture each required tool in the doc using a consistent bullet list or table that includes: tool name, pinned version, official download or installation link, and the Wear OS 5/6 lineage references that justify the target selections.
    - **Purpose:** Freeze host/tool versions for repeatability.
    - **Acceptance:** `docs/setup/tooling.md` describes tooling, cites Play target API 34 requirement.
    - **Artifacts:** Tooling doc diff.
