@@ -440,7 +440,18 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
     - **Artifacts:** Track screenshots, tester list (redacted).
     - **Fail?:** Reconcile tester emails; wait for indexing.
 
-26. **[ ] Prompt:** _"Verify the Wear OS target API policy compliance and document the evidence."_
+26. **[ ] Prompt:** _"Draft the privacy policy, complete the Data Safety questionnaire, and archive the evidence."_
+    - **Purpose:** Lock down Play compliance artifacts before advancing.
+    - **Steps:**
+      * Draft/update the privacy policy and data handling disclosures with PM/legal input.
+      * Complete the Google Play Data Safety questionnaire; export the review summary.
+      * Store the policy, questionnaire exports, and supporting notes under `docs/security/` (or the designated security docs folder).
+      * Capture screenshots or PDFs showing the questionnaire submission before proceeding to pre-release gates.
+    - **Acceptance:** Privacy policy and Data Safety entries approved in Play Console; repository contains the synced documentation.
+    - **Artifacts:** `docs/security/` assets; Play Console submission evidence.
+    - **Fail?:** Resolve policy gaps or questionnaire blockers with PM/legal and resubmit.
+
+27. **[ ] Prompt:** _"Verify the Wear OS target API policy compliance and document the evidence."_
     - **Purpose:** Compliance gate.
     - **Steps:**
       * Confirm `targetSdkVersion=34` for Wear OS app submission.
@@ -452,7 +463,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 
 ### Phase 8 — Pre-Release Gates
 
-27. **[ ] Prompt:** _"Run a Google Play pre-launch report smoke test and address findings."_
+28. **[ ] Prompt:** _"Run a Google Play pre-launch report smoke test and address findings."_
     - **Purpose:** Automated device lab sanity.
     - **Steps:**
       * Upload to **Internal**; trigger PLR; review crashes, ANRs, permissions.
@@ -460,7 +471,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
     - **Artifacts:** PLR HTML/PDF.
     - **Fail?:** Fix and re-upload.
 
-28. **[ ] Prompt:** _"Complete the accessibility review for the watch face and document adjustments."_
+29. **[ ] Prompt:** _"Complete the accessibility review for the watch face and document adjustments."_
     - **Purpose:** Legibility on small displays.
     - **Steps:**
       * Check contrast ratios and tap targets per Wear guidance.
@@ -468,7 +479,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
     - **Artifacts:** Before/after screenshots.
     - **Fail?:** Adjust palettes/typography.
 
-29. **[ ] Prompt:** _"Promote the build to the closed testing track and collect feedback."_
+30. **[ ] Prompt:** _"Promote the build to the closed testing track and collect feedback."_
     - **Purpose:** External validation.
     - **Steps:**
       * Promote internal → closed; collect feedback for 7–14 days.
@@ -480,7 +491,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 
 ### Phase 9 — Release & Post-Release
 
-30. **[ ] Prompt:** _"Execute a staged production rollout via Gradle Play Publisher."_
+31. **[ ] Prompt:** _"Execute a staged production rollout via Gradle Play Publisher."_
     - **Purpose:** Safe release.
     - **Steps:**
       * Use GPP: `./gradlew publishRelease -Ptrack=production -ProlloutFraction=0.1`.
@@ -488,7 +499,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
     - **Artifacts:** Rollout screenshot; CI logs.
     - **Fail?:** Halt rollout; hotfix via internal → production.
 
-31. **[ ] Prompt:** _"Establish monitoring dashboards and alerting for post-release health."_
+32. **[ ] Prompt:** _"Establish monitoring dashboards and alerting for post-release health."_
     - **Purpose:** Catch regressions.
     - **Steps:**
       * Enable ANR/Crash alerts; track Play vitals; set alerting in observability tool.
@@ -496,7 +507,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
     - **Artifacts:** Dashboard URL in `docs/devops/monitoring.md`.
     - **Fail?:** Adjust filters and thresholds.
 
-32. **[ ] Prompt:** _"Cut the production tag, publish the changelog, and write the release retrospective."_
+33. **[ ] Prompt:** _"Cut the production tag, publish the changelog, and write the release retrospective."_
     - **Purpose:** Close the loop.
     - **Steps:**
       * Tag `v1.0.0`; generate `CHANGELOG.md` from commits; write retro in `docs/operations/retrospectives.md`.
