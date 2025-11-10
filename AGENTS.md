@@ -31,24 +31,6 @@
 - **Neighborhood leaderboards:** Surface hyperlocal rankings (steps, mindfulness streaks, adventure logs) that rotate themes to avoid fatigue and keep achievements equitable for diverse lifestyles.
 - **Community care quests:** Publish cooperative challenges (e.g., “collectively log 10k mindful minutes this weekend”) with shared progress bars and global cosmetic unlocks when goals are met.
 
-### Starter Companion Roster
-Select three launch companions from this ideation list. Each includes a signature trait to shape animations, evolution paths, and accessory sets:
-1. **Nebula Kitsune:** A vulpine wanderer with shimmering tails that light up constellations.
-2. **Aqua Glider Manta:** A floating manta-ray friend that swims through air currents, leaving bubble trails.
-3. **Meteor Sproutling:** A plant-rock hybrid whose leaves unfurl meteor sparks during stretches.
-4. **Aurora Puff Drake:** A mini dragon that puffs aurora ribbons when celebrating goals.
-5. **Cosmo Corgi:** A stubby-legged explorer whose jetpack boots fire when sprinting.
-6. **Lumen Firefly:** A cluster of synchronized fireflies forming one companion entity.
-7. **Chrono Owl:** A wise owl that rotates its head to track schedule adherence.
-8. **Orbit Otter:** Performs zero-g flips and loves water intake reminders.
-9. **Prism Jelly:** A translucent jelly creature that reacts to mood via color gradients.
-10. **Solar Sprinter Lynx:** Shifts coat patterns based on sunlight exposure and outdoor achievements.
-11. **Harmonic Hedgehog:** Spikes resonate with music beats, ideal for audio-synced behaviors.
-12. **Nimbus Capybara:** Chill vibes companion that invites mindfulness breaks with gentle rainclouds.
-13. **Comet Chinchilla:** Dashes in dust trails, motivating interval training.
-14. **Galaxy Grove Sprite:** A tree spirit with seasonal foliage evolutions tied to circadian health.
-15. **Astro Axolotl:** Regenerates glowing fins whenever the user completes recovery routines.
-
 ### DigiPet Watch Face Expansion Checklist
 
 - **Universal watch face requirements:** Each DigiPet remains a fully functional CosmoBond watch face. Reserve space for time,
