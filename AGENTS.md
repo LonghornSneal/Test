@@ -32,8 +32,29 @@
 
 ### DigiPet Watch Face Expansion Checklist
 
+#### Watch Face Animation Integration
+
+- **Asset workflow:**
+  1. Maintain layered source artwork for every DigiPet watch face state inside `art/source/watchface/` using the naming pattern `digipet_<pet>_<state>_source.<format>` (for example `digipet_cardio_happy_source.psd`).
+  2. Export frame sequences or motion graphics to `art/export/watchface/` using either `digipet_<pet>_<state>_frames/frame_##.png` for numbered PNG frames or `digipet_<pet>_<state>_lottie.json` for Lottie animations (for example `art/export/watchface/digipet_stepsprite_idle_frames/frame_01.png`).
+  3. Deliver runtime assets in the application under `app/src/main/res/drawable*/` for frame sequences or `app/src/main/res/raw/animations/` for Lottie using `digipet_<pet>_<state>_anim.<png|webp|json>`.
+  4. Keep frame lists (`drawable` XML or animated-vector wrappers) alongside the runtime assets using the suffix `_animlist.xml` (for example `digipet_somnosloth_happy_animlist.xml`).
+- **State coverage:** Ensure that each DigiPet includes dedicated animations with the following asset names:
+  - Happy (`digipet_<pet>_happy_anim.*`)
+  - Idle/Breathing (`digipet_<pet>_idle_anim.*`)
+  - Neglected/Sad (`digipet_<pet>_neglected_anim.*`)
+  - Runaway Transition (`digipet_<pet>_runaway_anim.*`)
+  - Celebration/Evolution (`digipet_<pet>_celebration_anim.*`)
+  - Sleep/Rest (`digipet_<pet>_sleep_anim.*`)
+  - Feeding/Interaction (`digipet_<pet>_care_anim.*`)
+  - Return/Reunion (`digipet_<pet>_return_anim.*`)
+- **Checklist updates:** When adding a DigiPet, extend its steps to:
+  - Reference the new animation assets from `app/src/main/res/raw/watchface.xml` or the Kotlin renderer responsible for the watch face state machine.
+  - Capture proof of each state animation running on device or emulator, storing GIF/MP4 evidence under the checklist’s required artifact directories.
+  - Document the asset additions and proof locations inside the pet’s `docs/pets/<pet>/` log.
+
 - **Universal watch face requirements:** Each DigiPet remains a fully functional CosmoBond watch face. Reserve space for time, date, battery, and at least two configurable complications so wearers can tailor health, productivity, or communication data without obscuring the companion. Use ambient-mode variants that keep the time legible while dimming pet animations.
-- **Shared DigiPet Evidence Primer:** All DigiPets must retain uninterrupted timekeeping, include automated state-transition coverage, capture before/after visuals for happy vs. neglected states, and document key metrics in `docs/pets/<pet>/` alongside the relevant gradle command log. Reference this primer in each pet-specific acceptance checklist.
+- **Shared DigiPet Evidence Primer:** All DigiPets must retain uninterrupted timekeeping, include automated state-transition coverage, capture before/after visuals for happy vs. neglected states, confirm that every animation asset listed above exists in the repository and is wired through the watch face renderer for that pet, and document key metrics in `docs/pets/<pet>/` alongside the relevant gradle command log. Reference this primer in each pet-specific acceptance checklist.
 
 #### Sensor-Driven DigiPets
 
