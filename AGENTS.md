@@ -82,15 +82,41 @@
 
 ###### Animation export & integration workflow
 
+> **Current module state:** The repository presently exposes only the `:app` Gradle module. The historical `./gradlew :art:exportWatchFace` and `./gradlew :art:optimizeWatchFace` commands remain future-facing placeholders until the `:art` automation module ships.
+
 1. **Prep source timelines:** Open the pet’s master project under `art/source/pets/<pet>/` (After Effects, Blender, or Spine as defined in the pet brief). Confirm layers follow the state names above so exported folders inherit deterministic identifiers.
-2. **Batch export:** Run `./gradlew :art:exportWatchFace --pet <pet>` (or use the matching script documented beside the project) to render Watch Face Format frame sequences into `art/export/pets/<pet>/<state>/`. For manual exports, render PNG sequences at 60 fps, trim to the watch-face safe zone, and drop them into the same directory structure.
-3. **Optimize assets:** Execute `./gradlew :art:optimizeWatchFace --pet <pet>` to convert sequences into animated WebP/WebM (ambient) and vector drawables (low-bit) variants. Verify the optimizer outputs `.wff` or `.xml` payloads and preview sprites per state.
+2. **Manual export pipeline:** Until the automation module lands, render frame sequences manually. A typical command looks like:
+
+   ```bash
+   ffmpeg -i art/source/pets/<pet>/<state>.mp4 \
+          -vf "fps=60,scale=512:512:flags=lanczos" \
+          art/export/pets/<pet>/<state>/%04d.png
+   ```
+
+   Ensure the output tree matches `art/export/pets/<pet>/<state>/` with four-digit frame numbers. See `docs/art/manual-export.md` for additional copy-paste helpers.
+3. **Manual optimization:** Convert the exported PNGs into preview sprites and ambient loops:
+
+   ```bash
+   # Animated WebP preview drawable
+   cwebp -q 85 -loop 0 -m 6 -af \
+         art/export/pets/<pet>/<state>/*.png \
+         -o app/src/main/res/drawable/<pet>_<state>_preview.webp
+
+   # VP9 WebM ambient payload
+   ffmpeg -framerate 60 -pattern_type glob \
+          -i "art/export/pets/<pet>/<state>/*.png" \
+          -c:v libvpx-vp9 -pix_fmt yuva420p -b:v 0 -crf 28 \
+          art/export/pets/<pet>/<state>.webm
+   ```
+
+   Additional variants—including FFmpeg-based WebP encoding—are documented in `docs/art/manual-export.md`.
 4. **Commit expectations:** Stage the generated directories plus optimized resources under `app/src/main/res/raw/` and `app/src/main/res/drawable/`. Include the export logs emitted under `art/export/pets/<pet>/export.log` so reviewers can trace tooling versions.
 5. **Wire into Watch Face Format:**
    - Update `app/src/main/res/raw/watchface.xml` so each `state` element references the new `@raw/<pet>_<state>` assets and defines transitions tied to the gameplay state machine.
    - For Canvas/Kotlin fallback, edit `app/src/main/java/.../renderer/<Pet>Renderer.kt` to load the matching drawable previews when Watch Face Format assets are unavailable (e.g., ambient low-bit mode).
 6. **Verification:** Run `./gradlew :app:assembleDebug` to ensure the build packages new raw assets, then preview on device/emulator to confirm state transitions map to the expected animations. Capture before/after GIFs or frame dumps and save them under `docs/pets/<pet>/`.
 7. **Documentation update:** Append an entry to `docs/pets/<pet>/animation.md` summarizing export settings, optimization parameters, and integration commit hash before completing the checklist item.
+- **Future automation:** Once the `:art` module lands, update this checklist to reference its verified tasks and capture the resulting Gradle logs so the automated pipeline becomes the source of truth.
 - **Shared DigiPet Evidence Primer:** All DigiPets must retain uninterrupted timekeeping, include automated state-transition coverage, capture before/after visuals for happy vs. neglected states, and document key metrics in `docs/pets/<pet>/` alongside the relevant gradle command log. Reference this primer in each pet-specific acceptance checklist.
 
 #### Sensor-Driven DigiPets
