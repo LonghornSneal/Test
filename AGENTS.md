@@ -567,18 +567,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 
 ### Phase 4 — CI Foundation (GitHub Actions)
 
-12. **[ ] Prompt:** _"Provision the CI secrets required for builds and publishing."_
-   - **Purpose:** Secure keys for build/publish.
-   - **Prerequisites:** Phase 5 Task 17 (Play App Signing + service account JSON) and Task 18 (Gradle release signing + upload keystore) are completed.
-   - **Steps:**
-     1. Confirm Task 17's service-account JSON is stored in the secure vault, then immediately upload it as the `PLAY_SERVICE_ACCOUNT_JSON` GitHub secret.
-     2. Right after completing Task 18, base64-encode the upload keystore generated there and add/update the `UPLOAD_KEYSTORE_BASE64`, `UPLOAD_KEY_ALIAS`, `UPLOAD_KEY_PASSWORD`, and `STORE_PASSWORD` secrets.
-     3. Update CI workflow references (Tasks 13–16, 19–20) to read these secrets via environment variables only—no plaintext commits.
-   - **Acceptance:** GitHub secrets reference the Task 17 service-account JSON and Task 18 upload keystore; workflows consume them without leaking secrets in code or logs.
-   - **Artifacts:** Screenshot of the GitHub secrets page (sensitive fields redacted) plus links back to the Task 17/18 evidence in `docs/`.
-   - **Fail?:** Rotate keys from Tasks 17/18 and retry.
-
-13. **[ ] Prompt:** _"Wire the PR build and lint workflow in GitHub Actions."_
+12. **[ ] Prompt:** _"Wire the PR build and lint workflow in GitHub Actions."_
     - **Purpose:** Automatic checks on PR.
     - **Steps:**
       * Ensure `.github/workflows/android.yml` runs `./gradlew spotlessCheck detekt lint assembleDebug` with cached Gradle and Android SDK setup.
@@ -586,7 +575,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
     - **Artifacts:** Lint/Detekt reports as build artifacts.
     - **Fail?:** Fix build/lint errors.
 
-14. **[ ] Prompt:** _"Extend CI to execute the unit test suite and surface the results."_
+13. **[ ] Prompt:** _"Extend CI to execute the unit test suite and surface the results."_
     - **Purpose:** Enforce correctness gates.
     - **Steps:**
       * Extend workflow to run `./gradlew testDebugUnitTest` and publish reports.
@@ -594,7 +583,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
     - **Artifacts:** Test reports uploaded.
     - **Fail?:** Fix tests or code.
 
-15. **[ ] Prompt:** _"Add the Wear OS emulator job to run connected tests in CI."_
+14. **[ ] Prompt:** _"Add the Wear OS emulator job to run connected tests in CI."_
     - **Purpose:** Run instrumentation/screenshot tests headless.
     - **Steps:**
       * Use **ReactiveCircus/android-emulator-runner** with a Wear OS x86_64 system image; start emulator; run `connectedDebugAndroidTest`.
@@ -602,7 +591,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
     - **Artifacts:** Instrumentation logs, screenshots.
     - **Fail?:** Bump RAM/timeouts; pre-download system images; retry.
 
-16. **[ ] Prompt:** _"Schedule the nightly Macrobenchmark workflow to capture baseline profiles."_
+15. **[ ] Prompt:** _"Schedule the nightly Macrobenchmark workflow to capture baseline profiles."_
     - **Purpose:** Generate baseline profile in CI nightly.
     - **Steps:**
       * Nightly workflow triggers `:baselineprofile:collect` then commits asset as artifact (not auto-commit).
@@ -614,22 +603,33 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 
 ### Phase 5 — Signing & Play Integration
 
-17. **[ ] Prompt:** _"Enable Play App Signing in the Google Play Console and capture evidence."_
+16. **[ ] Prompt:** _"Enable Play App Signing in the Google Play Console and capture evidence."_
     - **Purpose:** Use Google-managed signing; CI only needs upload key.
     - **Steps:**
       * In Play Console, enable **App signing by Google Play**; download upload certificate; export a dedicated upload keystore and base64-encode it for CI.
-      * Create a Play Console service account with release-upload rights and download the JSON credentials for later use in Task 12.
+      * Create a Play Console service account with release-upload rights and download the JSON credentials for later use in Task 18.
     - **Acceptance:** Play shows “App signing enabled,” and the service-account JSON + upload keystore are archived for CI secrets.
     - **Artifacts:** App signing status screenshot; redacted note of service-account JSON location.
     - **Fail?:** Complete identity verification; retry.
 
-18. **[ ] Prompt:** _"Configure Gradle release signing and build types to use CI-provided credentials."_
+17. **[ ] Prompt:** _"Configure Gradle release signing and build types to use CI-provided credentials."_
     - **Purpose:** Deterministic release builds in CI.
     - **Steps:**
       * In `app/build.gradle.kts`, configure `signingConfigs { release }` reading env vars; enable R8; set `versionCode` auto from tags.
     - **Acceptance:** `./gradlew :app:bundleRelease` uses release keystore in CI.
     - **Artifacts:** Build scans/logs.
     - **Fail?:** Fix keystore passwords/aliases.
+
+18. **[ ] Prompt:** _"Provision the CI secrets required for builds and publishing."_
+    - **Purpose:** Secure keys for build/publish.
+    - **Prerequisites:** Phase 5 Task 16 (Play App Signing + service account JSON) and Task 17 (Gradle release signing + upload keystore) are completed.
+    - **Steps:**
+      1. Confirm Task 16's service-account JSON is stored in the secure vault, then immediately upload it as the `PLAY_SERVICE_ACCOUNT_JSON` GitHub secret.
+      2. Right after completing Task 17, base64-encode the upload keystore generated there and add/update the `UPLOAD_KEYSTORE_BASE64`, `UPLOAD_KEY_ALIAS`, `UPLOAD_KEY_PASSWORD`, and `STORE_PASSWORD` secrets.
+      3. Update CI workflow references (Tasks 12–15, 19–20) to read these secrets via environment variables only—no plaintext commits.
+    - **Acceptance:** GitHub secrets reference the Task 16 service-account JSON and Task 17 upload keystore; workflows consume them without leaking secrets in code or logs.
+    - **Artifacts:** Screenshot of the GitHub secrets page (sensitive fields redacted) plus links back to the Task 16/17 evidence in `docs/`.
+    - **Fail?:** Rotate keys from Tasks 16/17 and retry.
 
 19. **[ ] Prompt:** _"Integrate Gradle Play Publisher and validate the release task graph."_
     - **Purpose:** Automate upload to internal/closed tracks.
