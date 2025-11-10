@@ -91,6 +91,46 @@
    - For Canvas/Kotlin fallback, edit `app/src/main/java/.../renderer/<Pet>Renderer.kt` to load the matching drawable previews when Watch Face Format assets are unavailable (e.g., ambient low-bit mode).
 6. **Verification:** Run `./gradlew :app:assembleDebug` to ensure the build packages new raw assets, then preview on device/emulator to confirm state transitions map to the expected animations. Capture before/after GIFs or frame dumps and save them under `docs/pets/<pet>/`.
 7. **Documentation update:** Append an entry to `docs/pets/<pet>/animation.md` summarizing export settings, optimization parameters, and integration commit hash before completing the checklist item.
+
+###### Generative animation sourcing
+
+- **Sora 2**
+  - *Prompt approach:* Provide concise shot descriptions emphasizing seamless loops, foreground character action, and transparent or solid chroma backgrounds that can be keyed while preserving watch-safe framing.
+  - *Output settings:* Request 6–8 second loops, 60 fps delivery, and centered composition with ample padding for circular crop safety. Prefer background removal or a keyed solid to maintain alpha-safe framing during extraction.
+  - *Download & prep:* Export the resulting MP4 from the Sora UI. When downloading, disable platform-level compression and keep the highest bitrate version.
+  - *Sequence conversion:*
+    ```bash
+    ffmpeg -i sora-output.mp4 -vf "fps=60" art/export/pets/<pet>/<state>/%04d.png
+    ```
+
+- **Veo 3.1**
+  - *Prompt approach:* Highlight camera motion constraints (minimal drift) and specify loop continuity plus any lighting passes needed for different pet states. Mention circular crop guides so Veo frames the subject inside the watch face safe zone.
+  - *Output settings:* Target loop durations under 10 seconds with 60 fps playback. Enable ProRes or high-quality MOV/MP4 output and request neutral backgrounds or export the alpha channel when available.
+  - *Download & prep:* Use Veo’s export panel to download the highest-quality render (prefer MOV if alpha is embedded). Ensure color management remains sRGB to match downstream tooling.
+  - *Sequence conversion:*
+    ```bash
+    ffmpeg -i veo-output.mov -vf "fps=60" art/export/pets/<pet>/<state>/%04d.png
+    ```
+
+- **Gemini**
+  - *Prompt approach:* Provide explicit loop instructions, state-specific mood cues, and reference existing DigiPet poses. Emphasize stable background plates or single-color stages to facilitate alpha isolation.
+  - *Output settings:* Ask for 5–8 second, 60 fps clips with square or vertical framing that leaves padding for the circular crop and avoids clipping extremities.
+  - *Download & prep:* From the Gemini interface, choose “Download original quality” for the generated video asset before any platform recompression.
+  - *Sequence conversion:*
+    ```bash
+    ffmpeg -i gemini-output.mp4 -vf "fps=60" art/export/pets/<pet>/<state>/%04d.png
+    ```
+
+- **ChatGPT (DALL·E/Canvas)**
+  - *Prompt approach:* Instruct Canvas to create frame-by-frame variations of the pet in the desired state, noting seamless looping start/end frames and the need for transparent backgrounds or masked layers.
+  - *Output settings:* Aim for 6 second sequences assembled at 60 fps. Request square canvases with safe margins for circular watch crops and ensure exported layers respect alpha-safe framing.
+  - *Download & prep:* Export the animation or layered frames directly from the Canvas project as a high-resolution MP4 or PNG stack without platform recompression.
+  - *Sequence conversion:*
+    ```bash
+    ffmpeg -i chatgpt-canvas.mp4 -vf "fps=60" art/export/pets/<pet>/<state>/%04d.png
+    ```
+
+- **Post-generation checklist:** Review the licensing and usage terms for each platform before committing assets, run `./gradlew :art:optimizeWatchFace --pet <pet>` on the generated frame sequences, and record the exact prompts plus provenance notes under `docs/pets/<pet>/animation.md` for future audits.
 - **Shared DigiPet Evidence Primer:** All DigiPets must retain uninterrupted timekeeping, include automated state-transition coverage, capture before/after visuals for happy vs. neglected states, and document key metrics in `docs/pets/<pet>/` alongside the relevant gradle command log. Reference this primer in each pet-specific acceptance checklist.
 
 #### Sensor-Driven DigiPets
