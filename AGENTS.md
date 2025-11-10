@@ -546,13 +546,20 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 
 ### Phase 3 — Performance & Battery Scaffolding
 
-10. **[ ] Prompt:** _"Stand up the baseline profile module and ensure Macrobenchmark-generated rules ship in release builds."_
+10. **[ ] Prompt:** _"Stand up the baseline profile module and ensure Macrobenchmark-generated rules ship in release builds."_ _(claimed by @assistant, 2025-11-10 13:40 UTC)_
     - **Purpose:** Improve startup/render perf; reduce CPU.
     - **Steps:**
-      1. Add `baselineprofile` module with **Macrobenchmark** to exercise face config screen and render path.
-      2. Generate & include baseline profile in release builds.
-    - **Acceptance:** `./gradlew :baselineprofile:generateBaselineProfile` produces rules; included in AAB.
-    - **Artifacts:** Baseline profile file; macrobenchmark HTML/CSV.
+      1. Scaffold the `baselineprofile/` Macrobenchmark module (Gradle script, manifest, and source folders) so it targets the `:app` module and runs on a debuggable variant.
+      2. Register the module in `settings.gradle.kts` with `include(":baselineprofile")` and sync the project.
+      3. Apply the Macrobenchmark/Baseline Profile plugins and configurations in `baselineprofile/build.gradle.kts`, including the `androidx.benchmark` dependencies and instrumentation runner pointing at the app under test.
+      4. Add starter benchmark classes under `baselineprofile/src/main/java/...` that warm up the watch face configuration screen and primary render path before profile capture.
+      5. Generate the baseline profile and copy the resulting `baseline-prof.txt` into `app/src/main/baseline-prof.txt` so it ships with release builds.
+    - **Acceptance:**
+      * `./gradlew :baselineprofile:generateBaselineProfile` completes successfully and refreshes `app/src/main/baseline-prof.txt`.
+      * `./gradlew :app:assembleRelease` finishes without errors, confirming the packaged artifact contains the refreshed profile.
+    - **Artifacts:**
+      * `art/perf/baselineprofile-generateBaselineProfile.log` and `art/perf/app-assembleRelease.log` capturing the command outputs.
+      * Updated `docs/perf/baselineprofile.md` summarizing the module structure, Macrobenchmark coverage, and profile storage path.
     - **Fail?:** Verify profile merging per Compose/Wear guidance.
 
 11. **[ ] Prompt:** _"Complete the battery and performance guideline audit for the watch face."_
