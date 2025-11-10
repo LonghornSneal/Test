@@ -93,6 +93,40 @@
 7. **Documentation update:** Append an entry to `docs/pets/<pet>/animation.md` summarizing export settings, optimization parameters, and integration commit hash before completing the checklist item.
 - **Shared DigiPet Evidence Primer:** All DigiPets must retain uninterrupted timekeeping, include automated state-transition coverage, capture before/after visuals for happy vs. neglected states, and document key metrics in `docs/pets/<pet>/` alongside the relevant gradle command log. Reference this primer in each pet-specific acceptance checklist.
 
+###### Generative animation sourcing
+
+When AI video tools are used to draft state timelines, capture the same evidence trail as hand-built exports and store raw plus processed files beside the existing `art/export/pets/<pet>/<state>/` directories.
+
+- **Sora 2 (OpenAI video sandbox):**
+  1. Request access through the OpenAI Research Preview portal, then launch the Sora workspace session assigned to your CosmoBond project.
+  2. Craft prompts that lock resolution, cadence, and background hygiene: `"4K square 2160x2160 creature animation, 60 fps, 6-second loop, flat studio light, chroma key green background"`. Explicitly mention whether you need negative space for watch complications and remind the model to avoid props outside the safe zone.
+  3. Generate the take, download the MP4 master from the session’s “Exports” drawer, and log the model version plus safety filters in `docs/pets/<pet>/animation.md`.
+  4. Convert to CosmoBond frame sequences with `ffmpeg -i sora-output.mp4 -vf "fps=60" art/export/pets/<pet>/<state>/%04d.png` and store the untouched MP4 under `art/source/pets/<pet>/generative/sora/` using the naming pattern `<state>_sora2_<yyyymmdd>.mp4`.
+  5. Note OpenAI’s usage policy and capture any consent documentation if live-action elements or personal likenesses were referenced; do not ingest runs that violate the policy.
+
+- **Veo 3.1 (Google VideoFX beta):**
+  1. Open Vertex AI > VideoFX, ensure the `cosmobond` project is active, and start a Veo 3.1 prompt card with the “Cinematic loop” template.
+  2. Include framing metadata such as `resolution: 2048x2048`, `duration_seconds: 6`, `frame_rate: 60`, and specify `background: solid #00FF00 for transparency keying` inside the structured prompt field.
+  3. Export the resulting `.mp4` plus the optional `.json` prompt metadata; keep both under `art/source/pets/<pet>/generative/veo/` following `<state>_veo31_<yyyymmdd>.mp4` naming.
+  4. Use `ffmpeg -i <state>_veo31_<yyyymmdd>.mp4 -vf "fps=60,format=rgba" art/export/pets/<pet>/<state>/%04d.png` if alpha is unavailable, then manually key out the solid background before optimization.
+  5. Respect Google’s VideoFX terms, especially around third-party IP and consent for any people depicted; log approvals in the pet’s documentation folder.
+
+- **Gemini (Imagen + VideoFX pipelines):**
+  1. Launch the Gemini Studio workspace and pick either the Imagen still-to-video or VideoFX motion pipeline based on state needs.
+  2. Define prompt variables that match CosmoBond constraints: specify a square render (minimum 1024×1024), 60 fps, ≤6 seconds, and require either transparent PNG export or a single-color background.
+  3. Download both the `.mp4` animation and the `.zip` bundle of intermediate PNG frames when available; save them under `art/source/pets/<pet>/generative/gemini/` as `<state>_gemini_<yyyymmdd>.mp4` and `<state>_gemini_<yyyymmdd>.zip`.
+  4. If PNG frames are not supplied, create them locally with `ffmpeg` using the same `fps=60` filter, then drop the processed sequence into `art/export/pets/<pet>/<state>/`.
+  5. Add a consent note when source prompts include recognizable brands, locations, or contributors and confirm the Gemini output license allows redistribution inside the CosmoBond repository.
+
+- **ChatGPT (DALL·E + frame export extension):**
+  1. Start a ChatGPT session with the DALL·E video plug-in enabled, then issue a storyboard prompt plus a follow-up request for a 60 fps loop rendered against a chroma-key background.
+  2. Use DALL·E’s “Advanced settings” to force a 2048×2048 aspect ratio, limit duration to 6 seconds, and include `"background": "flat #00FF00"` instructions for easier compositing.
+  3. Download the delivered `.mp4` or `.mov` file along with any `.json` prompt export, saving them to `art/source/pets/<pet>/generative/chatgpt/` named `<state>_chatgpt_<yyyymmdd>.mp4`.
+  4. Run `ffmpeg -i <state>_chatgpt_<yyyymmdd>.mp4 -vf "fps=60" art/export/pets/<pet>/<state>/%04d.png`, then review frames for artifacts before committing.
+  5. DALL·E inherits OpenAI content policy—log stylistic inspirations, avoid real-person likenesses without written consent, and document approvals in the pet’s evidence notes.
+
+After generating sequences, bundle each tool’s raw deliverables into `art/source/pets/<pet>/generative/<tool>/` (keep MP4s, JSON prompts, and QA notes) and deposit cleaned PNG frames inside `art/export/pets/<pet>/<state>/`. Zip the entire `generative/<tool>/` directory into `art/source/pets/<pet>/archives/<pet>_<state>_<tool>_<yyyymmdd>.zip`, then reference the archive path plus the processed export folder in `docs/pets/<pet>/animation.md`. When submitting checklist evidence, attach the zip alongside the optimized assets so downstream agents can reproduce conversions or rerun optimization jobs without repeating the AI generation step.
+
 #### Sensor-Driven DigiPets
 
 - [ ] **CardioCritter — Heart Rate Fitness Monster**
