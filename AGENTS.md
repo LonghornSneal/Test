@@ -511,13 +511,33 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
    ```bash
    ./art/mockups/render_watchface.sh --pet <pet> --state <state> --input art/tmp/exports/<pet>/<state>/frames
    ```
-   The script copies the frames into `art/export/pets/<pet>/<state>/frames/`, then generates WebM, animated WebP, and GIF previews under `art/export/pets/<pet>/<state>/renders/`. Execution details (arguments, ffmpeg version, and full stdout/stderr) are captured automatically in `art/export/pets/<pet>/logs/<timestamp>_<state>.log`.
-4. **Commit expectations:** Stage the updated `art/export/pets/<pet>/` subtree (frames, renders, metadata, and logs) together with the integrated resources under `app/src/main/res/raw/` and `app/src/main/res/drawable/`. Include the GIF preview when present so reviewers can eyeball the animation without rebuilding the project.
-5. **Wire into Watch Face Format:**
+   The script copies the frames into `art/export/pets/<pet>/<state>/frames/`, then generates WebM, animated WebP, and GIF previews under `art/export/pets/<pet>/<state>/renders/`. Execution details (arguments, ffmpeg version, and full stdout/stderr) are captured automatically in `art/export/pets/<pet>/logs/<timestamp>_<state>.log`. Those `frames/` directories are the authoritative source for the Watch Face Format packaging step, while the `renders/` previews help with visual QA.
+4. **Package Watch Face Format resources:** Create one archive per state so the runtime can stream the sequence from `@raw`. From `art/export/pets/<pet>/<state>/`, generate a lightweight manifest with the frame cadence and bundle it together with the PNGs:
+   ```bash
+   cat > sequence.json <<'JSON'
+   {
+     "fps": 60,
+     "framePath": "frames/%04d.png"
+   }
+   JSON
+   zip -j app/src/main/res/raw/<pet>_<state>.zip sequence.json frames/*.png
+   ```
+   (Adjust `fps` if you rendered at a different cadence.) Keep the zipped asset named `@raw/<pet>_<state>` so it lines up with the references in `watchface.xml`. If you prefer to validate structure first, you can stage the archive under `art/export/pets/<pet>/<state>/wff/` before copying it into `app/src/main/res/raw/`.
+5. **Commit expectations:** Stage the updated `art/export/pets/<pet>/` subtree (frames, renders, metadata, and logs) together with the new zipped resources under `app/src/main/res/raw/` and any drawable fallbacks under `app/src/main/res/drawable/`. Include the GIF preview when present so reviewers can eyeball the animation without rebuilding the project.
+6. **Wire into Watch Face Format:**
    - Update `app/src/main/res/raw/watchface.xml` so each `state` element references the new `@raw/<pet>_<state>` assets and defines transitions tied to the gameplay state machine.
+      ```xml
+      <Animation id="<pet>_<state>">
+          <ImageSequence fps="60">
+              <Image src="@raw/<pet>_<state>" width="480" height="480"/>
+          </ImageSequence>
+      </Animation>
+      ```
+      Use the `<ImageSequence>` as a child of your scene/group definition so the archive created in the previous step is streamed correctly. Keep the animation identifiers consistent with your state machine enum.
    - For Canvas/Kotlin fallback, edit `app/src/main/java/.../renderer/<Pet>Renderer.kt` to load the matching drawable previews when Watch Face Format assets are unavailable (e.g., ambient low-bit mode).
-6. **Verification:** Run `./gradlew :app:assembleDebug` to ensure the build packages new raw assets, then preview on device/emulator to confirm state transitions map to the expected animations. Capture before/after GIFs or frame dumps and save them under `docs/pets/<pet>/`.
-7. **Documentation update:** Append an entry to `docs/pets/<pet>/animation.md` summarizing export settings, optimization parameters, and integration commit hash before completing the checklist item.
+7. **Verification:** Run `./gradlew :app:assembleDebug` followed by `./gradlew :app:lint` (or Android Studio’s Watch Face Format Preview) to confirm the zipped `@raw` assets are discoverable and render in the correct states. When possible, install the debug build on a Wear OS emulator or device and trigger each gameplay state to validate the animation swaps. Capture before/after GIFs or frame dumps and save them under `docs/pets/<pet>/`.
+8. **Documentation update:** Append an entry to `docs/pets/<pet>/animation.md` summarizing export settings, optimization parameters, and integration commit hash before completing the checklist item.
+- **Acceptance:** Zipped `@raw/<pet>_<state>` archives exist under `app/src/main/res/raw/`, `watchface.xml` references them via `<ImageSequence>`, and the verification commands above pass while showing the expected motion in preview.
 - **Shared DigiPet Evidence Primer:** All DigiPets must retain uninterrupted timekeeping, include automated state-transition coverage, capture before/after visuals for happy vs. neglected states, and document key metrics in `docs/pets/<pet>/` alongside the relevant gradle command log. Reference this primer in each pet-specific acceptance checklist.
 
 #### Sensor-Driven DigiPets
