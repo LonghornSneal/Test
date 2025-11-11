@@ -694,12 +694,12 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
   - **Acceptance:**
     * Satisfies the **Shared DigiPet Evidence Primer**.
     * Stress spikes surface progressive visual cues before notifications and guided breathing entry point launches within one tap.
-    * Calm streak milestones unlock evolution tiers; neglecting practices triggers shell-withdrawn state before runaway.
+    * Calm streak milestones unlock evolution tiers; neglecting practices triggers the `stress_alert` state before runaway.
     * Animation assets listed in the checklist (see [Generative animation workflows](#generative-animation-workflows) for sourcing options) are committed under `art/export/pets/zenpanda/` with matching `@raw/@drawable` resources and documented in `docs/pets/zenpanda/`.
   - **Artifacts:**
     * HRV-to-tier mapping chart plus associated unit tests.
     * Session logs demonstrating guided breathing launches and calm-minute accumulation.
-    * Visual capture of escalation cues vs. calm glow stored in documentation.
+    * Visual capture of escalation cues (`stress_alert`) vs. calm glow (`calm_breathe`) stored in documentation.
     * `docs/pets/zenpanda/animation.md` updated with export settings, optimization output, and asset verification screenshots.
 
 - [ ] **JiggleJelly — Motion-Interactive Play Pet**
