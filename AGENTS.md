@@ -82,6 +82,11 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 
 1. **[ ] Prompt:** _"Audit the repository guardrails. Inspect `README.md`, `CODEOWNERS`, `CONTRIBUTING.md`, `LICENSE`, `.gitignore`, `.editorconfig`, and `.gitattributes`; record any needed adjustments in `docs/project/decision_log.md`; capture current branch protection status and document how to request updates."_
    - **Purpose:** Confirm guardrails and initial documentation are present.
+   - **Steps:**
+     1. Open each guardrail file (`README.md`, `CODEOWNERS`, `CONTRIBUTING.md`, `LICENSE`, `.gitignore`, `.editorconfig`, `.gitattributes`) and review for gaps or outdated guidance.
+     2. Note any discrepancies, missing sections, or follow-up actions required for the guardrails.
+     3. Capture the current branch-protection settings (rules, required checks, enforcement status) for the default branch.
+     4. Log all findings and recommended updates in `docs/project/decision_log.md`, referencing both file reviews and branch-protection status.
    - **Acceptance:** Baseline files reviewed; issues noted in `docs/project/decision_log.md`; branch protections documented.
    - **Artifacts:** Decision log entry, branch protection screenshot.
    - **Fail?:** Address missing protections or file updates, recommit.
@@ -97,6 +102,10 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 
 3. **[ ] Prompt:** _"Confirm the rendering track. Update `docs/tech/architecture.md` to summarize the Watch Face Format v2 + Kotlin host approach, set minSdk/targetSdk to 34, and cite the supporting Google/Samsung guidance. If you pivot to the Kotlin-rendered path, adjust downstream notes accordingly."_
    - **Purpose:** Document Watch Face Format v2 choice (or switch to Kotlin track if required).
+   - **Steps:**
+     1. Inspect the Gradle configuration (including `app/build.gradle.kts` and `gradle.properties`) to verify the `minSdk` and `targetSdk` values.
+     2. Gather the relevant Google/Samsung guidance links that justify the selected rendering approach and SDK levels.
+     3. Summarize the Watch Face Format vs. Kotlin-rendered decision in `docs/tech/architecture.md`, citing the collected guidance and noting any implications for downstream tasks.
    - **Acceptance:** Architecture doc captures decision with references.
    - **Artifacts:** Architecture doc diff.
    - **Fail?:** If opting into Kotlin-rendered path, update downstream steps and checklist notes accordingly.
@@ -236,7 +245,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 15. **[ ] Prompt:** _"Schedule the nightly Macrobenchmark workflow to capture baseline profiles."_
     - **Purpose:** Generate baseline profile in CI nightly.
     - **Steps:**
-      * Nightly workflow triggers `:baselineprofile:collect` then commits asset as artifact (not auto-commit).
+      * Nightly workflow triggers `./gradlew :baselineprofile:generateBaselineProfile` then commits the asset as an artifact (not auto-commit).
     - **Acceptance:** Baseline profile artifact attached to nightly run.
     - **Artifacts:** Baseline profile, perf metrics.
     - **Fail?:** Skip battery check on no-battery hosts if needed.
@@ -938,7 +947,7 @@ Use these commands when relevant tasks call for validation:
 - `./gradlew spotlessCheck detekt lint`
 - `./gradlew testDebugUnitTest`
 - `./gradlew connectedDebugAndroidTest`
-- `./gradlew :baselineprofile:collect`
+- `./gradlew :baselineprofile:generateBaselineProfile`
 - `./gradlew publishRelease --dry-run`
 
 ### Done Definition (applies to every box)
