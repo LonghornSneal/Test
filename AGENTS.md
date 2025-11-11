@@ -461,7 +461,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 - **BeatBunny states:**
   - `ambient_idle`, `beat_drop`, `tempo_change`, `silence_pause`, `runaway_departure`.
 - **BookWorm states:**
-  - `ambient_idle`, `reading_glow`, `knowledge_share`, `stalled_progress`, `runaway_departure`.
+  - `ambient_idle` (caterpillar idle baseline), `reading_glow` (caterpillar active/feeding), `stalled_progress` (cocoon dormancy), `knowledge_share` (butterfly showcase), `runaway_departure` (butterfly exit).
 - **ShutterBug states:**
   - `ambient_idle`, `photo_snap`, `gallery_proud`, `creative_block`, `runaway_departure`.
 - **TranquiliTurtle states:**
@@ -857,10 +857,10 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
     * Satisfies the **Shared DigiPet Evidence Primer**.
     * Reading sessions register within tracked categories and update BookWorm form at milestone boundaries.
     * Fact-of-the-day prompts rotate without repetition during 14-day window and skip when streak is broken.
-    * Animation assets listed in the checklist (see [Generative animation workflows](#generative-animation-workflows) for sourcing options) are committed under `art/export/pets/bookworm/` with matching `@raw/@drawable` resources and documented in `docs/pets/bookworm/`.
+    * Animation assets for the checklist states (`ambient_idle`, `reading_glow`, `stalled_progress`, `knowledge_share`, `runaway_departure`) are committed under `art/export/pets/bookworm/` with matching `@raw/bookworm_<state>` and `@drawable/bookworm_<state>` resources and documented in `docs/pets/bookworm/`.
   - **Artifacts:**
     * Usage stats ingestion logs with reconciliation script notes.
-    * Animation captures for caterpillar, cocoon, and butterfly states.
+    * Animation captures covering `reading_glow` (caterpillar), `stalled_progress` (cocoon), and `knowledge_share` (butterfly) states.
     * Milestone table and prompt rotation plan saved under `docs/pets/bookworm/`.
     * `docs/pets/bookworm/animation.md` updated with export settings, optimization output, and asset verification screenshots.
 
