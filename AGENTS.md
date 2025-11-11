@@ -236,7 +236,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 15. **[ ] Prompt:** _"Schedule the nightly Macrobenchmark workflow to capture baseline profiles."_
     - **Purpose:** Generate baseline profile in CI nightly.
     - **Steps:**
-      * Nightly workflow triggers `:baselineprofile:collect` then commits asset as artifact (not auto-commit).
+      * Nightly workflow triggers `./gradlew :baselineprofile:generateBaselineProfile` then commits the asset as an artifact (not auto-commit).
     - **Acceptance:** Baseline profile artifact attached to nightly run.
     - **Artifacts:** Baseline profile, perf metrics.
     - **Fail?:** Skip battery check on no-battery hosts if needed.
@@ -938,7 +938,7 @@ Use these commands when relevant tasks call for validation:
 - `./gradlew spotlessCheck detekt lint`
 - `./gradlew testDebugUnitTest`
 - `./gradlew connectedDebugAndroidTest`
-- `./gradlew :baselineprofile:collect`
+- `./gradlew :baselineprofile:generateBaselineProfile`
 - `./gradlew publishRelease --dry-run`
 
 ### Done Definition (applies to every box)
