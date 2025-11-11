@@ -457,7 +457,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 - **BusyBee states:**
   - `ambient_idle`, `task_complete`, `overdue_swarm`, `planning_focus`, `runaway_departure`.
 - **BuddyPup states:**
-  - `ambient_idle`, `social_greet`, `lonely_whimper`, `message_delivery`, `runaway_departure`.
+  - `ambient_idle`, `social_greet`, `co_play_joy`, `lonely_whimper`, `message_delivery`, `runaway_departure`.
 - **BeatBunny states:**
   - `ambient_idle`, `beat_drop`, `tempo_change`, `silence_pause`, `runaway_departure`.
 - **BookWorm states:**
@@ -479,7 +479,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 
 - **Sora 2 (OpenAI):**
   - **Request access:** File a request through the OpenAI enterprise admin portal; include project identifiers, intended commercial scope, and compliance contact. Await approval and API key distribution before queuing jobs.
-  - **Prompting:** Craft per-state prompts that describe the pet, lighting, and camera move, e.g., `"CosmoBond CardioCritter healthy_workout animation, energetic gym interior, tracking shot"`. Embed state tags (`[state:healthy_workout]`) so render histories align with the export log. Iterate with reference frames from prior assets when available.
+  - **Prompting:** Craft per-state prompts that describe the pet, lighting, and camera move, e.g., `"CosmoBond CardioCritter healthy_workout animation, energetic gym interior, tracking shot"`. For BuddyPup's new `co_play_joy` state, mirror the structure with `"CosmoBond BuddyPup co_play_joy animation, playful park meetup, dynamic tail wags"`. Embed state tags (`[state:healthy_workout]`, `[state:co_play_joy]`) so render histories align with the export log. Iterate with reference frames from prior assets when available.
   - **Export:** Use the Sora dashboard or API to render 1080p clips; download MP4 masters plus JSON metadata. Re-render variations until motion loops cleanly for the targeted watch-face duration.
   - **Conversion:** Execute the shared 60 fps PNG extraction command above. Inspect frames for motion blur artifacts; if present, request motion smoothing via Sora’s `motion_coherence` parameter before re-exporting.
 
@@ -820,7 +820,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
     * Animation assets listed in the checklist (see [Generative animation workflows](#generative-animation-workflows) for sourcing options) are committed under `art/export/pets/buddypup/` with matching `@raw/@drawable` resources and documented in `docs/pets/buddypup/`.
   - **Artifacts:**
     * Interaction log sample plus privacy note for notification listener usage.
-    * Animation captures for mail delivery, co-play joy, and lonely whimper states.
+    * Animation captures for `message_delivery`, `co_play_joy`, and `lonely_whimper` states.
     * Documentation of manual meetup entry workflow in `docs/pets/buddypup/`.
     * `docs/pets/buddypup/animation.md` updated with export settings, optimization output, and asset verification screenshots.
 
