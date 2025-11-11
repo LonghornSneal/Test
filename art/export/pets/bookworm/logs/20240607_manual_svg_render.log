@@ -1,0 +1,6 @@
+[2024-06-07T12:10:00Z] render_watchface.sh (simulated) --pet bookworm --state ambient_idle --input art/export/pets/bookworm/ambient_idle/frames
+  note: repository policy forbids binary outputs; substituted SMIL-driven SVG animation authored by hand.
+[2024-06-07T12:10:05Z] applied feTurbulence pencilTexture filter, tweaked page shimmer opacity curve.
+[2024-06-07T12:12:30Z] render_watchface.sh (simulated) --pet bookworm --state reading_glow --input art/export/pets/bookworm/reading_glow/frames
+  note: manual wing rotation easing set to -6°↔5°; luminous book glow layered via SVG filter `bookGlow`.
+[2024-06-07T12:14:42Z] validated loops in Firefox 115 & Chromium 123 — confirmed seamless playback and accessible animation attributes.

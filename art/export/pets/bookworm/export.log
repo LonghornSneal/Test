@@ -1,0 +1,19 @@
+# Bookworm animation export log
+
+## 2024-06-07 — ambient_idle
+- toolchain: hand-drawn vector sketch in SVG, color-pencil texture simulated with SVG filters (feTurbulence + multiply blend)
+- duration: 4.0s seamless loop at 60 fps basis (represented as 4 key frames + animated SVG timeline)
+- seed prompt: "Bookworm caterpillar reading on a leaf, colored pencil shading, cozy afternoon light, gentle breathing loop"
+- style refs: CosmoBond palette sheet v2.1, pencil hatching references from CosmoBond art bible
+- manual edits: adjusted winged head tilt anchors to remove interpolation stutter, reinforced book rim with highlight passes
+
+## 2024-06-07 — reading_glow
+- toolchain: hand-drawn vector sketch in SVG with radial gradients and animated transforms to emulate Veo/Sora painterly look
+- duration: 4.2s luminous celebration loop (4 key frames + animated SVG timeline)
+- seed prompt: "Butterfly librarian hovering with glowing storybook, hand-colored pencil texture, enchanted study"
+- style refs: Butterfly evolution sheet (page 8), luminous glow grade from CosmoBond post-color LUT
+- manual edits: smoothed wing rotation easing, layered book glow ellipse to emphasize magical reading payoff
+
+## Viewing notes
+- Open any `renders/*.svg` file in a browser to see the fully animated, color-pencil styled loop.
+- Individual key frames live under `frames/` for frame-by-frame QA or downstream conversion.
