@@ -111,7 +111,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
    - **Purpose:** Ensure the existing module builds and aligns with naming/package expectations.
    - **Steps:**
      1. Inspect `app/build.gradle.kts`, `settings.gradle.kts`, and `app/src/main/AndroidManifest.xml` for namespace, module includes, and SDK configuration.
-     2. Execute `./gradlew :app:assembleDebug` from the repository root and save the terminal output to `docs/project/logs/phase1-task4-build.txt`.
+    2. Execute `./gradlew :app:assembleDebug` from the repository root and save the terminal output to `docs/project/logs/phase1-task4-build.txt`. Create `docs/project/logs/` with `mkdir -p` if needed before saving the build output.
      3. Verify the generated APK under `app/build/outputs/apk/debug/` and note Gradle wrapper details in `docs/project/decision_log.md`.
      4. Record any dependency or configuration follow-ups in the same decision log entry.
    - **Acceptance:** Debug build succeeds; notes recorded in decision log.
@@ -124,7 +124,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
      1. Update `app/src/main/res/raw/watchface.xml` with the initial layout groups, elements, and complication bindings.
      2. Cross-check `app/src/main/AndroidManifest.xml` and `app/src/main/res/xml/watch_face_config.xml` (if introduced) for matching service metadata and preview references.
      3. Ensure preview assets live under `app/src/main/res/drawable-nodpi/` or the appropriate density directory referenced by the manifest.
-     4. Run `./gradlew :app:assembleRelease` and archive the AAB from `app/build/outputs/bundle/release/` alongside captured build logs in `docs/project/logs/`.
+    4. Run `./gradlew :app:assembleRelease` and archive the AAB from `app/build/outputs/bundle/release/` alongside captured build logs in `docs/project/logs/`. Create `docs/project/logs/` with `mkdir -p` if needed before saving the build output.
    - **Acceptance:** Release bundle contains WFF resource; previews render.
    - **Artifacts:** AAB artifact, manifest diff, screenshots.
    - **Fail?:** Correct resource paths or metadata and rebuild.
@@ -150,7 +150,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
      1. Configure Spotless with ktlint inside `build.gradle.kts` or `app/build.gradle.kts`, and add any project-wide settings to `gradle/spotless.klint.gradle` if needed.
      2. Add Detekt configuration under `config/detekt/detekt.yml` (create the directory if missing) and enable fatal new issues via `app/build.gradle.kts` lintOptions baseline setup.
      3. Generate or update `app/lint-baseline.xml` after resolving findings so the lint task can treat new issues as fatal.
-     4. Run `./gradlew spotlessApply detekt lint` and store the command output plus generated reports (`app/build/reports/`) in `docs/qa/static-analysis/`.
+    4. Run `./gradlew spotlessApply detekt lint` and store the command output plus generated reports (`app/build/reports/`) in `docs/qa/static-analysis/`. Create `docs/qa/static-analysis/` with `mkdir -p` if needed before archiving the reports.
    - **Acceptance:** `./gradlew spotlessApply detekt lint` passes.
    - **Artifacts:** Lint HTML report, Detekt SARIF, Spotless status.
    - **Fail?:** Fix violations or adjust rules narrowly.
@@ -171,7 +171,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
    - **Steps:**
      1. Set up instrumentation or Paparazzi tests under `app/src/androidTest/java/com/cosmobond/watchface/` that exercise `app/src/main/res/raw/watchface.xml` configurations.
      2. Ensure golden directories exist at `app/src/androidTest/assets/goldens/` and save dark, light, and ambient PNGs there with deterministic filenames.
-     3. Run `./gradlew connectedDebugAndroidTest` (for device/emulator flows) or the Paparazzi Gradle task and export the generated screenshots/logs to `docs/qa/screenshots/`.
+    3. Run `./gradlew connectedDebugAndroidTest` (for device/emulator flows) or the Paparazzi Gradle task and export the generated screenshots/logs to `docs/qa/screenshots/`. Create `docs/qa/screenshots/` with `mkdir -p` if needed before archiving the screenshots.
      4. Update CI configuration notes in `docs/project/decision_log.md` describing how the goldens will be verified on pull requests.
    - **Acceptance:** Golden images generated & committed under `app/src/androidTest/assets/goldens/`.
    - **Artifacts:** Generated PNGs uploaded by CI.
@@ -518,7 +518,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
    - For Canvas/Kotlin fallback, edit `app/src/main/java/.../renderer/<Pet>Renderer.kt` to load the matching drawable previews when Watch Face Format assets are unavailable (e.g., ambient low-bit mode).
 6. **Verification:** Run `./gradlew :app:assembleDebug` to ensure the build packages new raw assets, then preview on device/emulator to confirm state transitions map to the expected animations. Capture before/after GIFs or frame dumps and save them under `docs/pets/<pet>/`.
 7. **Documentation update:** Append an entry to `docs/pets/<pet>/animation.md` summarizing export settings, optimization parameters, and integration commit hash before completing the checklist item.
-- **Shared DigiPet Evidence Primer:** All DigiPets must retain uninterrupted timekeeping, include automated state-transition coverage, capture before/after visuals for happy vs. neglected states, and document key metrics in `docs/pets/<pet>/` alongside the relevant gradle command log. Reference this primer in each pet-specific acceptance checklist.
+- **Shared DigiPet Evidence Primer:** All DigiPets must retain uninterrupted timekeeping, include automated state-transition coverage, capture before/after visuals for happy vs. neglected states, and document key metrics in `docs/pets/<pet>/` alongside the relevant gradle command log. Create `docs/pets/<pet>/` with `mkdir -p` if needed before storing the evidence package. Reference this primer in each pet-specific acceptance checklist.
 
 #### Sensor-Driven DigiPets
 
