@@ -465,7 +465,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 - **ShutterBug states:**
   - `ambient_idle`, `photo_snap`, `gallery_proud`, `creative_block`, `runaway_departure`.
 - **TranquiliTurtle states:**
-  - `ambient_idle`, `meditation_pose`, `stress_warning`, `breath_coaching`, `runaway_departure`.
+  - `ambient_idle`, `meditation_pose`, `shell_withdrawn`, `radiant_aura`, `runaway_departure`.
 - **VoltVampire states:**
   - `ambient_idle`, `charge_boost`, `battery_warning`, `energy_saver`, `runaway_departure`.
 
@@ -516,6 +516,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 5. **Wire into Watch Face Format:**
    - Update `app/src/main/res/raw/watchface.xml` so each `state` element references the new `@raw/<pet>_<state>` assets and defines transitions tied to the gameplay state machine.
    - For Canvas/Kotlin fallback, edit `app/src/main/java/.../renderer/<Pet>Renderer.kt` to load the matching drawable previews when Watch Face Format assets are unavailable (e.g., ambient low-bit mode).
+   - Note the TranquiliTurtle renames (`stress_warning` → `shell_withdrawn`, `breath_coaching` → `radiant_aura`) when wiring assets so integration hooks match the updated identifiers.
 6. **Verification:** Run `./gradlew :app:assembleDebug` to ensure the build packages new raw assets, then preview on device/emulator to confirm state transitions map to the expected animations. Capture before/after GIFs or frame dumps and save them under `docs/pets/<pet>/`.
 7. **Documentation update:** Append an entry to `docs/pets/<pet>/animation.md` summarizing export settings, optimization parameters, and integration commit hash before completing the checklist item.
 - **Shared DigiPet Evidence Primer:** All DigiPets must retain uninterrupted timekeeping, include automated state-transition coverage, capture before/after visuals for happy vs. neglected states, and document key metrics in `docs/pets/<pet>/` alongside the relevant gradle command log. Reference this primer in each pet-specific acceptance checklist.
@@ -900,7 +901,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
     * Animation assets listed in the checklist (see [Generative animation workflows](#generative-animation-workflows) for sourcing options) are committed under `art/export/pets/tranquiliturtle/` with matching `@raw/@drawable` resources and documented in `docs/pets/tranquiliturtle/`.
   - **Artifacts:**
     * Session sync logs and reduced-motion configuration notes.
-    * Animation captures for meditation, shell-withdrawn, and radiant aura states.
+    * Animation captures for `meditation_pose`, `shell_withdrawn`, and `radiant_aura` states.
     * Prompt schedule and inactivity thresholds documented in `docs/pets/tranquiliturtle/`.
     * `docs/pets/tranquiliturtle/animation.md` updated with export settings, optimization output, and asset verification screenshots.
 
