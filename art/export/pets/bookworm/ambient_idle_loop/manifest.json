@@ -1,0 +1,24 @@
+{
+  "name": "BookWorm Ambient Idle Loop",
+  "description": "96-frame 438x438 transparent RGBA animation for Galaxy Watch8 Classic ambient mode.",
+  "fps": 24,
+  "frameCount": 96,
+  "canvas": {
+    "width": 438,
+    "height": 438
+  },
+  "hudReserve": {
+    "width": 200,
+    "height": 120,
+    "position": "top-center"
+  },
+  "reservedCorners": ["upper-left", "lower-right"],
+  "paletteReference": "../palette.txt",
+  "assets": {
+    "module": "./bookworm_idle_assets.js",
+    "framesExport": "bookwormIdleFrames",
+    "planningExport": "bookwormIdlePlanningFrames",
+    "metaExport": "bookwormIdleMeta",
+    "previewHtml": "./bookworm_idle_preview.html"
+  }
+}

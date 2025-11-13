@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>BookWorm Ambient Idle Loop Preview</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: 'Inter', 'Segoe UI', sans-serif;
+        background: #0d0812;
+        color: #f9f5ec;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+      .card {
+        background: rgba(22, 16, 28, 0.9);
+        border: 1px solid rgba(250, 212, 184, 0.25);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 32px 64px rgba(0, 0, 0, 0.45);
+        max-width: 720px;
+      }
+      canvas {
+        display: block;
+        width: 438px;
+        height: 438px;
+        image-rendering: pixelated;
+        border-radius: 20px;
+      }
+      .controls {
+        margin-top: 16px;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+      button {
+        background: #f4c98a;
+        color: #2c1b2f;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 999px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      button:focus-visible {
+        outline: 2px solid #ffffff;
+        outline-offset: 2px;
+      }
+      .meta {
+        font-size: 14px;
+        opacity: 0.75;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <canvas id="preview" width="438" height="438" aria-label="BookWorm ambient idle animation preview"></canvas>
+      <div class="controls">
+        <button id="toggle-mode" type="button">Show planning rough</button>
+        <span class="meta">96 production frames · 6 planning frames · 24 fps</span>
+      </div>
+    </div>
+    <script type="module">
+      import { bookwormIdleFrames, bookwormIdlePlanningFrames, bookwormIdleMeta } from './bookworm_idle_assets.js';
+
+      const canvas = document.getElementById('preview');
+      const ctx = canvas.getContext('2d');
+      const toggle = document.getElementById('toggle-mode');
+
+      let frameIndex = 0;
+      let usingPlanning = false;
+      let lastTimestamp = 0;
+
+      const finalFrames = bookwormIdleFrames.map(src => Object.assign(new Image(), { src }));
+      const planningFrames = bookwormIdlePlanningFrames.map(src => Object.assign(new Image(), { src }));
+
+      toggle.addEventListener('click', () => {
+        usingPlanning = !usingPlanning;
+        toggle.textContent = usingPlanning ? 'Show production render' : 'Show planning rough';
+        frameIndex = 0;
+      });
+
+      function drawFrame(images, index) {
+        const image = images[index % images.length];
+        if (!image.complete) {
+          return;
+        }
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(image, 0, 0);
+      }
+
+      function step(timestamp) {
+        const elapsed = timestamp - lastTimestamp;
+        const interval = 1000 / bookwormIdleMeta.fps;
+        const frames = usingPlanning ? planningFrames : finalFrames;
+
+        if (elapsed >= interval) {
+          drawFrame(frames, frameIndex);
+          frameIndex = (frameIndex + 1) % frames.length;
+          lastTimestamp = timestamp;
+        }
+        requestAnimationFrame(step);
+      }
+
+      requestAnimationFrame(step);
+    </script>
+  </body>
+</html>
