@@ -1,39 +1,116 @@
-# CosmoBond BookWorm — Ambient Idle Loop
+# CosmoBond BookWorm Animation Plan — Gemini GIF Workflow
 
-This document captures the asset generation steps and export settings for the CosmoBond BookWorm ambient idle loop prepared for the Galaxy Watch8 Classic.
+## Production Approach
+- **Generator:** Google Gemini video diffusion configured for 4-second loops with storybook lighting and macro depth-of-field.
+- **Export guardrails:** 438 × 438 px, 8-bit color, deep navy background (#05060C), and steady camera angled down toward the tome.
+- **Post-processing:** Convert MP4 masters to 60 fps PNG stacks, refine glow edges on glyphs in Photoshop, and assemble GIF/WebM plus sprite sheets.
 
-## Canvas & Timing
-- **Canvas:** 438 × 438 px (transparent RGBA)
-- **Frames:** 96
-- **Frame rate:** 24 fps (4-second seamless loop)
-- **HUD allocation:** Reserved a 200 × 120 px band centered along the top edge for the HUD overlay; left the upper-left and lower-right corners free for complications.
+## Pet Model Snapshot
+- Plump caterpillar-butterfly hybrid with five rounded segments painted in mint-to-emerald gradients, lined with crisp cel shading.
+- Face: oversized almond eyes with golden irises, rosy cheeks, and a gentle smile showing two nubs.
+- Accessories: copper bookmark charm, leather messenger satchel, and glowing firefly companion.
+- Rests atop an ornate mahogany book whose pages emit soft teal glyphs.
 
-## Layering Workflow
-1. **Planning rough:** Generated a six-frame pencil outline sequence (exported as data URIs in `bookworm_idle_assets.js`) on a dedicated layer with mirrored guides to establish pose, book placement, and bookmark curl.
-2. **Volume blocking:** Used the guides to block-in the leaf curl, bookmark leaf, and caterpillar segments before detailing.
-3. **Refinement:** Smoothed every contour using sub-pixel arcs and selective color anti-aliasing to maintain crisp 1 px linework.
-4. **Onion skinning:** Animated the breathing, antenna sway, and page flutter manually frame-by-frame without auto-tweening.
-5. **Dithering & shading:** Applied multi-pass manual dithering on the caterpillar segments and book trim while preserving the 64-color palette.
-6. **Hue offsets:** Shifted the leaf highlight hue slightly per frame to create a subtle shimmer cycle.
-7. **Lighting:** Added layer-based light masks for the ambient glow and dusk vignette, keeping the background transparent.
-8. **Cleanup:** Performed pixel-level sweeps on each frame to remove stray pixels and confirm clean transparency.
+## Interaction Map
+- **Reading Glow:** Triggered when the user logs reading time or starts an in-app session, focusing on page-turn motions.
+- **Knowledge Share:** Fires when the user posts a fact or shares progress, highlighting gifting gestures.
 
-## Motion Beats
-- **Breathing:** Torso easing cycle keyed with sin-based offsets at 24 fps.
-- **Antenna sway:** Alternating arc sway with tip highlights.
-- **Page flutter:** Book page edge oscillates in sync with breathing cadence.
-- **Leaf shimmer:** Highlight ramps rotate every 16 frames for a six-step shimmer.
+## Animation States
 
-## Palette
-Documented palette lives in `art/export/pets/bookworm/palette.txt` and is limited to 33 curated RGBA swatches (≤ 64 requirement) with 26 currently utilized across the loop.
+### Idle State — "Luminous Leaf Hover"
+- **Title:** Luminous Leaf Hover
+- **Pet Visual Description:**
+  - BookWorm lounges atop the open book, segments glowing subtly.
+  - Antennae sway with amber droplets; satchel rests at the side.
+  - Firefly circles slowly, casting dappled highlights.
+  - Copper bookmark dangles from the page edge.
+  - Background fades into deep navy with faint bokeh.
+- **Action Sequence:**
+  1. Caterpillar lowers its front segments, eyes narrowing in focus.
+  2. It inhales, body lifting slightly while glyphs brighten.
+  3. Tail curls upward, tapping the bookmark charm.
+  4. BookWorm exhales, returning to the relaxed hover.
 
-## Export
-- **Module:** `art/export/pets/bookworm/ambient_idle_loop/bookworm_idle_assets.js` contains ES module exports with base64-encoded PNG frames for both the 96-frame production loop and the six planning roughs.
-- **Preview:** `art/export/pets/bookworm/ambient_idle_loop/bookworm_idle_preview.html` imports the module for in-browser review without requiring binary assets.
-- **Alpha integrity:** Verified that all pixels in the HUD band and reserved corners remain fully transparent in every frame before encoding.
+### Interaction State — Reading Glow "Page Drift"
+- **Title:** Page Drift
+- **Pet Visual Description:**
+  - Segments shine brighter mint; eyes widen with curiosity.
+  - Front body lifts, nudging the page edge.
+  - Firefly hovers near the text, creating spotlights.
+  - Bookmark charm emits warm sparks.
+  - Satchel strap tightens to keep balance.
+- **Action Sequence:**
+  1. BookWorm grips the page corner with tiny feet.
+  2. It rolls the page over, revealing glowing illustrations.
+  3. Antennae trace the air, leaving light trails along each sentence.
+  4. Page lands softly as the worm beams proudly.
 
-## Integration Notes
-- Consume the ES module directly or decode the exported data URIs at build time to materialize sprite sheets within the watch-face toolchain.
-- Maintain 24 fps playback to preserve breathing cadence.
-- Vignette and glow are subtle overlays—ensure additive blending if composited with other layers.
-- Use the HTML preview as a quick smoke test when reviewing palette or motion tweaks without restoring binary exports.
+### Interaction State — Knowledge Share "Fact Gift"
+- **Title:** Fact Gift
+- **Pet Visual Description:**
+  - Colors shift to pearlescent hues; wings peek from the back.
+  - Satchel pops open, revealing scrolls.
+  - Firefly perches on the satchel flap.
+  - Bookmark charm transforms into a glowing envelope.
+  - Eyes sparkle with excitement.
+- **Action Sequence:**
+  1. BookWorm pulls a scroll from the satchel.
+  2. It taps the scroll with antennae, turning it into a holographic fact card.
+  3. The worm bows, presenting the card to the viewer.
+  4. Card dissolves into glittering words before the loop restarts.
+
+### Sick State — "Stalled Progress"
+- **Title:** Stalled Progress
+- **Pet Visual Description:**
+  - Colors fade to muted sage; eyes droop.
+  - Firefly light dims; satchel slumps closed.
+  - Bookmark charm tarnishes slightly.
+  - Body curls inward, hugging the book.
+  - Background darkens with drifting dust motes.
+- **Action Sequence:**
+  1. BookWorm sighs, antennae drooping.
+  2. It attempts to open a page but lacks strength.
+  3. The worm shivers, segments collapsing.
+  4. It rests its head on the closed book before repeating.
+
+### Happy State — "Butterfly Bloom"
+- **Title:** Butterfly Bloom
+- **Pet Visual Description:**
+  - Segments glow neon green; translucent wings unfurl fully.
+  - Firefly orbits faster, leaving star trails.
+  - Bookmark charm erupts into floating leaves.
+  - Satchel spills confetti-like tabs.
+  - Eyes sparkle with star-shaped highlights.
+- **Action Sequence:**
+  1. BookWorm rises on hind segments, wings spreading wide.
+  2. It twirls above the book, scattering glowing letters.
+  3. Wings clap gently, creating gusts that flip pages.
+  4. The worm lands gracefully, giggling before repeating.
+
+### Runaway State — "Runaway Departure"
+- **Title:** Runaway Departure
+- **Pet Visual Description:**
+  - Body stretches into a trail of green light; wings flutter anxiously.
+  - Firefly zips ahead, acting as a guide.
+  - Bookmark charm tears into a glowing portal.
+  - Satchel tightens for travel.
+  - Eyes glance back sadly.
+- **Action Sequence:**
+  1. BookWorm looks back at the viewer, trembling.
+  2. It launches toward the bookmark portal, leaving leaf-shaped particles.
+  3. Wings fold as it squeezes through the glowing slit.
+  4. Portal snaps shut, scattering loose glyphs before reset.
+
+### Death State — "Library Cocoon"
+- **Title:** Library Cocoon
+- **Pet Visual Description:**
+  - Caterpillar wraps itself in parchment cocoon etched with text.
+  - Firefly hovers nearby, acting as vigil candle.
+  - Book closes gently beneath the cocoon.
+  - Copper charm seals the cocoon with wax.
+  - Soft teal light glows within.
+- **Action Sequence:**
+  1. BookWorm exhales, weaving parchment threads.
+  2. Cocoon seals, copper charm imprinting a leaf emblem.
+  3. Firefly circles slowly, casting warm halos.
+  4. Light fades to a serene glow before the loop resets.
