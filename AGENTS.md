@@ -80,7 +80,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 
 ### Phase 0 — Baseline Verification & Policy Alignment
 
-1. **[ ] Prompt:** _"Audit the repository guardrails. Inspect `README.md`, `CODEOWNERS`, `CONTRIBUTING.md`, `LICENSE`, `.gitignore`, `.editorconfig`, and `.gitattributes`; record any needed adjustments in `docs/project/decision_log.md`; capture current branch protection status and document how to request updates."_
+1. **[ ] Prompt:** _"Audit the repository guardrails. Inspect `README.md`, `CODEOWNERS`, `CONTRIBUTING.md`, `LICENSE`, `.gitignore`, `.editorconfig`, and `.gitattributes`; record any needed adjustments in `docs/project/decision_log.md`; capture current branch protection status and document how to request updates."_ _(claimed by @assistant, 2025-11-26 22:28 UTC)_
    - **Purpose:** Confirm guardrails and initial documentation are present.
    - **Steps:**
      1. Open each guardrail file (`README.md`, `CODEOWNERS`, `CONTRIBUTING.md`, `LICENSE`, `.gitignore`, `.editorconfig`, `.gitattributes`) and review for gaps or outdated guidance.
