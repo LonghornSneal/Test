@@ -10,3 +10,9 @@
   - `.gitattributes`: Treats common image formats as binary; add media types used in this repo (e.g., `*.mp4`) to prevent line-ending normalization.
 - Branch protection: Unable to retrieve `main` protection via GitHub API without credentials (`curl .../branches/main/protection` returned 401). Request an admin to confirm settings in GitHub → Settings → Branches → Branch protection rules for `main` and enable required status checks (spotlessCheck, detekt, lint, testDebugUnitTest, connectedDebugAndroidTest), PR review requirements, and branch up-to-date enforcement; capture a screenshot when available.
 - Markdown lint: `npx markdownlint-cli "**/*.md"` (2025-11-26) reported existing formatting/line-length violations across the repo (no files auto-fixed; exit code non-zero); no scope changes applied in this task.
+
+## 2025-11-26 — Task 2: Tooling snapshot
+- Documented required tooling in `docs/setup/tooling.md` with pinned/pending versions and links: JDK 17 (Temurin), AGP 8.5.2, Gradle 8.7 (minimum for AGP 8.5), Kotlin 1.9.24, Android SDK/Target API 34, Wear OS 5 emulator images (API 34) with Wear OS 6 lineage note (API 35), platform tools/CLT download, and wrapper usage note.
+- Source confirmation: AGP 8.5.2 and Kotlin 1.9.24 pulled from root `build.gradle.kts`; min/target SDK 34 from `app/build.gradle.kts`.
+- Play target note: Doc references Play’s target API 34 requirement for Wear OS.
+- Markdown lint: `npx markdownlint-cli "**/*.md"` rerun (2025-11-26) still fails on pre-existing long-line/formatting issues across the repo (exit code non-zero, no auto-fixes); newly added doc also flagged for bare URLs/line length. Will resolve in a follow-up pass when markdown rules are triaged.
