@@ -91,7 +91,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
    - **Artifacts:** Decision log entry, branch protection screenshot.
    - **Fail?:** Address missing protections or file updates, recommit.
 
-2. **[ ] Prompt:** _"Lock the platform versions and compliance targets. Confirm JDK 17, AGP 8.5.x+, Kotlin 1.9+, Gradle wrapper, Android SDK API 34, and Wear OS emulator images, then update `docs/setup/tooling.md` with the versions, download links, and Wear OS 5/6 lineage references."_ _(claimed by @assistant, 2025-11-26 22:28 UTC)_
+2. **[x] Prompt:** _"Lock the platform versions and compliance targets. Confirm JDK 17, AGP 8.5.x+, Kotlin 1.9+, Gradle wrapper, Android SDK API 34, and Wear OS emulator images, then update `docs/setup/tooling.md` with the versions, download links, and Wear OS 5/6 lineage references."_ _(Completed: tooling snapshot documented with versions/links/lineage notes in docs/setup/tooling.md (2025-11-26 22:39 UTC))_
    - **Steps:**
      1. Create `docs/setup/tooling.md` (and the parent directory) if it does not already exist before documenting the tooling snapshot.
      2. Capture each required tool in the doc using a consistent bullet list or table that includes: tool name, pinned version, official download or installation link, and the Wear OS 5/6 lineage references that justify the target selections.
@@ -100,7 +100,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
    - **Artifacts:** Tooling doc diff.
    - **Fail?:** Adjust mismatched versions and re-document.
 
-3. **[ ] Prompt:** _"Confirm the rendering track. Update `docs/tech/architecture.md` to summarize the Watch Face Format v2 + Kotlin host approach, set minSdk/targetSdk to 34, and cite the supporting Google/Samsung guidance. If you pivot to the Kotlin-rendered path, adjust downstream notes accordingly."_
+3. **[x] Prompt:** _"Confirm the rendering track. Update `docs/tech/architecture.md` to summarize the Watch Face Format v2 + Kotlin host approach, set minSdk/targetSdk to 34, and cite the supporting Google/Samsung guidance. If you pivot to the Kotlin-rendered path, adjust downstream notes accordingly."_ _(Completed: WFF+Kotlin host documented in docs/tech/architecture.md with min/target 34 refs to Google/Samsung guidance (2025-11-26 22:44 UTC))_
    - **Purpose:** Document Watch Face Format v2 choice (or switch to Kotlin track if required).
    - **Steps:**
      1. Inspect the Gradle configuration (including `app/build.gradle.kts` and `gradle.properties`) to verify the `minSdk` and `targetSdk` values.

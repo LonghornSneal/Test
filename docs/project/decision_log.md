@@ -16,3 +16,9 @@
 - Source confirmation: AGP 8.5.2 and Kotlin 1.9.24 pulled from root `build.gradle.kts`; min/target SDK 34 from `app/build.gradle.kts`.
 - Play target note: Doc references Play’s target API 34 requirement for Wear OS.
 - Markdown lint: `npx markdownlint-cli "**/*.md"` rerun (2025-11-26) still fails on pre-existing long-line/formatting issues across the repo (exit code non-zero, no auto-fixes); newly added doc also flagged for bare URLs/line length. Will resolve in a follow-up pass when markdown rules are triaged.
+
+## 2025-11-26 — Task 3: Rendering track decision
+- Verified rendering config: `app/build.gradle.kts` sets `minSdk = 34`, `targetSdk = 34`, `compileSdk = 34`; Kotlin/JDK/AGP versions align with WFF expectations (Kotlin 1.9.24, AGP 8.5.2, JDK 17 from root `build.gradle.kts`).
+- Confirmed WFF path: `app/src/main/AndroidManifest.xml` points to `@raw/watchface` via `androidx.wear.watchface.wff` metadata; `CosmoBondWatchFaceService` remains a lightweight host.
+- Documented the decision in `docs/tech/architecture.md`: chose Watch Face Format v2 + Kotlin host; cited Google WFF overview (developer.android.com/training/wearables/watch-faces/watch-face-format) and Samsung WFF overview (developer.samsung.com/watch-face/face-format/overview.html); noted downstream tasks continue on WFF track (layout, complications, ambient, screenshots) without a Kotlin-rendered canvas unless we pivot.
+- Markdown lint: `npx markdownlint-cli "**/*.md"` rerun (2025-11-26) still fails on existing long-line/bare-URL issues across the repo (no auto-fixes applied).
