@@ -31,3 +31,11 @@
 - `./gradlew :app:assembleDebug` succeeded with JDK 17; log captured at `docs/project/logs/phase1-task4-build.txt`. Resulting APK at `app/build/outputs/apk/debug/app-debug.apk`.
 - Follow-ups: remove `package` attribute from `app/src/main/AndroidManifest.xml` (AGP warning), revert to a proper Watch Face host implementation once WFF/Kotlin track finalized, and consider bumping watchface libs when the 1.3.x artifacts are available.
 - Markdown lint: not rerun post-build; outstanding repo-wide issues remain (long lines/bare URLs).
+
+## 2025-11-26 — Task 5: WFF layout expansion & release build
+- Expanded `app/src/main/res/raw/watchface.xml` with date text and two SHORT_TEXT complications (left/right) positioned near the bottom; adjusted time positioning for better balance.
+- Added preview drawable `app/src/main/res/drawable-nodpi/watchface_preview.xml` and wired service metadata (`androidx.wear.watchface.preview`) in `app/src/main/AndroidManifest.xml`; removed manifest `package` attribute per AGP guidance.
+- Release build succeeded via `./gradlew :app:assembleRelease`; log stored at `docs/project/logs/phase1-task5-build.txt`. Output APK at `app/build/outputs/apk/release/app-release-unsigned.apk`.
+- Dependencies: watchface libs remain pinned to `1.2.1` (newer artifacts still not resolving at build time).
+- Follow-ups: implement a proper WatchFaceService host (currently stub Service), add `watch_face_config.xml` if needed for WFF config, and consider richer WFF visuals plus preview screenshots when design assets are ready.
+- Markdown lint: not rerun for this task; existing repo-wide failures persist.

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.cosmobond.watchface">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
         android:allowBackup="false"
@@ -17,6 +16,9 @@
             <meta-data
                 android:name="androidx.wear.watchface.wff"
                 android:resource="@raw/watchface" />
+            <meta-data
+                android:name="androidx.wear.watchface.preview"
+                android:resource="@drawable/watchface_preview" />
         </service>
     </application>
 

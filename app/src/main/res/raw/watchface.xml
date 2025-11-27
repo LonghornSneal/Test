@@ -17,21 +17,49 @@
                     <Time format="HH:mm"/>
                 </Value>
                 <Font family="sans-serif" size="48"/>
-                <Position x="50%" y="50%" anchor="center"/>
+                <Position x="50%" y="48%" anchor="center"/>
+            </Text>
+        </Partial>
+        <Partial id="date_text">
+            <Text>
+                <Value>
+                    <Time format="EEE, MMM d"/>
+                </Value>
+                <Font family="sans-serif" size="18"/>
+                <Position x="50%" y="58%" anchor="center"/>
+                <Color>#A6B6FF</Color>
             </Text>
         </Partial>
     </Partials>
+
+    <Complications>
+        <Complication id="left_slot" type="SHORT_TEXT">
+            <Bounds width="72" height="72">
+                <Position x="28%" y="65%" anchor="center"/>
+            </Bounds>
+        </Complication>
+        <Complication id="right_slot" type="SHORT_TEXT">
+            <Bounds width="72" height="72">
+                <Position x="72%" y="65%" anchor="center"/>
+            </Bounds>
+        </Complication>
+    </Complications>
+
     <Scenes>
         <Scene id="active">
             <Group>
-                <Background color="#000000"/>
+                <Background color="#0A0D18"/>
                 <PartialRef ref="time_text"/>
+                <PartialRef ref="date_text"/>
+                <ComplicationRef ref="left_slot"/>
+                <ComplicationRef ref="right_slot"/>
             </Group>
         </Scene>
         <Scene id="ambient">
             <Group>
                 <Background color="#000000"/>
                 <PartialRef ref="time_text"/>
+                <PartialRef ref="date_text"/>
             </Group>
         </Scene>
     </Scenes>

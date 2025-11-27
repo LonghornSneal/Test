@@ -127,7 +127,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
    - **Artifacts:** Build log, Gradle wrapper version, decision log entry.
    - **Fail?:** Resolve version mismatches or missing dependencies and rerun.
 
-5. **[ ] Prompt:** _"Expand the Watch Face Format v2 skeleton. Enhance `res/raw/watchface.xml` with initial layout elements, verify the service metadata and preview assets, and build a release bundle with `./gradlew :app:assembleRelease` to confirm the resource packaging."_
+5. **[x] Prompt:** _"Expand the Watch Face Format v2 skeleton. Enhance `res/raw/watchface.xml` with initial layout elements, verify the service metadata and preview assets, and build a release bundle with `./gradlew :app:assembleRelease` to confirm the resource packaging."_ _(Completed: layout expanded with date/complications, preview added, assembleRelease logged in docs/project/logs/phase1-task5-build.txt (2025-11-26 23:40 UTC))_
    - **Purpose:** Flesh out declarative structure and previews.
    - **Steps:**
      1. Update `app/src/main/res/raw/watchface.xml` with the initial layout groups, elements, and complication bindings.
