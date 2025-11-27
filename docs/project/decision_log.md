@@ -32,10 +32,17 @@
 - Follow-ups: remove `package` attribute from `app/src/main/AndroidManifest.xml` (AGP warning), revert to a proper Watch Face host implementation once WFF/Kotlin track finalized, and consider bumping watchface libs when the 1.3.x artifacts are available.
 - Markdown lint: not rerun post-build; outstanding repo-wide issues remain (long lines/bare URLs).
 
-## 2025-11-26 — Task 5: WFF layout expansion & release build
+## 2025-11-26 - Task 5: WFF layout expansion & release build
 - Expanded `app/src/main/res/raw/watchface.xml` with date text and two SHORT_TEXT complications (left/right) positioned near the bottom; adjusted time positioning for better balance.
 - Added preview drawable `app/src/main/res/drawable-nodpi/watchface_preview.xml` and wired service metadata (`androidx.wear.watchface.preview`) in `app/src/main/AndroidManifest.xml`; removed manifest `package` attribute per AGP guidance.
 - Release build succeeded via `./gradlew :app:assembleRelease`; log stored at `docs/project/logs/phase1-task5-build.txt`. Output APK at `app/build/outputs/apk/release/app-release-unsigned.apk`.
 - Dependencies: watchface libs remain pinned to `1.2.1` (newer artifacts still not resolving at build time).
 - Follow-ups: implement a proper WatchFaceService host (currently stub Service), add `watch_face_config.xml` if needed for WFF config, and consider richer WFF visuals plus preview screenshots when design assets are ready.
 - Markdown lint: not rerun for this task; existing repo-wide failures persist.
+
+## 2025-11-27 - Task 9: Screenshot tests for watch face previews
+- Added a Paparazzi-based screenshot suite (`WatchFaceScreenshotTest`) using deterministic time and palette states; renders the Kotlin canvas watch face via a fake SurfaceHolder to avoid native surface deps and captures interactive cosmic blue, interactive starlight, and ambient frames.
+- Goldens recorded under `app/src/test/snapshots/images/` and mirrored to `app/src/androidTest/assets/goldens/`; evidence copies live in `docs/qa/screenshots/task9/`.
+- Commands executed with `JAVA_HOME=C:/Users/HhsJa/.jdks/temurin-17/jdk-17.0.17+10`: `./gradlew :app:recordPaparazziDebug` (log `docs/qa/screenshots/task9-paparazzi-record.log`) and `./gradlew :app:verifyPaparazziDebug` (log `docs/qa/screenshots/task9-paparazzi-verify.log`).
+- CI note: add `:app:verifyPaparazziDebug` plus Paparazzi HTML report (`app/build/reports/paparazzi/debug/index.html`) as PR artifacts in `.github/workflows/android.yml`; keep `app/src/test/snapshots` and `app/src/androidTest/assets/goldens` in sync when updating goldens.
+- Markdown lint: `npx markdownlint-cli "**/*.md"` (log `docs/qa/screenshots/task9-markdownlint.log`, 2025-11-27) fails on existing long-line/bare-URL/style issues across the repo; initial `npx markdownlint` alias could not resolve an executable. No auto-fixes applied.

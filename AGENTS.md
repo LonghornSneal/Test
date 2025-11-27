@@ -175,7 +175,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
    - **Artifacts:** JUnit XML, coverage report.
    - **Fail?:** Add tests/fix logic.
 
-9. **[ ] Prompt:** _"Create screenshot tests for the previews. For WFF, write an instrumentation test that loads `watchface.xml` and captures frames via the wear-watchface screenshot API (use Paparazzi/Compose for the Kotlin track). Commit the golden images to `app/src/androidTest/assets/goldens/` and surface them in CI."_
+9. **[x] Prompt:** _"Create screenshot tests for the previews. For WFF, write an instrumentation test that loads `watchface.xml` and captures frames via the wear-watchface screenshot API (use Paparazzi/Compose for the Kotlin track). Commit the golden images to `app/src/androidTest/assets/goldens/` and surface them in CI."_ _(Completed: Paparazzi screenshot suite with interactive/ambient goldens mirrored to `app/src/androidTest/assets/goldens` and logs in `docs/qa/screenshots` (2025-11-27 05:20 UTC))_
    - **Purpose:** Lock visual baselines (dark/light/AOD).
    - **Steps:**
      1. Set up instrumentation or Paparazzi tests under `app/src/androidTest/java/com/cosmobond/watchface/` that exercise `app/src/main/res/raw/watchface.xml` configurations.
