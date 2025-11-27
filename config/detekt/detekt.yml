@@ -1,0 +1,40 @@
+config:
+  validation: true
+  warningsAsErrors: false
+
+processors:
+  active: true
+
+console-reports:
+  active: true
+
+build:
+  maxIssues: 0
+
+style:
+  MagicNumber:
+    active: false
+  MaxLineLength:
+    active: false
+  WildcardImport:
+    active: false
+  UnusedParameter:
+    active: false
+  UnusedPrivateProperty:
+    active: false
+
+naming:
+  MatchingDeclarationName:
+    active: false
+
+complexity:
+  LongMethod:
+    active: false
+  LongParameterList:
+    active: false
+  TooManyFunctions:
+    active: false
+
+exceptions:
+  SwallowedException:
+    active: false

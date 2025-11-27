@@ -153,7 +153,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 
 ### Phase 2 — Quality Gates (Local)
 
-7. **[ ] Prompt:** _"Establish static analysis and style enforcement. Add ktlint with Spotless, configure Android Lint to treat new issues as fatal (with a baseline), and wire in a Detekt ruleset, then verify with `./gradlew spotlessApply detekt lint`."_
+7. **[x] Prompt:** _"Establish static analysis and style enforcement. Add ktlint with Spotless, configure Android Lint to treat new issues as fatal (with a baseline), and wire in a Detekt ruleset, then verify with `./gradlew spotlessApply detekt lint`."_ _(Completed: Spotless+ktlint, Detekt config, lint baseline & reports generated via spotlessApply/detekt/lint (2025-11-27 04:56 UTC))_
    - **Purpose:** Enforce Kotlin style and code health.
    - **Steps:**
      1. Configure Spotless with ktlint inside `build.gradle.kts` or `app/build.gradle.kts`, and add any project-wide settings to `gradle/spotless.klint.gradle` if needed.

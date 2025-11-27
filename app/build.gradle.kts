@@ -21,7 +21,7 @@ android {
             isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -41,6 +41,14 @@ android {
 
     testOptions {
         unitTests.isIncludeAndroidResources = true
+    }
+
+    lint {
+        baseline = file("lint-baseline.xml")
+        warningsAsErrors = true
+        abortOnError = true
+        checkReleaseBuilds = true
+        disable += setOf("GradleDependency")
     }
 }
 

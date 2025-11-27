@@ -13,29 +13,28 @@ import androidx.wear.watchface.style.CurrentUserStyleRepository
  * a Jetpack Watch Face renderer so complications and style schema can be exercised in tests.
  */
 class CosmoBondWatchFaceService : WatchFaceService() {
-
     override fun createUserStyleSchema() = CompanionUserStyle.createSchema(resources)
 
-    override fun createComplicationSlotsManager(
-        currentUserStyleRepository: CurrentUserStyleRepository
-    ): ComplicationSlotsManager = CompanionComplicationSlots.create(this, currentUserStyleRepository)
+    override fun createComplicationSlotsManager(currentUserStyleRepository: CurrentUserStyleRepository): ComplicationSlotsManager =
+        CompanionComplicationSlots.create(this, currentUserStyleRepository)
 
     override suspend fun createWatchFace(
         surfaceHolder: SurfaceHolder,
         watchState: androidx.wear.watchface.WatchState,
         complicationSlotsManager: ComplicationSlotsManager,
-        currentUserStyleRepository: CurrentUserStyleRepository
+        currentUserStyleRepository: CurrentUserStyleRepository,
     ): WatchFace {
-        val renderer = CompanionWatchFaceRenderer(
-            context = applicationContext,
-            surfaceHolder = surfaceHolder,
-            currentUserStyleRepository = currentUserStyleRepository,
-            watchState = watchState,
-            complicationSlotsManager = complicationSlotsManager
-        )
+        val renderer =
+            CompanionWatchFaceRenderer(
+                context = applicationContext,
+                surfaceHolder = surfaceHolder,
+                currentUserStyleRepository = currentUserStyleRepository,
+                watchState = watchState,
+                complicationSlotsManager = complicationSlotsManager,
+            )
         return WatchFace(
             WatchFaceType.DIGITAL,
-            renderer
+            renderer,
         )
     }
 }

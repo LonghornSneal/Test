@@ -1,5 +1,6 @@
 package com.cosmobond.watchface
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Canvas
@@ -37,50 +38,57 @@ private const val INTERACTIVE_FRAME_MS = 16L
 private const val BACKGROUND_COLOR = 0xFF0A0D18.toInt()
 private const val AMBIENT_BACKGROUND_COLOR = 0xFF000000.toInt()
 
+@SuppressLint("RestrictedApi")
 internal class CompanionWatchFaceRenderer(
     context: Context,
     surfaceHolder: SurfaceHolder,
     private val currentUserStyleRepository: CurrentUserStyleRepository,
     private val watchState: WatchState,
-    private val complicationSlotsManager: ComplicationSlotsManager
+    private val complicationSlotsManager: ComplicationSlotsManager,
 ) : Renderer.CanvasRenderer(
-    surfaceHolder,
-    currentUserStyleRepository,
-    watchState,
-    CanvasType.HARDWARE,
-    INTERACTIVE_FRAME_MS,
-    false
-) {
-
+        surfaceHolder,
+        currentUserStyleRepository,
+        watchState,
+        CanvasType.HARDWARE,
+        INTERACTIVE_FRAME_MS,
+        false,
+    ) {
     private val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 
-    private val timePaint = Paint().apply {
-        textAlign = Paint.Align.CENTER
-        textSize = 64f
-        isAntiAlias = true
-    }
+    private val timePaint =
+        Paint().apply {
+            textAlign = Paint.Align.CENTER
+            textSize = 64f
+            isAntiAlias = true
+        }
 
-    private val backgroundPaint = Paint().apply {
-        color = BACKGROUND_COLOR
-    }
+    private val backgroundPaint =
+        Paint().apply {
+            color = BACKGROUND_COLOR
+        }
 
     init {
         complicationSlotsManager.watchState = watchState
     }
 
-    override fun render(canvas: Canvas, bounds: Rect, zonedDateTime: ZonedDateTime) {
+    override fun render(
+        canvas: Canvas,
+        bounds: Rect,
+        zonedDateTime: ZonedDateTime,
+    ) {
         backgroundPaint.color = CompanionPalette.backgroundFor(renderParameters.drawMode)
-        timePaint.color = CompanionPalette.accentFor(
-            currentUserStyleRepository.userStyle.value,
-            renderParameters.drawMode
-        )
+        timePaint.color =
+            CompanionPalette.accentFor(
+                currentUserStyleRepository.userStyle.value,
+                renderParameters.drawMode,
+            )
 
         canvas.drawRect(bounds, backgroundPaint)
         canvas.drawText(
             timeFormatter.format(zonedDateTime),
             bounds.exactCenterX(),
             bounds.centerY().toFloat(),
-            timePaint
+            timePaint,
         )
 
         complicationSlotsManager.complicationSlots.values.forEach { slot ->
@@ -88,7 +96,11 @@ internal class CompanionWatchFaceRenderer(
         }
     }
 
-    override fun renderHighlightLayer(canvas: Canvas, bounds: Rect, zonedDateTime: ZonedDateTime) {
+    override fun renderHighlightLayer(
+        canvas: Canvas,
+        bounds: Rect,
+        zonedDateTime: ZonedDateTime,
+    ) {
         complicationSlotsManager.complicationSlots.values.forEach { slot ->
             slot.renderHighlightLayer(canvas, zonedDateTime, renderParameters)
         }
@@ -98,47 +110,50 @@ internal class CompanionWatchFaceRenderer(
 }
 
 internal object CompanionComplicationSlots {
-    private val supportedTypes = listOf(
-        ComplicationType.SHORT_TEXT,
-        ComplicationType.MONOCHROMATIC_IMAGE,
-        ComplicationType.SMALL_IMAGE
-    )
+    private val supportedTypes =
+        listOf(
+            ComplicationType.SHORT_TEXT,
+            ComplicationType.MONOCHROMATIC_IMAGE,
+            ComplicationType.SMALL_IMAGE,
+        )
 
     fun create(
         context: Context,
-        currentUserStyleRepository: CurrentUserStyleRepository
+        currentUserStyleRepository: CurrentUserStyleRepository,
     ): ComplicationSlotsManager {
-        val leftSlot = ComplicationSlot.createRoundRectComplicationSlotBuilder(
-            LEFT_SLOT_ID,
-            PlaceholderCanvasComplication.factory(),
-            supportedTypes,
-            DefaultComplicationDataSourcePolicy(
-                SystemDataSources.DATA_SOURCE_DAY_OF_WEEK,
-                ComplicationType.SHORT_TEXT
-            ),
-            ComplicationSlotBounds(RectF(0.23f, 0.58f, 0.39f, 0.78f))
-        )
-            .setNameResourceId(R.string.complication_left_name)
-            .setScreenReaderNameResourceId(R.string.complication_left_name)
-            .build()
+        val leftSlot =
+            ComplicationSlot.createRoundRectComplicationSlotBuilder(
+                LEFT_SLOT_ID,
+                PlaceholderCanvasComplication.factory(),
+                supportedTypes,
+                DefaultComplicationDataSourcePolicy(
+                    SystemDataSources.DATA_SOURCE_DAY_OF_WEEK,
+                    ComplicationType.SHORT_TEXT,
+                ),
+                ComplicationSlotBounds(RectF(0.23f, 0.58f, 0.39f, 0.78f)),
+            )
+                .setNameResourceId(R.string.complication_left_name)
+                .setScreenReaderNameResourceId(R.string.complication_left_name)
+                .build()
 
-        val rightSlot = ComplicationSlot.createRoundRectComplicationSlotBuilder(
-            RIGHT_SLOT_ID,
-            PlaceholderCanvasComplication.factory(),
-            supportedTypes,
-            DefaultComplicationDataSourcePolicy(
-                SystemDataSources.DATA_SOURCE_STEP_COUNT,
-                ComplicationType.SHORT_TEXT
-            ),
-            ComplicationSlotBounds(RectF(0.61f, 0.58f, 0.77f, 0.78f))
-        )
-            .setNameResourceId(R.string.complication_right_name)
-            .setScreenReaderNameResourceId(R.string.complication_right_name)
-            .build()
+        val rightSlot =
+            ComplicationSlot.createRoundRectComplicationSlotBuilder(
+                RIGHT_SLOT_ID,
+                PlaceholderCanvasComplication.factory(),
+                supportedTypes,
+                DefaultComplicationDataSourcePolicy(
+                    SystemDataSources.DATA_SOURCE_STEP_COUNT,
+                    ComplicationType.SHORT_TEXT,
+                ),
+                ComplicationSlotBounds(RectF(0.61f, 0.58f, 0.77f, 0.78f)),
+            )
+                .setNameResourceId(R.string.complication_right_name)
+                .setScreenReaderNameResourceId(R.string.complication_right_name)
+                .build()
 
         return ComplicationSlotsManager(
             listOf(leftSlot, rightSlot),
-            currentUserStyleRepository
+            currentUserStyleRepository,
         )
     }
 }
@@ -152,32 +167,33 @@ internal object CompanionUserStyle {
     private var paletteSetting: UserStyleSetting.ListUserStyleSetting? = null
 
     fun createSchema(resources: Resources): UserStyleSchema {
-        val palette = UserStyleSetting.ListUserStyleSetting(
-            paletteSettingId,
-            resources,
-            R.string.user_style_palette,
-            R.string.user_style_palette_description,
-            null,
-            listOf(
-                UserStyleSetting.ListUserStyleSetting.ListOption(
-                    cosmicBlueOptionId,
-                    resources,
-                    R.string.palette_cosmic_blue,
-                    null
+        val palette =
+            UserStyleSetting.ListUserStyleSetting(
+                paletteSettingId,
+                resources,
+                R.string.user_style_palette,
+                R.string.user_style_palette_description,
+                null,
+                listOf(
+                    UserStyleSetting.ListUserStyleSetting.ListOption(
+                        cosmicBlueOptionId,
+                        resources,
+                        R.string.palette_cosmic_blue,
+                        null,
+                    ),
+                    UserStyleSetting.ListUserStyleSetting.ListOption(
+                        starlightOptionId,
+                        resources,
+                        R.string.palette_starlight,
+                        null,
+                    ),
                 ),
-                UserStyleSetting.ListUserStyleSetting.ListOption(
-                    starlightOptionId,
-                    resources,
-                    R.string.palette_starlight,
-                    null
-                )
-            ),
-            listOf(
-                WatchFaceLayer.BASE,
-                WatchFaceLayer.COMPLICATIONS,
-                WatchFaceLayer.COMPLICATIONS_OVERLAY
+                listOf(
+                    WatchFaceLayer.BASE,
+                    WatchFaceLayer.COMPLICATIONS,
+                    WatchFaceLayer.COMPLICATIONS_OVERLAY,
+                ),
             )
-        )
         paletteSetting = palette
         return UserStyleSchema(listOf(palette))
     }
@@ -193,7 +209,10 @@ internal object CompanionPalette {
     private const val STARLIGHT = 0xFFF5E5B9.toInt()
     private const val AMBIENT_ACCENT = 0xFFB0B0B0.toInt()
 
-    fun accentFor(userStyle: UserStyle, drawMode: DrawMode = DrawMode.INTERACTIVE): Int {
+    fun accentFor(
+        userStyle: UserStyle,
+        drawMode: DrawMode = DrawMode.INTERACTIVE,
+    ): Int {
         if (drawMode == DrawMode.AMBIENT) return AMBIENT_ACCENT
         return when (CompanionUserStyle.accentOption(userStyle)?.id) {
             CompanionUserStyle.starlightOptionId -> STARLIGHT
@@ -207,18 +226,20 @@ internal object CompanionPalette {
 }
 
 internal class PlaceholderCanvasComplication : CanvasComplication {
-    private val outlinePaint = Paint().apply {
-        color = Color.argb(70, 166, 182, 255)
-        style = Paint.Style.STROKE
-        strokeWidth = 4f
-        isAntiAlias = true
-    }
-    private val highlightPaint = Paint().apply {
-        color = Color.argb(120, 166, 182, 255)
-        style = Paint.Style.STROKE
-        strokeWidth = 6f
-        isAntiAlias = true
-    }
+    private val outlinePaint =
+        Paint().apply {
+            color = Color.argb(70, 166, 182, 255)
+            style = Paint.Style.STROKE
+            strokeWidth = 4f
+            isAntiAlias = true
+        }
+    private val highlightPaint =
+        Paint().apply {
+            color = Color.argb(120, 166, 182, 255)
+            style = Paint.Style.STROKE
+            strokeWidth = 6f
+            isAntiAlias = true
+        }
     private var data: ComplicationData = NoDataComplicationData()
 
     override fun render(
@@ -226,7 +247,7 @@ internal class PlaceholderCanvasComplication : CanvasComplication {
         bounds: Rect,
         zonedDateTime: ZonedDateTime,
         renderParameters: RenderParameters,
-        slotId: Int
+        slotId: Int,
     ) {
         canvas.drawRoundRect(RectF(bounds), 12f, 12f, outlinePaint)
     }
@@ -236,20 +257,24 @@ internal class PlaceholderCanvasComplication : CanvasComplication {
         bounds: Rect,
         boundsType: Int,
         zonedDateTime: ZonedDateTime,
-        slotId: Int
+        slotId: Int,
     ) {
         canvas.drawRoundRect(RectF(bounds), 12f, 12f, highlightPaint)
     }
 
     override fun getData(): ComplicationData = data
 
-    override fun loadData(complicationData: ComplicationData, loadDrawablesAsynchronous: Boolean) {
+    override fun loadData(
+        complicationData: ComplicationData,
+        loadDrawablesAsynchronous: Boolean,
+    ) {
         data = complicationData
     }
 
     companion object {
-        fun factory(): CanvasComplicationFactory = CanvasComplicationFactory { _, _ ->
-            PlaceholderCanvasComplication()
-        }
+        fun factory(): CanvasComplicationFactory =
+            CanvasComplicationFactory { _, _ ->
+                PlaceholderCanvasComplication()
+            }
     }
 }
