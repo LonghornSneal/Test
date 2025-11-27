@@ -38,6 +38,10 @@ android {
     buildFeatures {
         buildConfig = false
     }
+
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+    }
 }
 
 play {
@@ -61,4 +65,9 @@ dependencies {
     implementation("androidx.wear.watchface:watchface:1.2.1")
     implementation("androidx.wear.watchface:watchface-client:1.2.1")
     implementation("androidx.wear.watchface:watchface-style:1.2.1")
+    implementation("androidx.wear.watchface:watchface-complications:1.2.1")
+
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.robolectric:robolectric:4.11.1")
+    testImplementation("androidx.test:core-ktx:1.5.0")
 }

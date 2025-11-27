@@ -138,7 +138,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
    - **Artifacts:** AAB artifact, manifest diff, screenshots.
    - **Fail?:** Correct resource paths or metadata and rebuild.
 
-6. **[ ] Prompt (optional Kotlin track):** _"Introduce the Jetpack Watch Face renderer. Add the `androidx.wear.watchface:watchface` dependencies, implement the `WatchFaceService`, `ComplicationSlotsManager`, and `UserStyleSchema`, and prove the renderer with a passing unit test preview."_
+6. **[x] Prompt (optional Kotlin track):** _"Introduce the Jetpack Watch Face renderer. Add the `androidx.wear.watchface:watchface` dependencies, implement the `WatchFaceService`, `ComplicationSlotsManager`, and `UserStyleSchema`, and prove the renderer with a passing unit test preview."_ _(Completed: Kotlin Canvas renderer + complications + palette UserStyle with passing unit test (2025-11-27 04:12 UTC))_
    - **Purpose:** Code-rendered face (if not using WFF).
    - **Steps:**
      1. Add the required `androidx.wear.watchface` dependencies to `app/build.gradle.kts`, including the `watchface`, `watchface-style`, and `watchface-complications-data-source` artifacts.
