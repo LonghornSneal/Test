@@ -41,14 +41,24 @@ android {
 }
 
 play {
-    serviceAccountCredentials.set(file(System.getenv("PLAY_SERVICE_ACCOUNT_JSON") ?: ""))
+    val credsPath = System.getenv("PLAY_SERVICE_ACCOUNT_JSON")
+    if (!credsPath.isNullOrBlank()) {
+        val credsFile = file(credsPath)
+        if (credsFile.exists()) {
+            serviceAccountCredentials.set(credsFile)
+        } else {
+            logger.warn("PLAY_SERVICE_ACCOUNT_JSON points to missing file: $credsPath")
+        }
+    } else {
+        logger.lifecycle("PLAY_SERVICE_ACCOUNT_JSON not set; skipping Play Publisher credentials for local builds.")
+    }
     track.set("internal")
 }
 
 dependencies {
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.wear:wear:1.3.0")
-    implementation("androidx.wear.watchface:watchface:1.3.1")
-    implementation("androidx.wear.watchface:watchface-client:1.3.1")
-    implementation("androidx.wear.watchface:watchface-style:1.3.1")
+    implementation("androidx.wear.watchface:watchface:1.2.1")
+    implementation("androidx.wear.watchface:watchface-client:1.2.1")
+    implementation("androidx.wear.watchface:watchface-style:1.2.1")
 }

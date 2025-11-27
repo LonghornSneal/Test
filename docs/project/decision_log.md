@@ -22,3 +22,12 @@
 - Confirmed WFF path: `app/src/main/AndroidManifest.xml` points to `@raw/watchface` via `androidx.wear.watchface.wff` metadata; `CosmoBondWatchFaceService` remains a lightweight host.
 - Documented the decision in `docs/tech/architecture.md`: chose Watch Face Format v2 + Kotlin host; cited Google WFF overview (developer.android.com/training/wearables/watch-faces/watch-face-format) and Samsung WFF overview (developer.samsung.com/watch-face/face-format/overview.html); noted downstream tasks continue on WFF track (layout, complications, ambient, screenshots) without a Kotlin-rendered canvas unless we pivot.
 - Markdown lint: `npx markdownlint-cli "**/*.md"` rerun (2025-11-26) still fails on existing long-line/bare-URL issues across the repo (no auto-fixes applied).
+
+## 2025-11-26 — Task 4: Scaffold validation and debug build
+- Gradle wrapper added (8.7) via `gradle/wrapper/gradle-wrapper.properties` and `gradlew*`; verified SHA256 pin. Root plugins remain AGP 8.5.2, Kotlin 1.9.24.
+- Installed Android SDK locally (platform-tools, build-tools 34.0.0, platforms;android-34) and set `local.properties` to `sdk.dir=C:/Users/HhsJa/AppData/Local/Android/Sdk` to satisfy build.
+- Adjusted Play Publisher block in `app/build.gradle.kts` to skip missing creds locally; downgraded watchface deps to `1.2.1` (1.3.x artifacts unavailable on Google/Maven at run time).
+- Satisfied build by stubbing `CosmoBondWatchFaceService` as a basic `Service` host (no renderer yet); manifest still references `@raw/watchface`.
+- `./gradlew :app:assembleDebug` succeeded with JDK 17; log captured at `docs/project/logs/phase1-task4-build.txt`. Resulting APK at `app/build/outputs/apk/debug/app-debug.apk`.
+- Follow-ups: remove `package` attribute from `app/src/main/AndroidManifest.xml` (AGP warning), revert to a proper Watch Face host implementation once WFF/Kotlin track finalized, and consider bumping watchface libs when the 1.3.x artifacts are available.
+- Markdown lint: not rerun post-build; outstanding repo-wide issues remain (long lines/bare URLs).

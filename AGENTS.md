@@ -116,7 +116,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 
 > **USER NOTE — first on-watch testing unlock:** Task 4 produces a debug build you can sideload to the Galaxy Watch8 Classic for initial smoke checks once completed. AI agents should ignore this line.
 
-4. **[ ] Prompt:** _"Validate the Wear OS project scaffolding. Review `app/build.gradle.kts`, `settings.gradle.kts`, and `AndroidManifest.xml`; run `./gradlew :app:assembleDebug` on JDK 17; capture the build logs and record any dependency updates needed in the decision log."_
+4. **[x] Prompt:** _"Validate the Wear OS project scaffolding. Review `app/build.gradle.kts`, `settings.gradle.kts`, and `AndroidManifest.xml`; run `./gradlew :app:assembleDebug` on JDK 17; capture the build logs and record any dependency updates needed in the decision log."_ _(Completed: gradlew added, SDK set up, assembleDebug succeeded; log in docs/project/logs/phase1-task4-build.txt with noted follow-ups (2025-11-26 23:15 UTC))_
    - **Purpose:** Ensure the existing module builds and aligns with naming/package expectations.
    - **Steps:**
      1. Inspect `app/build.gradle.kts`, `settings.gradle.kts`, and `app/src/main/AndroidManifest.xml` for namespace, module includes, and SDK configuration.
