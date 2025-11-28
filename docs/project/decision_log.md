@@ -58,4 +58,14 @@
 - Installed Wear OS 34 x86_64 system image and created headless AVD `wear34`; ran baseline collection via `./gradlew :baselineprofile:connectedNonMinifiedReleaseAndroidTest` (emulator env with JAVA_HOME Temurin 17 / ANDROID_SDK_ROOT set).
 - Copied generated profile to `app/src/main/baseline-prof.txt` (source `app/build/intermediates/combined_art_profile/release/compileReleaseArtProfile/baseline-prof.txt`); confirmed packaging with `./gradlew :app:assembleRelease` (log `art/perf/app-assembleRelease.log`).
 - Logs: baseline profile run `art/perf/baselineprofile-connectedNonMinifiedReleaseAndroidTest.log`; initial task lookup failure in `art/perf/baselineprofile-generateBaselineProfile.log`.
-- Note: release build temporarily uses debug signing to allow emulator installs for baseline capture; update to real signing when CI secrets (Tasks 16–18) are configured. Cmdline-tools installed under `cmdline-tools/latest-2` due to existing install path.
+- Note: release build temporarily uses debug signing to allow emulator installs for baseline capture; update to real signing when CI secrets (Tasks 16-18) are configured. Cmdline-tools installed under `cmdline-tools/latest-2` due to existing install path.
+
+## 2025-11-28 - Pre-checklist prerequisites review
+- Searched repository for artifacts covering design brief, asset inventory, feature scope, account/secret access, and validation plan; no dedicated docs were found beyond placeholder `.gitkeep` files in `docs/product/` and `docs/experience/`.
+- Status by item and needed inputs:
+  - Design brief finalized: not documented. Need dial layout, typography, color palette, complication plan, and animation storyboards; suggest capturing in `docs/product/design_brief.md` (or similar) with approved snapshots.
+  - Asset requirements gathered: not inventoried. Need vector/raster asset list, font sources, and ambient-mode variants; align storage under `art/source/`, exports in `art/export/`, and note color profiles/compression.
+  - Feature scope prioritized: not recorded. Need v1.0 feature list with priority, interactive behaviors, data integrations, and configuration options; recommend `docs/product/feature_scope.md`.
+  - Account and secret access secured: no evidence checked in. Need confirmation of Google Play Console access, signing key custody, analytics credentials, and Play upload key; document access paths and storage locations once available.
+  - Validation plan prepared: not present. Need target device matrix, manual test scenarios, and acceptance criteria; propose `docs/qa/validation_plan.md` plus device matrix in `docs/qa/device_matrix.md`.
+- Next steps: collect owner-approved content for each item above and update the corresponding docs; once account access is confirmed, capture default-branch protection settings (screenshot) and include in Task 1 evidence.

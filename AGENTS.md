@@ -83,10 +83,10 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 1. **[ ] Prompt:** _"Audit the repository guardrails. Inspect `README.md`, `CODEOWNERS`, `CONTRIBUTING.md`, `LICENSE`, `.gitignore`, `.editorconfig`, and `.gitattributes`; record any needed adjustments in `docs/project/decision_log.md`; capture current branch protection status and document how to request updates."_ _(claimed by @assistant, 2025-11-26 22:28 UTC)_
    - **Purpose:** Confirm guardrails and initial documentation are present.
    - **Steps:**
-     1. Open each guardrail file (`README.md`, `CODEOWNERS`, `CONTRIBUTING.md`, `LICENSE`, `.gitignore`, `.editorconfig`, `.gitattributes`) and review for gaps or outdated guidance.
-     2. Note any discrepancies, missing sections, or follow-up actions required for the guardrails.
-     3. Capture the current branch-protection settings (rules, required checks, enforcement status) for the default branch.
-     4. Log all findings and recommended updates in `docs/project/decision_log.md`, referencing both file reviews and branch-protection status.
+     - [x] Open each guardrail file (`README.md`, `CODEOWNERS`, `CONTRIBUTING.md`, `LICENSE`, `.gitignore`, `.editorconfig`, `.gitattributes`) and review for gaps or outdated guidance.
+     - [x] Note any discrepancies, missing sections, or follow-up actions required for the guardrails.
+     - [ ] Capture the current branch-protection settings (rules, required checks, enforcement status) for the default branch and obtain a screenshot.
+     - [x] Log all findings and recommended updates in `docs/project/decision_log.md`, referencing both file reviews and branch-protection status.
    - **Acceptance:** Baseline files reviewed; issues noted in `docs/project/decision_log.md`; branch protections documented.
    - **Artifacts:** Decision log entry, branch protection screenshot.
    - **Fail?:** Address missing protections or file updates, recommit.
