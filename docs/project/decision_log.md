@@ -1,6 +1,6 @@
 # Decision Log
 
-## 2025-11-26 — Task 1: Guardrail audit
+## 2025-11-26 - Task 1: Guardrail audit
 - Reviewed guardrail files (`README.md`, `CODEOWNERS`, `CONTRIBUTING.md`, `LICENSE`, `.gitignore`, `.editorconfig`, `.gitattributes`).
 - Findings / follow-ups:
   - `README.md`: Add local run commands (lint/tests/build) and link to the active checklist; consider adding CI status badge once workflows settle.
@@ -10,6 +10,7 @@
   - `.gitattributes`: Treats common image formats as binary; add media types used in this repo (e.g., `*.mp4`) to prevent line-ending normalization.
 - Branch protection: Unable to retrieve `main` protection via GitHub API without credentials (`curl .../branches/main/protection` returned 401). Request an admin to confirm settings in GitHub → Settings → Branches → Branch protection rules for `main` and enable required status checks (spotlessCheck, detekt, lint, testDebugUnitTest, connectedDebugAndroidTest), PR review requirements, and branch up-to-date enforcement; capture a screenshot when available.
 - Markdown lint: `npx markdownlint-cli "**/*.md"` (2025-11-26) reported existing formatting/line-length violations across the repo (no files auto-fixed; exit code non-zero); no scope changes applied in this task.
+- Branch protection evidence (2025-11-29): Screenshot saved at `docs/project/screenshots/branch-protection-main.png`. Current settings under “Sneal Rules” ruleset: targets `main` (default criteria), bypass list empty; branch rules: restrict deletions = enabled, block force pushes = enabled; restrict creations/updates, require linear history, deployments, signed commits, PRs before merging, status checks, code scanning results, code quality results, and Copilot review settings = all disabled. Follow-up: tighten rules to require PRs + required checks (spotlessCheck, detekt, lint, testDebugUnitTest, connectedDebugAndroidTest) with up-to-date enforcement.
 
 ## 2025-11-26 — Task 2: Tooling snapshot
 - Documented required tooling in `docs/setup/tooling.md` with pinned/pending versions and links: JDK 17 (Temurin), AGP 8.5.2, Gradle 8.7 (minimum for AGP 8.5), Kotlin 1.9.24, Android SDK/Target API 34, Wear OS 5 emulator images (API 34) with Wear OS 6 lineage note (API 35), platform tools/CLT download, and wrapper usage note.
@@ -69,3 +70,12 @@
   - Account and secret access secured: no evidence checked in. Need confirmation of Google Play Console access, signing key custody, analytics credentials, and Play upload key; document access paths and storage locations once available.
   - Validation plan prepared: not present. Need target device matrix, manual test scenarios, and acceptance criteria; propose `docs/qa/validation_plan.md` plus device matrix in `docs/qa/device_matrix.md`.
 - Next steps: collect owner-approved content for each item above and update the corresponding docs; once account access is confirmed, capture default-branch protection settings (screenshot) and include in Task 1 evidence.
+
+## 2025-11-29 - Pre-checklist inputs drafted
+- Added structured drafts for prerequisites:
+  - Design brief in `docs/product/design_brief.md` (layout, palette, typography, complications, animation states, accessibility).
+  - Asset inventory in `docs/product/asset_requirements.md` (sources/exports, ambient rules, export settings, ownership).
+  - Feature scope in `docs/product/feature_scope.md` (P0/P1 features, integrations, deferred items, risks).
+  - Account/secret access in `docs/ops/account_access.md` (roles, Play App Signing, keystore/secret needs).
+  - Validation plan in `docs/qa/validation_plan.md` (device matrix outline, scenarios, acceptance, perf/accessibility).
+- Branch protection: awaiting placement of `docs/project/screenshots/branch-protection-main.png`; current ruleset “Sneal Rules” targets `main`, bypass empty; restrict deletions/block force pushes enabled; all other checks/PR requirements off. Pending tighten-up to require PR + checks (spotlessCheck, detekt, lint, testDebugUnitTest, connectedDebugAndroidTest) with up-to-date enforcement.
