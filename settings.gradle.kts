@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "CosmoBondWatchface"
 include(":app")
+include(":baselineprofile")

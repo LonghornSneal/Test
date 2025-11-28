@@ -2,6 +2,7 @@ plugins {
     id("com.android.application") version "8.5.2" apply false
     kotlin("android") version "1.9.24" apply false
     id("com.github.triplet.play") version "3.12.1" apply false
+    id("androidx.baselineprofile") version "1.2.4" apply false
     id("app.cash.paparazzi") version "1.3.4" apply false
     id("com.diffplug.spotless") version "6.25.0"
     id("io.gitlab.arturbosch.detekt") version "1.23.6"

@@ -30,7 +30,6 @@ import androidx.wear.watchface.style.UserStyleSchema
 import androidx.wear.watchface.style.UserStyleSetting
 import androidx.wear.watchface.style.WatchFaceLayer
 import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
 
 private const val LEFT_SLOT_ID = 10
 private const val RIGHT_SLOT_ID = 11
@@ -45,7 +44,7 @@ internal class CompanionWatchFaceRenderer(
     private val currentUserStyleRepository: CurrentUserStyleRepository,
     private val watchState: WatchState,
     private val complicationSlotsManager: ComplicationSlotsManager,
-) : Renderer.CanvasRenderer(
+    ) : Renderer.CanvasRenderer(
         surfaceHolder,
         currentUserStyleRepository,
         watchState,
@@ -53,8 +52,6 @@ internal class CompanionWatchFaceRenderer(
         INTERACTIVE_FRAME_MS,
         false,
     ) {
-    private val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
-
     private val timePaint =
         Paint().apply {
             textAlign = Paint.Align.CENTER
@@ -85,7 +82,7 @@ internal class CompanionWatchFaceRenderer(
 
         canvas.drawRect(bounds, backgroundPaint)
         canvas.drawText(
-            timeFormatter.format(zonedDateTime),
+            CompanionTimeFormatter.formatTime(zonedDateTime),
             bounds.exactCenterX(),
             bounds.centerY().toFloat(),
             timePaint,

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <application
         android:allowBackup="false"
@@ -8,6 +9,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true">
+        <profileable
+            android:shell="true"
+            tools:targetApi="33" />
+        <activity
+            android:name=".ConfigActivity"
+            android:exported="false" />
         <service
             android:name=".CosmoBondWatchFaceService"
             android:exported="true"

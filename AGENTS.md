@@ -164,7 +164,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
    - **Artifacts:** Lint HTML report, Detekt SARIF, Spotless status.
    - **Fail?:** Fix violations or adjust rules narrowly.
 
-8. **[ ] Prompt:** _"Add unit tests for the non-UI logic. Implement `src/test` coverage for time formatting, color scheme selection, and complication ID mapping, then confirm `./gradlew testDebugUnitTest` passes with ≥70% coverage on the core utilities."_
+8. **[x] Prompt:** _"Add unit tests for the non-UI logic. Implement `src/test` coverage for time formatting, color scheme selection, and complication ID mapping, then confirm `./gradlew testDebugUnitTest` passes with ≥70% coverage on the core utilities."_ _(Completed: Time/palette/complication tests with Jacoco 81% coverage; see docs/qa/unit-testing.md and logs in docs/qa/screenshots/task8-test.log (2025-11-27 05:43 UTC))_
    - **Purpose:** Cover non-UI logic (style schema parsing, config).
    - **Steps:**
      1. Identify the core utility classes under `app/src/main/java/com/cosmobond/` that handle time formatting, palette selection, and complication ID mapping.
@@ -190,7 +190,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 
 ### Phase 3 — Performance & Battery Scaffolding
 
-10. **[ ] Prompt:** _"Stand up the baseline profile module and ensure Macrobenchmark-generated rules ship in release builds."_ _(claimed by @assistant, 2025-11-10 13:40 UTC)_
+10. **[x] Prompt:** _"Stand up the baseline profile module and ensure Macrobenchmark-generated rules ship in release builds."_ _(Completed: baselineprofile module + Wear OS 34 AVD; baseline-prof.txt generated and packaged; logs in art/perf/ (2025-11-28 00:51 UTC))_
     - **Purpose:** Improve startup/render perf; reduce CPU.
     - **Steps:**
       1. Scaffold the `baselineprofile/` Macrobenchmark module (Gradle script, manifest, and source folders) so it targets the `:app` module and runs on a debuggable variant.

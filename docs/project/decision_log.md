@@ -46,3 +46,16 @@
 - Commands executed with `JAVA_HOME=C:/Users/HhsJa/.jdks/temurin-17/jdk-17.0.17+10`: `./gradlew :app:recordPaparazziDebug` (log `docs/qa/screenshots/task9-paparazzi-record.log`) and `./gradlew :app:verifyPaparazziDebug` (log `docs/qa/screenshots/task9-paparazzi-verify.log`).
 - CI note: add `:app:verifyPaparazziDebug` plus Paparazzi HTML report (`app/build/reports/paparazzi/debug/index.html`) as PR artifacts in `.github/workflows/android.yml`; keep `app/src/test/snapshots` and `app/src/androidTest/assets/goldens` in sync when updating goldens.
 - Markdown lint: `npx markdownlint-cli "**/*.md"` (log `docs/qa/screenshots/task9-markdownlint.log`, 2025-11-27) fails on existing long-line/bare-URL/style issues across the repo; initial `npx markdownlint` alias could not resolve an executable. No auto-fixes applied.
+
+## 2025-11-27 - Task 8: Unit tests for non-UI logic
+- Added focused unit tests for time formatting (`CompanionTimeFormatter`), palette selection (`CompanionPalette`), and complication slot registration (`CompanionComplicationSlots`) plus shared test helpers.
+- Introduced Jacoco reporting via `jacocoTestDebugUnitTestReport`; coverage at 81% instructions (see `app/build/reports/jacoco/jacocoTestDebugUnitTestReport/html/index.html`), satisfying the ≥70% goal for core utilities.
+- Command: `./gradlew testDebugUnitTest jacocoTestDebugUnitTestReport` (log `docs/qa/screenshots/task8-test.log`); JUnit XML under `app/build/test-results/testDebugUnitTest/`.
+- Next CI step: publish Jacoco HTML + XML and JUnit results as workflow artifacts; enforce the task execution in PR checks.
+
+## 2025-11-28 - Task 10: Baseline profile module
+- Added `baselineprofile/` macrobenchmark module (plugin `com.android.test`, self-instrumenting) targeting `:app` with `BaselineProfileRule` generator under `src/androidTest/java/com/cosmobond/watchface/baselineprofile/`.
+- Installed Wear OS 34 x86_64 system image and created headless AVD `wear34`; ran baseline collection via `./gradlew :baselineprofile:connectedNonMinifiedReleaseAndroidTest` (emulator env with JAVA_HOME Temurin 17 / ANDROID_SDK_ROOT set).
+- Copied generated profile to `app/src/main/baseline-prof.txt` (source `app/build/intermediates/combined_art_profile/release/compileReleaseArtProfile/baseline-prof.txt`); confirmed packaging with `./gradlew :app:assembleRelease` (log `art/perf/app-assembleRelease.log`).
+- Logs: baseline profile run `art/perf/baselineprofile-connectedNonMinifiedReleaseAndroidTest.log`; initial task lookup failure in `art/perf/baselineprofile-generateBaselineProfile.log`.
+- Note: release build temporarily uses debug signing to allow emulator installs for baseline capture; update to real signing when CI secrets (Tasks 16–18) are configured. Cmdline-tools installed under `cmdline-tools/latest-2` due to existing install path.

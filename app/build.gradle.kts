@@ -1,8 +1,12 @@
+import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
+import org.gradle.testing.jacoco.tasks.JacocoReport
+
 plugins {
     id("com.android.application")
     kotlin("android")
     id("com.github.triplet.play")
     id("app.cash.paparazzi")
+    jacoco
 }
 
 android {
@@ -24,6 +28,8 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            // Use debug signing locally to allow baseline profile/emulator installs until CI signing is wired.
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
 
@@ -75,9 +81,39 @@ dependencies {
     implementation("androidx.wear.watchface:watchface-client:1.2.1")
     implementation("androidx.wear.watchface:watchface-style:1.2.1")
     implementation("androidx.wear.watchface:watchface-complications:1.2.1")
+    implementation("androidx.profileinstaller:profileinstaller:1.3.1")
 
     testImplementation("app.cash.paparazzi:paparazzi:1.3.4")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.robolectric:robolectric:4.11.1")
     testImplementation("androidx.test:core-ktx:1.5.0")
+}
+
+tasks.withType<Test>().configureEach {
+    useJUnit()
+    extensions.configure(JacocoTaskExtension::class.java) {
+        isIncludeNoLocationClasses = true
+        excludes = listOf("jdk.internal.*")
+    }
+}
+
+tasks.register<JacocoReport>("jacocoTestDebugUnitTestReport") {
+    dependsOn("testDebugUnitTest")
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+    val debugTree = fileTree("${buildDir}/tmp/kotlin-classes/debug") {
+        exclude("**/R.class", "**/R$*.class", "**/BuildConfig.*", "**/Manifest*.*", "**/androidx/**")
+    }
+    classDirectories.setFrom(debugTree)
+    sourceDirectories.setFrom(files("src/main/java"))
+    executionData.setFrom(
+        fileTree(buildDir) {
+            include(
+                "jacoco/testDebugUnitTest.exec",
+                "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec",
+            )
+        },
+    )
 }
