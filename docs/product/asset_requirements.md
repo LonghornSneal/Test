@@ -30,6 +30,10 @@ Status: draft inventory; mark checkboxes when finalized and files are present.
 
 ## Export settings
 - PNG: 32-bit RGBA (full color + alpha, no 8-bit reduction); target <150 KB per frame; sRGB profile.
+
+## Source control for assets
+- Store layered source files (PSD/AI) under `art/source/` for versioning and reproducible exports.
+- Store exported runtime assets under `art/export/` referenced by the watch face.
 - SVG: clean with SVGO defaults; remove editor metadata.
 - Fonts: include license files; subset if needed to reduce size.
 

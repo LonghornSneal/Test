@@ -17,9 +17,9 @@ Status: draft ready for stakeholder sign-off. Mark the checkboxes when approved.
 - Mood: confident, playful, and calming; particle accents used sparingly.
 
 ## Layout
-- Time: centered, large digital readout with seconds hidden by default; aligns vertically with pet to avoid overlap.
+- Time: customizable position; default centered. User can switch among digital 12h/24h (military), analog hands, or hybrid, and toggle seconds on/off.
 - Date: upper arc, small caps (DDD, MMM DD) to preserve dial clarity.
-- User layout options: toggle seconds on/off and choose whether the date sits on the upper arc or lower arc; time stays centered.
+- User layout options: move time within expanded safe zones (top, upper-left/right, center, lower-left/right, bottom arc), choose digital or analog style, toggle 12h/24h (military), toggle seconds, and place the date on upper or lower arc.
 - Complications: two SHORT_TEXT slots low-left and low-right; optional top slot for battery if enabled.
 - Pet placement: lower center; idle stance occupies bottom third; avoids complication hit targets.
 - Safe areas: maintain >=24 px padding from screen edge; avoid overlap with hardware bezel.
@@ -47,6 +47,7 @@ Status: draft ready for stakeholder sign-off. Mark the checkboxes when approved.
 ## Interaction model
 - Tap actions: top = battery (if present), left/right = respective complication deep link, pet tap = quick reaction emote.
 - Configuration: color theme toggle (Cosmic Blue/Starlight), pet expression preview, complication reassignment via system editor.
+- Analog hands: default style plus per-pet alternate hand style for analog mode.
 
 ## Accessibility
 - Reduced motion: disable particle effects and keep pet in slow breathing idle; honor system setting.
