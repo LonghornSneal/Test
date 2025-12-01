@@ -22,3 +22,8 @@ Animation description: Stage lights dim rapidly; background cracks. Bunny become
 
 Animation: Vinyl Memorial
 Animation description: Bunny freezes into a holographic statue atop a vinyl record. Ears form a protective arc; LEDs turn to engraved grooves. Turntable transforms into a pedestal. Soft teal light glows beneath the record. Floating musical notes drift slowly. BeatBunny exudes one final beat that ripples across the record. Body crystallizes into hologram shards. Record spins once, emitting a gentle chord. Light fades, leaving the silent memorial before the loop rewinds.
+
+## Mini-game
+- Name: Beat Chase
+- Summary: Match the song’s beat with taps or wrist micro-taps; staying on tempo powers BeatBunny’s dance and unlocks style boosts.
+- Inputs: media playback metadata (consent) and gyro tap detections for beat matching.

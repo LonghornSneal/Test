@@ -22,3 +22,8 @@ Animation description: Body stretches into a comet streak, leaving neon slime tr
 
 Animation: Crystalized Keepsake
 Animation description: Jelly solidifies into a translucent crystal statue with suspended confetti frozen mid-air. Eyes close softly; mouth relaxed. Streamer scarf wraps tightly like a ribbon bow. Motion orb dims into a glass marble resting atop the statue. Base becomes a mirrored pedestal. JiggleJelly slowly hardens, colors shifting to pastel glass. Confetti freezes, sparkling as light passes through. The marble glows once, casting rays across the pedestal. Light fades, leaving the crystal still before the loop restarts.
+
+## Mini-game
+- Name: Wobble Balance
+- Summary: Keep your wrist steady while stacking shapes; sudden shakes topple the stack, gentle tilts help reposition.
+- Inputs: accelerometer/gyro (motion) only.

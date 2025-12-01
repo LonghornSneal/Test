@@ -22,3 +22,8 @@ Animation description: Body blurs into motion streaks; shell plates detach like 
 
 Animation: Film Negative
 Animation description: ShutterBug freezes inside a translucent film strip frame. Shell details invert to high-contrast negative colors. Flash becomes a dim bulb; legs fold neatly. Prompt cards freeze mid-air, faded. A sepia vignette surrounds the frame. Film strip materializes around the bug. Colors invert slowly, locking in the negative. The flash bulb flickers once, then burns out. Frame drifts gently before rewinding to the materialization.
+
+## Mini-game
+- Name: Photo Hunt
+- Summary: Camera-remote prompts themes; remote taps log shots while steady wrist/gyro keeps framing bonus high.
+- Inputs: camera remote trigger count + wrist orientation (gyro).

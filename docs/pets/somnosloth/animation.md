@@ -22,3 +22,8 @@ Animation description: Colors elongate into streaks of pale lavender; edges blur
 
 Animation: Starlit Cocoon
 Animation description: Body becomes translucent with soft lavender light emanating from within. Eyes close peacefully; smile returns to a faint content line. Moon-pillow weaves around the sloth, forming a cocoon of glowing threads. Props: drifting lanterns shaped like fireflies and a gentle hourglass releasing silver sand upward. Body curls into fetal position, hands over heart. SomnoSloth exhales mist that crystallizes into protective threads wrapping around its limbs. The lanterns gather, bathing the cocoon in golden light as the hourglass reverses its flow. The cocoon seals, pulsing softly, while tiny constellations bloom across the surface. The light slowly dims until only a faint silhouette remains, then rewinds to the first exhale.
+
+## Mini-game
+- Name: Dream Drift
+- Summary: After solid sleep, trace slow patterns without rushing; smooth, unbroken lines grow SomnoSloth’s dream vines.
+- Inputs: sleep duration/quality signal + slow trace gestures (touch); no mic or notifications.

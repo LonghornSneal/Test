@@ -22,3 +22,8 @@ Animation description: Body becomes translucent static; crest fragments into dat
 
 Animation: Echo Fossil
 Animation description: Parrot becomes a translucent glass sculpture embedded within the mic stand. Crest frozen mid-wave; eyes closed peacefully. Waveform arc converts to etched glass behind the body. Tail microphone rests at the base, now inert crystal. Soft cyan light glows within. Glass sculpture pulses once with cyan light. Embedded waveform flickers, replaying a final tiny chirp. Light fades gradually, leaving the sculpture serene. A faint echo ripple travels outward before the loop restarts.
+
+## Mini-game
+- Name: Mimic Match
+- Summary: Speak short phrases via push-to-talk; EchoParrot repeats with twists, and you copy back correctly to score.
+- Inputs: push-to-talk voice capture (consent) plus optional media playback metadata for flavor.

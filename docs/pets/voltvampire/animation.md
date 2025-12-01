@@ -22,3 +22,8 @@ Animation description: Body elongates into a streak of red light; cape dissolves
 
 Animation: Crystalline Sarcophagus
 Animation description: Bat rests inside a transparent coffin shaped like a battery cell. Cape wraps the body; wings folded peacefully. Meters freeze at zero, glowing faint blue. Sigil becomes etched glass beneath the coffin. Candle-like sparks float at each corner. Coffin seals with a soft hum. Frozen lightning travels across the surface once. Sparks extinguish slowly, leaving the sarcophagus glowing. Light fades to a tranquil glimmer before rewinding.
+
+## Mini-game
+- Name: Charge Ritual
+- Summary: During real charging, time taps to pulse cycles; avoid over-tapping. Good timing boosts VoltVampire’s aura and keeps the meters green.
+- Inputs: watch + phone battery levels and charging session events (no mic or motion).

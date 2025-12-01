@@ -22,3 +22,8 @@ Animation description: Colors stretch into long gradient streaks; edges fragment
 
 Animation: Dusty Footprint Dissolve
 Animation description: Body turns translucent gray with faint lime embers glowing within; lines soften to watercolor edges. Eyes close, eyelashes barely visible; mouth relaxes into a straight peaceful line. Scarf gently wraps around the torso like a blanket; ankle charm darkens completely. Ribbon transforms into soft sand, collecting impressions of the pet's final stance. A single glowing footprint sigil hovers above, projecting subtle rays. StepSprite bows its head, hands clasped, as the neon within the body dims to embers. The sand ribbon rises to cradle it, creating a shallow imprint beneath the feet. The scarf unwinds and drapes over the shoulders like a shroud while small grains lift and swirl upward. The body dissolves into sparkling dust that follows the grains, leaving only the glowing footprint sigil gently pulsing before the loop restarts.
+
+## Mini-game
+- Name: Sprint Dash
+- Summary: Run short cadence bursts to beat a rival shadow; matching pace wins the dash and charges StepSprite’s energy.
+- Inputs: step cadence and move-reminder acknowledgments (no mic or notifications).

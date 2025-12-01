@@ -22,3 +22,8 @@ Animation description: Body becomes semi-transparent parchment; feathers turn to
 
 Animation: Gilded Volume
 Animation description: Owl transforms into a golden embossed relief on the tome cover. Glasses rest atop the book; wings etched into the surface. Armillary rings collapse into a bookmark clasp. Soft light emanates from engraved text. Letter tiles arrange into "Forever Learning". LexiOwl exhales, feathers turning to gold dust. Dust settles onto the tome, forming the relief. Bookmark clasp locks with a gentle click. Light pulses once through the title before the loop rewinds.
+
+## Mini-game
+- Name: Bedtime Guard
+- Summary: During quiet hours, ignore false alerts and stay calm; resisting taps keeps LexiOwl serene and unlocks soothing scenes.
+- Inputs: sleep schedule/quiet hours (DND) plus tap restraint (no mic or sensors).

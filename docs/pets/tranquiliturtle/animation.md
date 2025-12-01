@@ -22,3 +22,8 @@ Animation description: Body becomes semi-transparent water; shell darkens. Incen
 
 Animation: Still Pond
 Animation description: TranquiliTurtle rests beneath translucent water; shell becomes stone. Lotus cushion unfurls into floating petals around the body. Beads wrap the shell gently; eyes closed. Incense orb transforms into a candle flame. Pond surface mirrors the moon. Water calms, revealing the resting turtle. Candle flame flickers once, illuminating the shell. Petals drift outward in slow circles. Moon reflection fades before the loop restarts.
+
+## Mini-game
+- Name: Calm Breaths
+- Summary: Follow guided breathing; smooth, steady breaths keep the ring in the calm zone and lift TranquiliTurtle’s aura.
+- Inputs: guided breathing timer + HRV snapshot post-session (optional, if available).

@@ -22,3 +22,8 @@ Animation description: Body stretches into a streak of orange and teal; backpack
 
 Animation: Compass Cairn
 Animation description: Fox rests curled atop stacked stones arranged like a compass rose. Colors fade to sepia; eyes closed calmly. Backpack gently opens, releasing glowing badges that hover like fireflies. Tail wraps around the cairn, tip pointing north. A translucent map overlay slowly fades in the background. RoverFox exhales, releasing a final plume of dust that forms a compass rose above. Badges lift from the backpack, orbiting slowly before settling atop the cairn. The map overlay dissolves into the night sky, leaving faint coordinates. The scene holds quietly before rewinding to the first exhale.
+
+## Mini-game
+- Name: Trail Scout
+- Summary: Follow changing compass headings to reach virtual waypoints; quick taps at waypoints earn cache finds and keep RoverFox exploring.
+- Inputs: compass heading changes + coarse GPS waypoints (no mic or notifications).

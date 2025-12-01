@@ -22,3 +22,8 @@ Animation description: Colors streak into elongated magenta trails as if capture
 
 Animation: Flatline Ember Drift
 Animation description: Body desaturates to pale pink and translucent white, edges glowing with ghostly cyan outlines. Eyes close peacefully; the sweatband LED shows a single horizontal line, and antennae stand motionless with dim embers. Chest cavity reveals a faintly beating light that gradually dims; tiny ash motes rise from the paws. Props: floating lotus-shaped stretcher composed of ECG lines and a hovering memorial beacon projecting a muted heart glyph. Body reclines on the lotus cradle, limbs gently folded across its torso. CardioCritter exhales a final visible breath, cheeks puffing before deflating as the heartbeat light flickers erratically. The lotus stretcher assembles beneath it, glowing cyan petals lifting the body as gravity loses influence. Antennae release the last pair of embers, which drift upward and burst into faint glitter before fading. The sweatband LED draws a flat horizontal line accompanied by a gentle white pulse that radiates outward. The creature's outline dissolves into translucent ribbons that wrap around the memorial beacon. Only the beacon remains, pulsing softly, before rewinding to the initial exhale for a respectful looping tribute.
+
+## Mini-game
+- Name: Pulse Sprint
+- Summary: Keep heart rate in a target zone during a short guided burst; holding the zone powers CardioCritter’s sprint and rep counters.
+- Inputs: workout-tagged heart rate/HRV during active session (no mic or notifications).

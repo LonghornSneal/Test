@@ -22,3 +22,8 @@ Animation description: Colors streak into muted lines; wings tear slightly. Hone
 
 Animation: Amber Reliquary
 Animation description: Bee encased in translucent amber droplet with suspended hex icons. Wings folded neatly; eyes closed peacefully. Planner notebook and stylus rest beside inside the amber. Soft golden light glows from within. Amber droplet sits atop a pedestal hive. Amber seals around BusyBee, trapping final sparkles. Light pulses gently, illuminating the suspended icons. Pedestal hive emits a warm hum, then quiets. Droplet remains still before loop restart.
+
+## Mini-game
+- Name: Task Sweep
+- Summary: Use the bezel/side crown to scroll through task tiles and tap to sort/mark them; speed and accuracy keep the honey meter full.
+- Inputs: bezel/side crown scroll + tap confirmations (no mic or sensors).

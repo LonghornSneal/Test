@@ -22,3 +22,8 @@ Animation description: Body turns semi-transparent with motion blur streaks; LED
 
 Animation: Echo Fade Vigil
 Animation description: Fur turns monochrome with faint cyan outlines; LED strips freeze as a single dot. Eyes close peacefully; ears rest flat. Collar volume knob stops at zero, projecting a quiet halo. Pup lies on the waveform cushion, tail wrapped around paws. Floating candles shaped like microphones hover around, flickering softly. DecibelDog exhales, breath forming a visible soundwave that dissipates quickly. The microphone candles ignite one by one, casting gentle reflections on the fur. The halo from the collar pulses once, illuminating the closed eyes. The scene fades to grayscale, then rewinds to the first exhale for the memorial loop.
+
+## Mini-game
+- Name: Sound Hide-and-Seek
+- Summary: Manage the environment’s loud/quiet swings—keep things calm so DecibelDog explores; sudden spikes send it hiding and lose points.
+- Inputs: ambient microphone level (consent) only.

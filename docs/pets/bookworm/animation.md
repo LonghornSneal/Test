@@ -22,3 +22,8 @@ Animation description: Body stretches into a trail of green light; wings flutter
 
 Animation: Library Cocoon
 Animation description: Caterpillar wraps itself in parchment cocoon etched with text. Firefly hovers nearby, acting as vigil candle. Book closes gently beneath the cocoon. Copper charm seals the cocoon with wax. Soft teal light glows within. BookWorm exhales, weaving parchment threads. Cocoon seals, copper charm imprinting a leaf emblem. Firefly circles slowly, casting warm halos. Light fades to a serene glow before the loop resets.
+
+## Mini-game
+- Name: Quiet Page
+- Summary: Hold a steady, calm wrist while “distraction” prompts appear; keeping posture earns BookWorm’s fact cards.
+- Inputs: ambient light + gentle wrist tilt (gyro) with idle timer; no mic or notifications needed.

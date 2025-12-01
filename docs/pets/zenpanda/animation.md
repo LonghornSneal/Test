@@ -22,3 +22,8 @@ Animation description: Body fades into semi-transparent fog; halo fractures into
 
 Animation: Serenity Lantern
 Animation description: ZenPanda lies on its side atop the cushion, fur silvered. Halo transforms into a paper lantern hovering above. Eyes closed peacefully; paws cradle the mala beads. Fireflies circle slowly, casting warm light. Incense smoke forms a final lotus outline. Panda exhales, releasing incense smoke that traces a lotus above. The lantern ignites softly, illuminating the closed eyes. Fireflies settle onto the beads, pulsing together once. Light dims, leaving the lantern glowing faintly before the loop restarts.
+
+## Mini-game
+- Name: Focus Field
+- Summary: In Do Not Disturb, avoid tapping during “distraction” pulses; occasional breath cues steady ZenPanda’s glow and keep the focus meter high.
+- Inputs: DND state + screen-on time ratio; simple tap restraint and optional breath timing.

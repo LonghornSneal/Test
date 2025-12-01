@@ -22,3 +22,8 @@ Animation description: Body elongates into a streak split between fire and ice. 
 
 Animation: Thermal Lantern
 Animation description: Dragon rests coiled around a lantern-shaped thermometer filled with liquid light. Scales become translucent glass, revealing extinguished embers and frost. Eyes closed peacefully; horns soften into gentle curves. Halo floats above as a dim halo flame. Snow and ash fall together softly. Thermagon exhales a final wisp that lights the lantern. The lantern glows once, illuminating the transparent scales. Embers fade, frost melts, and the tail unwinds slowly. The halo flame flickers out before rewinding to the last breath.
+
+## Mini-game
+- Name: Thermal Balance
+- Summary: Respond to virtual hot/cold fronts; tap to open/close vents and keep Thermagon’s core in the safe band.
+- Inputs: weather/temperature feed (phone) only; no mic or motion.

@@ -22,3 +22,8 @@ Animation description: Body becomes semi-transparent; ink lines sketch its outli
 
 Animation: Memory Capsule
 Animation description: Elephant curls around a glowing capsule filled with preserved cards. Body takes on a porcelain finish with gold cracks (kintsugi style). Ears fold gently over the capsule; eyes closed peacefully. Desk lamp morphs into a candle emitting steady light. Floating text reads "Remember". Memophant exhales, sealing the capsule with a soft light ribbon. Gold cracks shimmer as the porcelain body stabilizes. Candle flame flickers once, casting long shadows. Scene holds quietly before rewinding to the sealing breath.
+
+## Mini-game
+- Name: Quick Notes
+- Summary: Dictate or scribble short prompts; matching themes fill Memophant’s memory mosaic and keep morale high.
+- Inputs: voice dictation (consent) or on-screen scribble/tap input; no mic if dictation is skipped.

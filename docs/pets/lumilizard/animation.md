@@ -22,3 +22,8 @@ Animation description: Body elongates into a streak blending dusk colors; edges 
 
 Animation: Solar-Lunar Husk
 Animation description: Scales turn translucent glass, revealing fading embers and starlight within. Eyes close; frill droops gently, edges glowing faintly. Sunstone pendant cracks, leaking beams that solidify into floating shards. Body rests atop the spire, coiled peacefully with tail over snout. A halo of alternating day/night segments hovers above like a memorial clock. LumiLizard exhales a final breath that splits into warm and cool wisps circling the body. The pendant fractures, shards levitating to form a protective ring. Light drains from the scales, leaving a glass-like husk bathed in halo glow. The halo dims to a single pulse before rewinding to the initial exhale.
+
+## Mini-game
+- Name: Shadow Shield
+- Summary: Tilt/rotate to keep a “vampire buddy” in shadow while LumiLizard shares light; avoid overexposure to win the round.
+- Inputs: ambient light sensor + wrist tilt/rotation (gyro), with battery awareness for theme cues.

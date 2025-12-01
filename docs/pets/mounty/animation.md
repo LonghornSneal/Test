@@ -22,3 +22,8 @@ Animation description: Colors streak into gray-white blur; fur windblown. Eyes w
 
 Animation: Frost Cairn
 Animation description: Mounty lies peacefully atop stacked ice blocks etched with runes. Fur turns frosted silver; eyes closed with serene smile. Horns emit faint aurora light arcs. Harness neatly folded beside the body; rope coils like a wreath. Snow gently falls, accumulating softly. The goat exhales a final frosty breath that crystallizes midair. Auroras shimmer along the horns, illuminating the cairn. Snow covers the hooves gradually, leaving only the horns visible. Light fades to a gentle glow before rewinding to the last breath.
+
+## Mini-game
+- Name: Summit Steps
+- Summary: Hit elevation/stair climb targets and tap to plant flags at markers; steady ascent clears routes and boosts Mounty’s morale.
+- Inputs: elevation gain/barometer + step/stair counts (no mic or notifications).

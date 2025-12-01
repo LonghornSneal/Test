@@ -22,3 +22,8 @@ Animation description: Colors fade to dusk tones; mailbag swings sadly. Pup walk
 
 Animation: Stamped Keepsake
 Animation description: Pup turns into an embossed stamp affixed to the mailbag. Fur patterns preserved in relief; eyes closed peacefully. Mailbag becomes a memorial pedestal. Collar projects a constant soft glow. Floating postcards gently orbit. BuddyPup's body dissolves into glowing ink. Ink presses onto the mailbag, forming the stamp. Postcards align around the bag like a halo. Glow pulses once before resetting.
+
+## Mini-game
+- Name: Message Relay
+- Summary: React to simulated call/message pings; quick taps build trust, missed pings lower excitement. Phone disconnect/reconnect cues trigger a “fetch the link” comeback.
+- Inputs: notification listener (calls/messages consent) and Bluetooth proximity (phone disconnect/reconnect).
