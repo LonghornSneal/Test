@@ -30,6 +30,26 @@
                 <Color>#A6B6FF</Color>
             </Text>
         </Partial>
+        <Partial id="time_text_ambient">
+            <Text>
+                <Value>
+                    <Time format="HH:mm"/>
+                </Value>
+                <Font family="sans-serif" size="48"/>
+                <Position x="50%" y="48%" anchor="center"/>
+                <Color>#B0B0B0</Color>
+            </Text>
+        </Partial>
+        <Partial id="date_text_ambient">
+            <Text>
+                <Value>
+                    <Time format="EEE, MMM d"/>
+                </Value>
+                <Font family="sans-serif" size="18"/>
+                <Position x="50%" y="58%" anchor="center"/>
+                <Color>#B0B0B0</Color>
+            </Text>
+        </Partial>
     </Partials>
 
     <Complications>
@@ -58,8 +78,8 @@
         <Scene id="ambient">
             <Group>
                 <Background color="#000000"/>
-                <PartialRef ref="time_text"/>
-                <PartialRef ref="date_text"/>
+                <PartialRef ref="time_text_ambient"/>
+                <PartialRef ref="date_text_ambient"/>
             </Group>
         </Scene>
     </Scenes>

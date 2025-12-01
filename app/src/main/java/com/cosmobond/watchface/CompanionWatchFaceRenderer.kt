@@ -33,7 +33,7 @@ import java.time.ZonedDateTime
 
 private const val LEFT_SLOT_ID = 10
 private const val RIGHT_SLOT_ID = 11
-private const val INTERACTIVE_FRAME_MS = 16L
+private const val INTERACTIVE_FRAME_MS = 1000L
 private const val BACKGROUND_COLOR = 0xFF0A0D18.toInt()
 private const val AMBIENT_BACKGROUND_COLOR = 0xFF000000.toInt()
 
@@ -79,6 +79,9 @@ internal class CompanionWatchFaceRenderer(
                 currentUserStyleRepository.userStyle.value,
                 renderParameters.drawMode,
             )
+        val isAmbient = renderParameters.drawMode == DrawMode.AMBIENT
+        val lowBit = watchState.hasLowBitAmbient || watchState.hasBurnInProtection
+        timePaint.isAntiAlias = !(isAmbient && lowBit)
 
         canvas.drawRect(bounds, backgroundPaint)
         canvas.drawText(
@@ -88,8 +91,10 @@ internal class CompanionWatchFaceRenderer(
             timePaint,
         )
 
-        complicationSlotsManager.complicationSlots.values.forEach { slot ->
-            slot.render(canvas, zonedDateTime, renderParameters)
+        if (!isAmbient) {
+            complicationSlotsManager.complicationSlots.values.forEach { slot ->
+                slot.render(canvas, zonedDateTime, renderParameters)
+            }
         }
     }
 

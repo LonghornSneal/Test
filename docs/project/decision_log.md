@@ -85,3 +85,10 @@
 - Findings: `INTERACTIVE_FRAME_MS = 16` (~60 fps) despite static render; ambient path dims colors and stops animation but still renders complications with anti-aliasing on; WFF ambient scene hides complications while Kotlin renderer keeps them visible; no phone/Data Layer sync and complication cadence follows system providers.
 - Actions queued: throttle interactive tick to ≥1000 ms or animation-driven cadence; add ambient guards (skip complications, disable AA for low-bit/burn-in); align WFF + Kotlin ambient outputs; document refresh SLAs when adding heart-rate/phone battery providers.
 - Markdown lint: `npx markdownlint "**/*.md"` (2025-12-01) run for this task; see `docs/qa/battery-checklist-markdownlint.txt` (expected legacy long-line/bare-URL hits remain).
+
+## 2025-12-01 - Task 11 follow-ups applied
+- Raised renderer tick to 1000 ms and added ambient guards (skip complication rendering in ambient; disable anti-aliasing for low-bit/burn-in) in `CompanionWatchFaceRenderer`.
+- Updated WFF ambient scene with monochrome time/date partials to match the Kotlin renderer and keep complications hidden.
+- Added complication refresh SLAs for steps/heart/watch + phone battery to `docs/tech/architecture.md`.
+- Build: `./gradlew :app:assembleDebug` (with `JAVA_HOME=C:/Users/HhsJa/.jdks/temurin-17/jdk-17.0.17+10` after `./gradlew --stop`) succeeded; initial Kotlin daemon cache issue resolved by stopping daemons.
+- Markdown lint rerun: `npx markdownlint-cli "**/*.md"` → fails on existing long-line/bare-URL issues; log updated at `docs/qa/battery-checklist-markdownlint.txt`.
