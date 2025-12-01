@@ -1,3 +1,4 @@
+import java.util.Base64
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
 import org.gradle.testing.jacoco.tasks.JacocoReport
 
@@ -12,6 +13,51 @@ plugins {
 android {
     namespace = "com.cosmobond.watchface"
     compileSdk = 34
+
+    signingConfigs {
+        create("release") {
+            val keystorePath = System.getenv("UPLOAD_KEYSTORE_PATH")
+            val keystoreBase64 = System.getenv("UPLOAD_KEYSTORE_BASE64")
+            val storePwd = System.getenv("STORE_PASSWORD")
+            val keyAliasEnv = System.getenv("UPLOAD_KEY_ALIAS")
+            val keyPwd = System.getenv("UPLOAD_KEY_PASSWORD")
+
+            val keystoreFile =
+                when {
+                    !keystorePath.isNullOrBlank() -> file(keystorePath)
+                    !keystoreBase64.isNullOrBlank() -> {
+                        val decoded =
+                            layout.buildDirectory.file("keystore/upload-keystore.jks").get().asFile
+                        decoded.parentFile.mkdirs()
+                        decoded.writeBytes(Base64.getDecoder().decode(keystoreBase64))
+                        decoded
+                    }
+                    else -> null
+                }
+
+            val hasReleaseCreds =
+                keystoreFile?.exists() == true &&
+                    !storePwd.isNullOrBlank() &&
+                    !keyAliasEnv.isNullOrBlank() &&
+                    !keyPwd.isNullOrBlank()
+
+            if (hasReleaseCreds) {
+                storeFile = keystoreFile
+                storePassword = storePwd
+                keyAlias = keyAliasEnv
+                keyPassword = keyPwd
+            } else {
+                val debugConfig = signingConfigs.getByName("debug")
+                logger.lifecycle(
+                    "Release signing keys not set; falling back to debug signing config for local builds.",
+                )
+                storeFile = debugConfig.storeFile
+                storePassword = debugConfig.storePassword
+                keyAlias = debugConfig.keyAlias
+                keyPassword = debugConfig.keyPassword
+            }
+        }
+    }
 
     defaultConfig {
         applicationId = "com.cosmobond.watchface"
@@ -28,8 +74,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
-            // Use debug signing locally to allow baseline profile/emulator installs until CI signing is wired.
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 

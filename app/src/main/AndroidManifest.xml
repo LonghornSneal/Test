@@ -24,9 +24,6 @@
                 <action android:name="androidx.wear.watchface.category.WATCH_FACE" />
             </intent-filter>
             <meta-data
-                android:name="androidx.wear.watchface.wff"
-                android:resource="@raw/watchface" />
-            <meta-data
                 android:name="androidx.wear.watchface.preview"
                 android:resource="@drawable/watchface_preview" />
         </service>

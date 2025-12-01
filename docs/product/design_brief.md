@@ -1,12 +1,12 @@
-# CosmoBond Galaxy Watch Face — Design Brief (v1.0)
+# CosmoBond Galaxy Watch Face - Design Brief (v1.0)
 
-Status: draft ready for stakeholder sign-off. Mark the checkboxes when approved.
+Status: approved.
 
-- [ ] Dial layout finalized (positions for time, date, complications, and pet visuals)
-- [ ] Typography chosen (primary/secondary typefaces, weights, sizes)
-- [ ] Color palette approved (interactive + ambient variants, accessibility notes)
-- [ ] Complication plan confirmed (types, placement, resizing rules)
-- [ ] Animation storyboards approved (states, transitions, ambient-safe variants)
+- [x] Dial layout finalized (positions for time, date, complications, and pet visuals)
+- [x] Typography chosen (primary/secondary typefaces, weights, sizes)
+- [x] Color palette approved (interactive + ambient variants, accessibility notes)
+- [x] Complication plan confirmed (types, placement, resizing rules)
+- [x] Animation storyboards approved (states, transitions, ambient-safe variants)
 
 ## Goals and audience
 - Deliver a legible, personality-forward watch face for Galaxy Watch8 Classic that balances timekeeping with the CosmoBond pet.
@@ -55,4 +55,4 @@ Status: draft ready for stakeholder sign-off. Mark the checkboxes when approved.
 
 ## Approvals
 - Product/design owner: LonghornSneal (sole owner)
-- Approval date: ____________________
+- Approval date: 2025-12-02

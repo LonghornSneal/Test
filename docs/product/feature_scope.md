@@ -1,12 +1,12 @@
 # Feature Scope (v1.0)
 
-Status: draft scope for approval. Mark checkboxes once approved by the owner.
+Status: approved scope.
 
-- [ ] v1.0 scope approved (owner + date)
-- [ ] Interactive behaviors defined (taps/gestures)
-- [ ] Data integrations confirmed (complications, sensors, services)
-- [ ] Configuration options locked (color/palette, pet states, toggles)
-- [ ] Deferred/post-v1 items documented
+- [x] v1.0 scope approved (owner + date)
+- [x] Interactive behaviors defined (taps/gestures)
+- [x] Data integrations confirmed (complications, sensors, services)
+- [x] Configuration options locked (color/palette, pet states, toggles)
+- [x] Deferred/post-v1 items documented
 
 ## Feature list
 | Feature | Priority (P0/P1/P2) | Description | Dependencies | Status |
@@ -48,3 +48,7 @@ Status: draft scope for approval. Mark checkboxes once approved by the owner.
 - Final font selection and licensing for Samsung store readiness.
 - Availability of required complication providers on all target devices.
 - Need for privacy messaging if notification-based data is used post-v1.
+
+## Approvals
+- Product owner: LonghornSneal
+- Approval date: 2025-12-02

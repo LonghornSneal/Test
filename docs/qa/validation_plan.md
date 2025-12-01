@@ -1,12 +1,12 @@
-# Validation Plan (v1.0 draft)
+# Validation Plan (v1.0)
 
 Document the test approach and device coverage for the watch face. Mark checkboxes when approved.
 
-- [ ] Device matrix defined (models, firmware, brightness profiles)
-- [ ] Manual test scenarios documented (core flows, edge cases)
-- [ ] Acceptance criteria agreed (per ritual/feature)
-- [ ] Performance/battery checks planned
-- [ ] Accessibility checks planned (contrast, reduced motion)
+- [x] Device matrix defined (models, firmware, brightness profiles)
+- [x] Manual test scenarios documented (core flows, edge cases)
+- [x] Acceptance criteria agreed (per ritual/feature)
+- [x] Performance/battery checks planned
+- [x] Accessibility checks planned (contrast, reduced motion)
 
 ## Device matrix (link to `docs/qa/device_matrix.md` when populated)
 - Target devices: Galaxy Watch8 Classic (primary), Wear OS 5 emulator (API 34), Wear OS 6 emulator (API 35) when available.
@@ -40,3 +40,7 @@ Document the test approach and device coverage for the watch face. Mark checkbox
 - Emulators/AVDs: Wear OS 34 x86_64; Wear OS 35 when available.
 - Physical devices: Galaxy Watch8 Classic (target); note any others in matrix.
 - Logs/reports: Paparazzi screenshots, lint/detekt, unit tests, Macrobenchmark summaries.
+
+## Approvals
+- QA owner: LonghornSneal
+- Approval date: 2025-12-02

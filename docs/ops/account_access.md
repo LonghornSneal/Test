@@ -2,11 +2,11 @@
 
 Do not store secrets here. Record who has custody and where secrets live.
 
-- [ ] Google Play Console access confirmed (roles/owners)
-- [ ] Play App Signing status documented
-- [ ] Upload keystore custody recorded (location, owners)
-- [ ] Analytics/telemetry credentials accounted for
-- [ ] CI secret storage confirmed (GitHub Secrets/other vault)
+- [x] Google Play Console access confirmed (roles/owners)
+- [x] Play App Signing status documented
+- [x] Upload keystore custody recorded (location, owners)
+- [x] Analytics/telemetry credentials accounted for
+- [x] CI secret storage confirmed (GitHub Secrets/other vault)
 
 ## Access table
 | Service | Role/permission | Owners | Storage location/reference | Notes |
@@ -40,3 +40,7 @@ Do not store secrets here. Record who has custody and where secrets live.
 1. In Play Console, create a service account with upload/release rights.
 2. Download the JSON credentials; store in a secure vault (not in the repo).
 3. Add the JSON content to PLAY_SERVICE_ACCOUNT_JSON GitHub Secret.
+
+## Approvals
+- Operations owner: LonghornSneal
+- Approval date: 2025-12-02

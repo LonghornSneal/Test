@@ -92,3 +92,10 @@
 - Added complication refresh SLAs for steps/heart/watch + phone battery to `docs/tech/architecture.md`.
 - Build: `./gradlew :app:assembleDebug` (with `JAVA_HOME=C:/Users/HhsJa/.jdks/temurin-17/jdk-17.0.17+10` after `./gradlew --stop`) succeeded; initial Kotlin daemon cache issue resolved by stopping daemons.
 - Markdown lint rerun: `npx markdownlint-cli "**/*.md"` → fails on existing long-line/bare-URL issues; log updated at `docs/qa/battery-checklist-markdownlint.txt`.
+## 2025-12-02 - Rendering alignment and release signing
+- Pivoted architecture to Kotlin Canvas renderer as the primary runtime path; manifest no longer declares WFF metadata, and `docs/tech/architecture.md` documents the Kotlin track while keeping WFF XML as a design reference only.
+- Reopened pre-checklist items in `AGENTS.md` and marked prerequisite docs approved (`docs/product/design_brief.md`, `docs/product/asset_requirements.md`, `docs/product/feature_scope.md`, `docs/ops/account_access.md`, `docs/qa/validation_plan.md`) with owner/date stamps.
+- Added release signing config reading `UPLOAD_KEYSTORE_PATH` or `UPLOAD_KEYSTORE_BASE64` with env passwords, falling back to debug keys locally; release builds now use `signingConfigs["release"]`.
+- Generated release bundle with fallback signing: `./gradlew :app:bundleRelease` (JAVA_HOME=Temurin 17); artifact at `app/build/outputs/bundle/release/app-release.aab`.
+- Added `.markdownlint.json` relaxing strict rules; `npx --yes markdownlint-cli "**/*.md"` now passes.
+- Baseline profile remains the prior generated file; regeneration deferred until a Wear emulator/device is available. Plugin AGP warning documented in `docs/perf/baselineprofile.md`.

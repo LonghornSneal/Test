@@ -7,11 +7,7 @@ import androidx.wear.watchface.WatchFaceService
 import androidx.wear.watchface.WatchFaceType
 import androidx.wear.watchface.style.CurrentUserStyleRepository
 
-/**
- * Kotlin renderer host for the CosmoBond watch face.
- * The declarative WFF layout remains in res/raw/watchface.xml, but this service now wires
- * a Jetpack Watch Face renderer so complications and style schema can be exercised in tests.
- */
+/** Kotlin renderer host for the CosmoBond watch face. */
 class CosmoBondWatchFaceService : WatchFaceService() {
     override fun createUserStyleSchema() = CompanionUserStyle.createSchema(resources)
 

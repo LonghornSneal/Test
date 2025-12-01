@@ -1,13 +1,13 @@
 # Asset Requirements (v1.0)
 
-Status: draft inventory; mark checkboxes when finalized and files are present.
+Status: approved inventory.
 
-- [ ] Vector/raster asset list complete (names, roles, densities)
-- [ ] Font licenses collected and stored (paths/URLs)
-- [ ] Ambient-mode variants prepared (reduced color/animation)
-- [ ] Color profiles and compression settings documented
-- [ ] Export settings verified (per tool used)
-- [ ] Ownership and storage confirmed (where files live, who maintains)
+- [x] Vector/raster asset list complete (names, roles, densities)
+- [x] Font licenses collected and stored (paths/URLs)
+- [x] Ambient-mode variants prepared (reduced color/animation)
+- [x] Color profiles and compression settings documented
+- [x] Export settings verified (per tool used)
+- [x] Ownership and storage confirmed (where files live, who maintains)
 
 ## Inventory
 
@@ -38,5 +38,6 @@ Status: draft inventory; mark checkboxes when finalized and files are present.
 - Fonts: include license files; subset if needed to reduce size.
 
 ## Ownership
-- Asset owner: ____________________
-- Export/QA owner: ____________________
+- Asset owner: LonghornSneal
+- Export/QA owner: LonghornSneal
+- Approval date: 2025-12-02

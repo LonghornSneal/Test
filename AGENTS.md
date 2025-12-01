@@ -72,11 +72,11 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 
 ### Pre-Checklist Prerequisites
 
-- [x] **Design brief finalized:** Dial layout, typography, color palette, complication plan, and animation storyboards approved.
-- [x] **Asset requirements gathered:** Vector/raster assets, fonts, and ambient-mode variants stored in an accessible location.
-- [x] **Feature scope prioritized:** Feature list with interactive behaviors, data integrations, and configuration options locked for v1.0.
-- [x] **Account and secret access secured:** Google Play Console, signing keys, analytics credentials, and related secrets available for automation.
-- [x] **Validation plan prepared:** Target device matrix, manual test scenarios, and acceptance criteria documented for handoff.
+- [ ] **Design brief finalized:** Dial layout, typography, color palette, complication plan, and animation storyboards approved.
+- [ ] **Asset requirements gathered:** Vector/raster assets, fonts, and ambient-mode variants stored in an accessible location.
+- [ ] **Feature scope prioritized:** Feature list with interactive behaviors, data integrations, and configuration options locked for v1.0.
+- [ ] **Account and secret access secured:** Google Play Console, signing keys, analytics credentials, and related secrets available for automation.
+- [ ] **Validation plan prepared:** Target device matrix, manual test scenarios, and acceptance criteria documented for handoff.
 
 ### Phase 0 — Baseline Verification & Policy Alignment
 
