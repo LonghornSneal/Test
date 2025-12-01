@@ -234,7 +234,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
     - **Artifacts:** Test reports uploaded.
     - **Fail?:** Fix tests or code.
 
-14. **[ ] Prompt:** _"Add the Wear OS emulator job to run connected tests in CI."_
+14. **[x] Prompt:** _"Add the Wear OS emulator job to run connected tests in CI."_ _(Completed: Wear emulator connected test job with artifacts added to android.yml (2025-12-01 06:02 UTC))_
     - **Purpose:** Run instrumentation/screenshot tests headless.
     - **Steps:**
       * Use **ReactiveCircus/android-emulator-runner** with a Wear OS x86_64 system image; start emulator; run `connectedDebugAndroidTest`.

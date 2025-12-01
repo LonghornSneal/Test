@@ -93,20 +93,46 @@ jobs:
           update-comment: true
 
   androidTest:
+    name: Wear connected tests
     needs: build
     runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
-      - uses: android-actions/setup-android@v3
-      - uses: ReactiveCircus/android-emulator-runner@v2
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Gradle cache
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Run connected tests on Wear emulator
+        uses: ReactiveCircus/android-emulator-runner@v2
         with:
           api-level: 34
           target: google_apis
           arch: x86_64
           profile: wear-os-small-round
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
-          script: ./gradlew connectedDebugAndroidTest
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
+          disable-animations: true
+          script: ./gradlew --stacktrace connectedDebugAndroidTest
+
+      - name: Upload connected test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: connected-test-results
+          path: |
+            app/build/outputs/androidTest-results/**
+            app/build/reports/androidTests/connected/**
+            app/build/outputs/connected_android_test_additional_output/**
+          if-no-files-found: ignore

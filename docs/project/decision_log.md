@@ -111,3 +111,9 @@
 - Local verification: `JAVA_HOME=C:/Users/HhsJa/.jdks/temurin-17/jdk-17.0.17+10 ./gradlew testDebugUnitTest jacocoTestDebugUnitTestReport` succeeded; warnings persist for the baseline profile plugin (tested up to AGP 8.3.0) and deprecated `userStyleSettings` getter in tests.
 - Markdown lint: `npx --yes markdownlint-cli "**/*.md"` (2025-12-01) exited 0; log at `docs/qa/markdownlint/task13-markdownlint.log`.
 - Follow-ups: bump the baseline profile plugin when a compatible release lands for AGP 8.5.x; consider enforcing a minimum coverage threshold after trends stabilize.
+
+## 2025-12-01 - Task 14: Wear emulator CI job
+- Added Wear connected tests job in `.github/workflows/android.yml` using `ReactiveCircus/android-emulator-runner@v2` with Wear OS API 34 `google_apis` x86_64 small round profile, headless GPU/no-audio flags, and animations disabled; the job depends on the build job and reuses Gradle cache setup.
+- Artifact capture configured to upload `app/build/outputs/androidTest-results/**`, `app/build/reports/androidTests/connected/**`, and `app/build/outputs/connected_android_test_additional_output/**` so instrumentation logs/screenshots surface in PR runs.
+- Commands: `npx --yes markdownlint-cli "**/*.md"` (2025-12-01) after edits; `connectedDebugAndroidTest` not run locally due to Wear emulator requirements—execution delegated to the CI job added here.
+- Follow-ups: monitor CI duration/flakiness; increase emulator RAM/timeouts or pre-download the system image if start-up stalls, and consider adding Paparazzi verification to the PR workflow if golden drift is observed.
