@@ -78,4 +78,10 @@
   - Feature scope in `docs/product/feature_scope.md` (P0/P1 features, integrations, deferred items, risks).
   - Account/secret access in `docs/ops/account_access.md` (roles, Play App Signing, keystore/secret needs).
   - Validation plan in `docs/qa/validation_plan.md` (device matrix outline, scenarios, acceptance, perf/accessibility).
-- Branch protection: awaiting placement of `docs/project/screenshots/branch-protection-main.png`; current ruleset “Sneal Rules” targets `main`, bypass empty; restrict deletions/block force pushes enabled; all other checks/PR requirements off. Pending tighten-up to require PR + checks (spotlessCheck, detekt, lint, testDebugUnitTest, connectedDebugAndroidTest) with up-to-date enforcement.
+- Branch protection: awaiting placement of `docs/project/screenshots/branch-protection-main.png`; current ruleset "Sneal Rules" targets `main`, bypass empty; restrict deletions/block force pushes enabled; all other checks/PR requirements off. Pending tighten-up to require PR + checks (spotlessCheck, detekt, lint, testDebugUnitTest, connectedDebugAndroidTest) with up-to-date enforcement.
+
+## 2025-12-01 - Task 11: Battery/performance audit
+- Completed battery/performance review against Google Optimize watch faces guidance; evidence in `docs/qa/battery-checklist.md`.
+- Findings: `INTERACTIVE_FRAME_MS = 16` (~60 fps) despite static render; ambient path dims colors and stops animation but still renders complications with anti-aliasing on; WFF ambient scene hides complications while Kotlin renderer keeps them visible; no phone/Data Layer sync and complication cadence follows system providers.
+- Actions queued: throttle interactive tick to ≥1000 ms or animation-driven cadence; add ambient guards (skip complications, disable AA for low-bit/burn-in); align WFF + Kotlin ambient outputs; document refresh SLAs when adding heart-rate/phone battery providers.
+- Markdown lint: `npx markdownlint "**/*.md"` (2025-12-01) run for this task; see `docs/qa/battery-checklist-markdownlint.txt` (expected legacy long-line/bare-URL hits remain).

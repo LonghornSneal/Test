@@ -206,7 +206,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
       * Updated `docs/perf/baselineprofile.md` summarizing the module structure, Macrobenchmark coverage, and profile storage path.
     - **Fail?:** Verify profile merging per Compose/Wear guidance.
 
-11. **[ ] Prompt:** _"Complete the battery and performance guideline audit for the watch face."_
+11. **[x] Prompt:** _"Complete the battery and performance guideline audit for the watch face."_ _(Completed: audit logged in docs/qa/battery-checklist.md with action items (2025-12-01 01:18 UTC))_
     - **Purpose:** Enforce Google’s watch face power best practices.
     - **Steps:**
       * Audit animation cadence, complication update frequency, and phone interactions against **Optimize watch faces** guide.
