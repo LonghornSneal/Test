@@ -226,7 +226,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
     - **Artifacts:** Lint/Detekt reports as build artifacts.
     - **Fail?:** Fix build/lint errors.
 
-13. **[ ] Prompt:** _"Extend CI to execute the unit test suite and surface the results."_
+13. **[x] Prompt:** _"Extend CI to execute the unit test suite and surface the results."_ _(Completed: PR workflow runs testDebugUnitTest with artifacts and PR coverage comment (2025-12-01 11:50 UTC))_
     - **Purpose:** Enforce correctness gates.
     - **Steps:**
       * Extend workflow to run `./gradlew testDebugUnitTest` and publish reports.

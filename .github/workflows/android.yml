@@ -8,6 +8,7 @@ jobs:
     permissions:
       contents: read
       security-events: write
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -27,6 +28,9 @@ jobs:
 
       - name: Lint, static analysis, and assemble
         run: ./gradlew --stacktrace spotlessCheck detekt lint assembleDebug
+
+      - name: Run unit tests
+        run: ./gradlew --stacktrace testDebugUnitTest jacocoTestDebugUnitTestReport
 
       - name: Upload lint reports
         if: always()
@@ -58,6 +62,35 @@ jobs:
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: app/build/reports
+
+      - name: Upload unit test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-reports
+          path: |
+            app/build/reports/tests/testDebugUnitTest/**
+            app/build/test-results/testDebugUnitTest/**
+          if-no-files-found: ignore
+
+      - name: Upload coverage reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-coverage
+          path: |
+            app/build/reports/jacoco/jacocoTestDebugUnitTestReport/**
+          if-no-files-found: ignore
+
+      - name: Comment unit test coverage on PR
+        if: success() && github.event_name == 'pull_request'
+        uses: madrapps/jacoco-report@v1.6.1
+        with:
+          paths: app/build/reports/jacoco/jacocoTestDebugUnitTestReport/jacocoTestDebugUnitTestReport.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: Unit Test Coverage
+          minimum-coverage: 0
+          update-comment: true
 
   androidTest:
     needs: build

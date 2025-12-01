@@ -104,3 +104,10 @@
 - Updated `.github/workflows/android.yml` PR job to run `./gradlew spotlessCheck detekt lint assembleDebug` with Gradle cache + Android SDK setup, upload lint/detekt reports as artifacts, and push SARIF from lint/detekt to code scanning.
 - Enabled SARIF outputs via `build.gradle.kts` (Detekt reports) and `app/build.gradle.kts` (lint reports) to support the workflow uploads.
 - Resolved lint blockers so the CI command succeeds locally (Temurin 17): removed the redundant `tools:targetApi` on `<profileable>` and annotated `res/raw/watchface.xml` with `tools:ignore="UnusedResources"` because the WFF file remains as a design reference.
+
+## 2025-12-01 - Task 13: PR unit test + coverage gate
+- Extended `.github/workflows/android.yml` build job with `./gradlew --stacktrace testDebugUnitTest jacocoTestDebugUnitTestReport`, artifact uploads for JUnit (`unit-test-reports`) and Jacoco (`jacoco-coverage`), and a PR coverage comment via `madrapps/jacoco-report@v1.6.1` (added `pull-requests: write` permission).
+- Coverage comment reads `app/build/reports/jacoco/jacocoTestDebugUnitTestReport/jacocoTestDebugUnitTestReport.xml`; lint/detekt SARIF uploads remain unchanged.
+- Local verification: `JAVA_HOME=C:/Users/HhsJa/.jdks/temurin-17/jdk-17.0.17+10 ./gradlew testDebugUnitTest jacocoTestDebugUnitTestReport` succeeded; warnings persist for the baseline profile plugin (tested up to AGP 8.3.0) and deprecated `userStyleSettings` getter in tests.
+- Markdown lint: `npx --yes markdownlint-cli "**/*.md"` (2025-12-01) exited 0; log at `docs/qa/markdownlint/task13-markdownlint.log`.
+- Follow-ups: bump the baseline profile plugin when a compatible release lands for AGP 8.5.x; consider enforcing a minimum coverage threshold after trends stabilize.
