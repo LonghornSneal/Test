@@ -43,7 +43,9 @@ internal class FakeSurfaceHolder(
     override fun unlockCanvasAndPost(canvas: Canvas?) = Unit
 
     override fun getSurface(): android.view.Surface =
-        throw UnsupportedOperationException("Surface not available in tests")
+        throw UnsupportedOperationException(
+            "Surface not available in tests",
+        )
 
     override fun getSurfaceFrame(): Rect = frame
 }

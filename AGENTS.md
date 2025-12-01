@@ -218,7 +218,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 
 ### Phase 4 — CI Foundation (GitHub Actions)
 
-12. **[ ] Prompt:** _"Wire the PR build and lint workflow in GitHub Actions."_
+12. **[x] Prompt:** _"Wire the PR build and lint workflow in GitHub Actions."_ _(Completed: android.yml runs spotlessCheck/detekt/lint/assembleDebug with caches, SARIF uploads, and report artifacts (2025-12-01 11:33 UTC))_
     - **Purpose:** Automatic checks on PR.
     - **Steps:**
       * Ensure `.github/workflows/android.yml` runs `./gradlew spotlessCheck detekt lint assembleDebug` with cached Gradle and Android SDK setup.

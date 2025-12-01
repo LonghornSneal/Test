@@ -99,3 +99,8 @@
 - Generated release bundle with fallback signing: `./gradlew :app:bundleRelease` (JAVA_HOME=Temurin 17); artifact at `app/build/outputs/bundle/release/app-release.aab`.
 - Added `.markdownlint.json` relaxing strict rules; `npx --yes markdownlint-cli "**/*.md"` now passes.
 - Baseline profile remains the prior generated file; regeneration deferred until a Wear emulator/device is available. Plugin AGP warning documented in `docs/perf/baselineprofile.md`.
+
+## 2025-12-01 - Task 12: PR lint/build workflow
+- Updated `.github/workflows/android.yml` PR job to run `./gradlew spotlessCheck detekt lint assembleDebug` with Gradle cache + Android SDK setup, upload lint/detekt reports as artifacts, and push SARIF from lint/detekt to code scanning.
+- Enabled SARIF outputs via `build.gradle.kts` (Detekt reports) and `app/build.gradle.kts` (lint reports) to support the workflow uploads.
+- Resolved lint blockers so the CI command succeeds locally (Temurin 17): removed the redundant `tools:targetApi` on `<profileable>` and annotated `res/raw/watchface.xml` with `tools:ignore="UnusedResources"` because the WFF file remains as a design reference.

@@ -1,6 +1,6 @@
-import java.util.Base64
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
 import org.gradle.testing.jacoco.tasks.JacocoReport
+import java.util.Base64
 
 plugins {
     id("com.android.application")
@@ -100,6 +100,9 @@ android {
         warningsAsErrors = true
         abortOnError = true
         checkReleaseBuilds = true
+        sarifReport = true
+        htmlReport = true
+        xmlReport = true
         disable += setOf("GradleDependency")
     }
 }
@@ -148,9 +151,10 @@ tasks.register<JacocoReport>("jacocoTestDebugUnitTestReport") {
         xml.required.set(true)
         html.required.set(true)
     }
-    val debugTree = fileTree("${buildDir}/tmp/kotlin-classes/debug") {
-        exclude("**/R.class", "**/R$*.class", "**/BuildConfig.*", "**/Manifest*.*", "**/androidx/**")
-    }
+    val debugTree =
+        fileTree("$buildDir/tmp/kotlin-classes/debug") {
+            exclude("**/R.class", "**/R$*.class", "**/BuildConfig.*", "**/Manifest*.*", "**/androidx/**")
+        }
     classDirectories.setFrom(debugTree)
     sourceDirectories.setFrom(files("src/main/java"))
     executionData.setFrom(

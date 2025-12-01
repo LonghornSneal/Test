@@ -2,7 +2,6 @@ package com.cosmobond.watchface
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
-import androidx.wear.watchface.complications.SystemDataSources
 import androidx.wear.watchface.complications.data.ComplicationType
 import androidx.wear.watchface.style.CurrentUserStyleRepository
 import org.junit.Assert.assertEquals

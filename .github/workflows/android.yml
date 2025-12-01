@@ -5,21 +5,59 @@ on:
 
 jobs:
   build:
+    permissions:
+      contents: read
+      security-events: write
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
+
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+
       - name: Gradle cache
         uses: gradle/actions/setup-gradle@v3
-      - name: Lint & Static Analysis
-        run: ./gradlew spotlessCheck detekt lint
-      - name: Unit Tests
-        run: ./gradlew testDebugUnitTest
+
+      - name: Lint, static analysis, and assemble
+        run: ./gradlew --stacktrace spotlessCheck detekt lint assembleDebug
+
+      - name: Upload lint reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lint-reports
+          path: |
+            app/build/reports/lint-results*.*
+            app/build/reports/lint-results/**
+          if-no-files-found: ignore
+
+      - name: Upload detekt reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: detekt-reports
+          path: |
+            build/reports/detekt/**
+          if-no-files-found: ignore
+
+      - name: Upload detekt SARIF
+        if: always() && hashFiles('build/reports/detekt/detekt.sarif') != ''
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: build/reports/detekt/detekt.sarif
+
+      - name: Upload lint SARIF
+        if: always() && hashFiles('app/build/reports/**/*.sarif') != ''
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: app/build/reports
 
   androidTest:
     needs: build

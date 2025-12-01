@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<WatchFaceFormat version="2.0">
+<WatchFaceFormat
+    xmlns:tools="http://schemas.android.com/tools"
+    version="2.0"
+    tools:ignore="UnusedResources">
     <Metadata>
         <Name>CosmoBond Watchface</Name>
         <Author>CosmoBond</Author>

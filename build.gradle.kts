@@ -1,3 +1,5 @@
+import io.gitlab.arturbosch.detekt.Detekt
+
 plugins {
     id("com.android.application") version "8.5.2" apply false
     kotlin("android") version "1.9.24" apply false
@@ -31,4 +33,13 @@ detekt {
     allRules = false
     config.setFrom(files("config/detekt/detekt.yml"))
     source.setFrom(files("app/src/main/java", "app/src/test/java"))
+}
+
+tasks.withType<Detekt>().configureEach {
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        txt.required.set(false)
+        sarif.required.set(true)
+    }
 }

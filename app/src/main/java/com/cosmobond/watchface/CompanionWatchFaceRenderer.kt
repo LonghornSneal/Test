@@ -44,7 +44,7 @@ internal class CompanionWatchFaceRenderer(
     private val currentUserStyleRepository: CurrentUserStyleRepository,
     private val watchState: WatchState,
     private val complicationSlotsManager: ComplicationSlotsManager,
-    ) : Renderer.CanvasRenderer(
+) : Renderer.CanvasRenderer(
         surfaceHolder,
         currentUserStyleRepository,
         watchState,

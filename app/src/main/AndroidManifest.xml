@@ -10,8 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true">
         <profileable
-            android:shell="true"
-            tools:targetApi="33" />
+            android:shell="true" />
         <activity
             android:name=".ConfigActivity"
             android:exported="false" />
