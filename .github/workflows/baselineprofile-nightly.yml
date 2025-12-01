@@ -1,0 +1,73 @@
+name: Nightly Baseline Profile
+
+on:
+  schedule:
+    - cron: "0 7 * * *"
+  workflow_dispatch:
+
+concurrency: baselineprofile-nightly
+
+jobs:
+  baseline-profile:
+    name: Generate baseline profile
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Gradle cache
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Generate baseline profile (Wear emulator)
+        uses: ReactiveCircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          profile: wear-os-small-round
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
+          disable-animations: true
+          script: |
+            ./gradlew --stacktrace :baselineprofile:generateBaselineProfile
+
+      - name: Collect baseline profile artifacts
+        if: always()
+        run: |
+          mkdir -p artifacts/baselineprofile
+          python - <<'PY'
+import shutil
+from pathlib import Path
+
+dest = Path("artifacts/baselineprofile")
+dest.mkdir(parents=True, exist_ok=True)
+
+sources = list(Path("app").rglob("baseline-prof.txt")) + list(Path("baselineprofile").rglob("baseline-prof.txt"))
+for src in sources:
+    target = dest / src
+    target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(src, target)
+
+macro = Path("baselineprofile/build/outputs/macrobenchmark")
+if macro.exists():
+    shutil.copytree(macro, dest / "macrobenchmark", dirs_exist_ok=True)
+PY
+
+      - name: Upload baseline profile artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: baselineprofile-nightly-${{ github.run_id }}
+          path: artifacts/baselineprofile
+          if-no-files-found: error

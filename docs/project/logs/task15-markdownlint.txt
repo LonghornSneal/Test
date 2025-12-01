@@ -1,0 +1,6 @@
+npx markdownlint "**/*.md"
+npm error could not determine executable to run
+npm error A complete log of this run can be found in: C:\Users\HhsJa\AppData\Local\npm-cache\_logs\2025-12-01T13_01_09_716Z-debug-0.log
+
+npx --yes markdownlint-cli "**/*.md"
+exit code: 0 (no markdownlint findings with current config)

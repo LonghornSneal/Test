@@ -242,7 +242,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
     - **Artifacts:** Instrumentation logs, screenshots.
     - **Fail?:** Bump RAM/timeouts; pre-download system images; retry.
 
-15. **[ ] Prompt:** _"Schedule the nightly Macrobenchmark workflow to capture baseline profiles."_
+15. **[x] Prompt:** _"Schedule the nightly Macrobenchmark workflow to capture baseline profiles."_ _(Completed: nightly baseline profile workflow + Gradle alias added (2025-12-01 13:03 UTC))_
     - **Purpose:** Generate baseline profile in CI nightly.
     - **Steps:**
       * Nightly workflow triggers `./gradlew :baselineprofile:generateBaselineProfile` then commits the asset as an artifact (not auto-commit).
