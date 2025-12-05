@@ -302,7 +302,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 
 ### Phase 6 — Feature Completeness for Watch Face
 
-21. **[ ] Prompt:** _"Implement the complication slots and schema within the Watch Face Format layout."_
+21. **[x] Prompt:** _"Implement the complication slots and schema within the Watch Face Format layout."_ _(Completed: Kotlin Canvas renderer configured with 4 standard slots and ComplicationDrawable rendering (2025-12-04 13:00 UTC))_
     - **Purpose:** Add standard complications (steps, heart rate, battery).
     - **Steps:**
       * **Watch Face Format track:** Define slots and bounds in WFF; for phone battery or advanced data, consider a small provider app.

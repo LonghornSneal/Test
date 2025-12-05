@@ -2,6 +2,7 @@ package com.cosmobond.watchface
 
 import android.content.Context
 import android.graphics.RectF
+import androidx.wear.watchface.CanvasComplicationFactory
 import androidx.wear.watchface.ComplicationSlot
 import androidx.wear.watchface.ComplicationSlotsManager
 import androidx.wear.watchface.complications.ComplicationSlotBounds
@@ -35,7 +36,7 @@ object CompanionComplicationSlots {
         currentUserStyleRepository: CurrentUserStyleRepository,
     ): ComplicationSlotsManager {
         // Factory to create standard ComplicationDrawables that know how to render themselves
-        val drawableFactory = { watchState: androidx.wear.watchface.WatchState, listener: androidx.wear.watchface.CanvasComplication.InvalidateListener ->
+        val drawableFactory = CanvasComplicationFactory { watchState, listener ->
             val drawable = ComplicationDrawable(context)
             CanvasComplicationDrawable(drawable, watchState, listener)
         }
