@@ -1,7 +1,9 @@
 package com.cosmobond.watchface
 
 import android.view.SurfaceHolder
+import androidx.wear.watchface.ComplicationSlot
 import androidx.wear.watchface.ComplicationSlotsManager
+import androidx.wear.watchface.TapType
 import androidx.wear.watchface.WatchFace
 import androidx.wear.watchface.WatchFaceService
 import androidx.wear.watchface.WatchFaceType
@@ -31,6 +33,18 @@ class CosmoBondWatchFaceService : WatchFaceService() {
         return WatchFace(
             WatchFaceType.DIGITAL,
             renderer,
+        ).setTapListener(
+            object : WatchFace.TapListener {
+                override fun onTapEvent(
+                    tapType: Int,
+                    tapEvent: androidx.wear.watchface.TapEvent,
+                    complicationSlot: ComplicationSlot?,
+                ) {
+                    if (tapType == TapType.UP) {
+                        renderer.handleTap(tapEvent)
+                    }
+                }
+            },
         )
     }
 }

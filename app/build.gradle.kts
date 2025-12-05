@@ -13,6 +13,7 @@ plugins {
 android {
     namespace = "com.cosmobond.watchface"
     compileSdk = 34
+    buildToolsVersion = "35.0.0"
 
     signingConfigs {
         create("release") {

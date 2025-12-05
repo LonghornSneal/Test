@@ -30,6 +30,16 @@ class WatchFaceScreenshotTest {
     }
 
     @Test
+    fun snapshotInteractiveOverlay() {
+        val renderer =
+            rendererFor(
+                paletteOptionId = CompanionUserStyle.cosmicBlueOptionId,
+                drawMode = DrawMode.INTERACTIVE,
+            ) { it.debugForceGameState(GameState.Playing, streak = 6, misses = 1, cue = BeatChaseCue.Hit) }
+        snapshotRenderer(renderer, "watchface_interactive_overlay")
+    }
+
+    @Test
     fun snapshotInteractiveStarlight() {
         val renderer = rendererFor(paletteOptionId = CompanionUserStyle.starlightOptionId, drawMode = DrawMode.INTERACTIVE)
         snapshotRenderer(renderer, "watchface_interactive_starlight")
@@ -44,6 +54,7 @@ class WatchFaceScreenshotTest {
     private fun rendererFor(
         paletteOptionId: UserStyleSetting.Option.Id,
         drawMode: DrawMode,
+        configure: (CompanionWatchFaceRenderer) -> Unit = {},
     ): CompanionWatchFaceRenderer {
         val repository = CurrentUserStyleRepository(schema)
         applyPalette(repository, paletteOptionId)
@@ -58,6 +69,7 @@ class WatchFaceScreenshotTest {
                 complicationSlotsManager = slotsManager,
             )
         // renderer.renderParameters = renderParametersFor(drawMode) // Commented out due to access visibility issue
+        configure(renderer)
         return renderer
     }
 
