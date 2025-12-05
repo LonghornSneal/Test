@@ -3,6 +3,8 @@
     <string name="app_name">CosmoBond Watchface</string>
     <string name="complication_left_name">Left complication</string>
     <string name="complication_right_name">Right complication</string>
+    <string name="complication_top_name">Top complication</string>
+    <string name="complication_bottom_name">Bottom complication</string>
     <string name="user_style_palette">Accent palette</string>
     <string name="user_style_palette_description">Choose the accent color for the CosmoBond face.</string>
     <string name="palette_cosmic_blue">Cosmic blue</string>

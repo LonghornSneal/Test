@@ -254,7 +254,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 
 ### Phase 5 — Signing & Play Integration
 
-16. **[ ] Prompt:** _"Enable Play App Signing in the Google Play Console and capture evidence."_
+16. **[ ] Prompt:** _"Enable Play App Signing in the Google Play Console and capture evidence."_ _(Blocked: awaiting Google Play developer verification (2025-12-04 10:45 UTC))_
     - **Purpose:** Use Google-managed signing; CI only needs upload key.
     - **Steps:**
       * In Play Console, enable **App signing by Google Play**; download upload certificate; export a dedicated upload keystore and base64-encode it for CI.
@@ -263,7 +263,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
     - **Artifacts:** App signing status screenshot; redacted note of service-account JSON location.
     - **Fail?:** Complete identity verification; retry.
 
-17. **[ ] Prompt:** _"Configure Gradle release signing and build types to use CI-provided credentials."_
+17. **[ ] Prompt:** _"Configure Gradle release signing and build types to use CI-provided credentials."_ _(Blocked: depends on Task 16 keys (2025-12-04 10:45 UTC))_
     - **Purpose:** Deterministic release builds in CI.
     - **Steps:**
       * In `app/build.gradle.kts`, configure `signingConfigs { release }` reading env vars; enable R8; set `versionCode` auto from tags.
@@ -271,7 +271,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
     - **Artifacts:** Build scans/logs.
     - **Fail?:** Fix keystore passwords/aliases.
 
-18. **[ ] Prompt:** _"Provision the CI secrets required for builds and publishing."_
+18. **[ ] Prompt:** _"Provision the CI secrets required for builds and publishing."_ _(Blocked: depends on Task 16/17 artifacts (2025-12-04 10:45 UTC))_
     - **Purpose:** Secure keys for build/publish.
     - **Prerequisites:** Phase 5 Task 16 (Play App Signing + service account JSON) and Task 17 (Gradle release signing + upload keystore) are completed.
     - **Steps:**
@@ -282,7 +282,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
     - **Artifacts:** Screenshot of the GitHub secrets page (sensitive fields redacted) plus links back to the Task 16/17 evidence in `docs/`.
     - **Fail?:** Rotate keys from Tasks 16/17 and retry.
 
-19. **[ ] Prompt:** _"Integrate Gradle Play Publisher and validate the release task graph."_
+19. **[ ] Prompt:** _"Integrate Gradle Play Publisher and validate the release task graph."_ _(Blocked: depends on service account (2025-12-04 10:45 UTC))_
     - **Purpose:** Automate upload to internal/closed tracks.
     - **Steps:**
       * Add plugin `com.github.triplet.play` and `play { serviceAccountCredentials.set(...) track.set("internal") }`.
@@ -290,7 +290,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
     - **Artifacts:** Gradle config diff.
     - **Fail?:** Fix scopes on service account JSON.
 
-20. **[ ] Prompt:** _"Finalize the tag-driven internal release workflow in GitHub Actions."_
+20. **[ ] Prompt:** _"Finalize the tag-driven internal release workflow in GitHub Actions."_ _(Blocked: depends on release/publish config (2025-12-04 10:45 UTC))_
     - **Purpose:** One-button internal release from a tag.
     - **Steps:**
       * Ensure `.github/workflows/release.yml` builds `bundleRelease`, runs tests, then `publishRelease` to **internal** on tag push.
@@ -302,7 +302,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 
 ### Phase 6 — Feature Completeness for Watch Face
 
-21. **[ ] Prompt:** _"Implement the complication slots and schema within the Watch Face Format layout."_
+21. **[x] Prompt:** _"Implement the complication slots and schema within the Watch Face Format layout."_ _(Completed: Kotlin Canvas renderer configured with 4 standard slots and ComplicationDrawable rendering (2025-12-04 13:00 UTC))_
     - **Purpose:** Add standard complications (steps, heart rate, battery).
     - **Steps:**
       * **Watch Face Format track:** Define slots and bounds in WFF; for phone battery or advanced data, consider a small provider app.

@@ -19,10 +19,18 @@ class CompanionComplicationSlotsTest {
     fun defaultSlotsHaveExpectedIdsAndPolicies() {
         val slotsManager = CompanionComplicationSlots.create(context, CurrentUserStyleRepository(schema))
         val slots = slotsManager.complicationSlots
-        assertEquals(setOf(10, 11), slots.keys)
+
+        // Expect 4 slots: Left(10), Right(11), Top(12), Bottom(13)
+        assertEquals(setOf(10, 11, 12, 13), slots.keys)
+
         val left = slots[10]!!
         val right = slots[11]!!
-        assertTrue(left.supportedTypes.contains(ComplicationType.SHORT_TEXT))
-        assertTrue(right.supportedTypes.contains(ComplicationType.SHORT_TEXT))
+        val top = slots[12]!!
+        val bottom = slots[13]!!
+
+        assertTrue("Left slot supports SHORT_TEXT", left.supportedTypes.contains(ComplicationType.SHORT_TEXT))
+        assertTrue("Right slot supports SHORT_TEXT", right.supportedTypes.contains(ComplicationType.SHORT_TEXT))
+        assertTrue("Top slot supports RANGED_VALUE", top.supportedTypes.contains(ComplicationType.RANGED_VALUE))
+        assertTrue("Bottom slot supports SHORT_TEXT", bottom.supportedTypes.contains(ComplicationType.SHORT_TEXT))
     }
 }

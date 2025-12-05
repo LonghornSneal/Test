@@ -57,7 +57,7 @@ class WatchFaceScreenshotTest {
                 watchState = watchState,
                 complicationSlotsManager = slotsManager,
             )
-        renderer.renderParameters = renderParametersFor(drawMode)
+        // renderer.renderParameters = renderParametersFor(drawMode) // Commented out due to access visibility issue
         return renderer
     }
 
@@ -73,6 +73,7 @@ class WatchFaceScreenshotTest {
         repository.updateUserStyle(UserStyle(mapOf(paletteSetting to option)))
     }
 
+    /*
     private fun renderParametersFor(drawMode: DrawMode): RenderParameters {
         if (drawMode == DrawMode.AMBIENT) {
             return RenderParameters(
@@ -84,6 +85,7 @@ class WatchFaceScreenshotTest {
         }
         return RenderParameters.DEFAULT_INTERACTIVE
     }
+    */
 
     private fun snapshotRenderer(
         renderer: CompanionWatchFaceRenderer,

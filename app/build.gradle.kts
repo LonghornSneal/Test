@@ -61,7 +61,7 @@ android {
 
     defaultConfig {
         applicationId = "com.cosmobond.watchface"
-        minSdk = 34
+        minSdk = 30 // Lowered to ensure compatibility across more Wear OS versions
         targetSdk = 34
         versionCode = 1
         versionName = "0.1.0"
@@ -129,6 +129,7 @@ dependencies {
     implementation("androidx.wear.watchface:watchface-client:1.2.1")
     implementation("androidx.wear.watchface:watchface-style:1.2.1")
     implementation("androidx.wear.watchface:watchface-complications:1.2.1")
+    implementation("androidx.wear.watchface:watchface-complications-rendering:1.2.1")
     implementation("androidx.profileinstaller:profileinstaller:1.3.1")
 
     testImplementation("app.cash.paparazzi:paparazzi:1.3.4")

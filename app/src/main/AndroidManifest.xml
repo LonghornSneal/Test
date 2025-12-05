@@ -15,6 +15,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true">
+
+        <meta-data
+            android:name="com.google.android.wearable.standalone"
+            android:value="true" />
+
         <profileable
             android:shell="true" />
         <activity
@@ -23,13 +28,18 @@
         <service
             android:name=".CosmoBondWatchFaceService"
             android:exported="true"
+            android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
-            android:permission="com.google.android.wearable.permission.BIND_WATCH_FACE">
+            android:permission="android.permission.BIND_WALLPAPER">
             <intent-filter>
-                <action android:name="androidx.wear.watchface.category.WATCH_FACE" />
+                <action android:name="android.service.wallpaper.WallpaperService" />
+                <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE" />
             </intent-filter>
             <meta-data
-                android:name="androidx.wear.watchface.preview"
+                android:name="com.google.android.wearable.watchface.preview"
+                android:resource="@drawable/watchface_preview" />
+            <meta-data
+                android:name="com.google.android.wearable.watchface.preview_circular"
                 android:resource="@drawable/watchface_preview" />
             <meta-data
                 android:name="androidx.wear.watchface.preview_circular"
