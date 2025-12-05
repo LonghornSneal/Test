@@ -2,6 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Ensure the Play Store and the device treat this as a watch-first app. -->
+    <uses-feature
+        android:name="android.hardware.type.watch"
+        android:required="true" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <application
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -24,6 +30,9 @@
             </intent-filter>
             <meta-data
                 android:name="androidx.wear.watchface.preview"
+                android:resource="@drawable/watchface_preview" />
+            <meta-data
+                android:name="androidx.wear.watchface.preview_circular"
                 android:resource="@drawable/watchface_preview" />
         </service>
     </application>
