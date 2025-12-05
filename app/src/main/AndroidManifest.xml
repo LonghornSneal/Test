@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature android:name="android.hardware.type.watch" />
+
     <application
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -18,13 +20,20 @@
             android:name=".CosmoBondWatchFaceService"
             android:exported="true"
             android:label="@string/app_name"
-            android:permission="com.google.android.wearable.permission.BIND_WATCH_FACE">
+            android:permission="android.permission.BIND_WALLPAPER">
             <intent-filter>
-                <action android:name="androidx.wear.watchface.category.WATCH_FACE" />
+                <action android:name="android.service.wallpaper.WallpaperService" />
+                <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE" />
             </intent-filter>
             <meta-data
-                android:name="androidx.wear.watchface.preview"
+                android:name="com.google.android.wearable.watchface.preview"
                 android:resource="@drawable/watchface_preview" />
+            <meta-data
+                android:name="com.google.android.wearable.watchface.preview_circular"
+                android:resource="@drawable/watchface_preview" />
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/watch_face_config" />
         </service>
     </application>
 
