@@ -5,12 +5,36 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
     <path
-        android:fillColor="#2F4F8F"
-        android:pathData="M54,14a40,40 0 1 1 0,80a40,40 0 1 1 0,-80z" />
+        android:fillColor="#0A0D18"
+        android:pathData="M8,8h92v92h-92z" />
+    <!-- BeatBunny ears -->
+    <path
+        android:fillColor="#F5E5B9"
+        android:pathData="M36,14c-5,0 -8,4 -8,9v24h14v-24c0,-5 -3,-9 -6,-9z" />
+    <path
+        android:fillColor="#F5E5B9"
+        android:pathData="M72,14c-5,0 -8,4 -8,9v24h14v-24c0,-5 -3,-9 -6,-9z" />
+    <!-- Head -->
     <path
         android:fillColor="#A6B6FF"
-        android:pathData="M54,30a24,24 0 1 1 0,48a24,24 0 1 1 0,-48z" />
+        android:pathData="M54,34c-17,0 -30,13 -30,30s13,30 30,30 30,-13 30,-30 -13,-30 -30,-30z" />
+    <!-- Face mask -->
     <path
         android:fillColor="#0A0D18"
-        android:pathData="M54,38a16,16 0 1 1 0,32a16,16 0 1 1 0,-32z" />
+        android:pathData="M54,44c-11,0 -20,9 -20,20s9,20 20,20 20,-9 20,-20 -9,-20 -20,-20z" />
+    <!-- Eyes -->
+    <path
+        android:fillColor="#F5E5B9"
+        android:pathData="M44,56a4,4 0 1 1 0,8a4,4 0 1 1 0,-8z" />
+    <path
+        android:fillColor="#F5E5B9"
+        android:pathData="M64,56a4,4 0 1 1 0,8a4,4 0 1 1 0,-8z" />
+    <!-- Nose -->
+    <path
+        android:fillColor="#FF6B6B"
+        android:pathData="M54,66l4,6h-8z" />
+    <!-- Accent ring -->
+    <path
+        android:fillColor="#2F4F8F"
+        android:pathData="M54,26c-21,0 -38,17 -38,38 0,6 1,11 3,16l8,-4c-2,-4 -3,-8 -3,-12 0,-16 13,-29 30,-29 10,0 19,5 24,12l7,-6c-7,-9 -18,-15 -31,-15z" />
 </vector>

@@ -21,17 +21,10 @@
         android:paddingBottom="12dp" />
 
     <Button
-        android:id="@+id/open_picker_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/set_watch_face_open_picker" />
-
-    <Button
         android:id="@+id/open_pet_setup_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/set_watch_face_pet_setup"
-        android:layout_marginTop="12dp" />
+        android:text="@string/set_watch_face_pet_setup" />
 
     <Button
         android:id="@+id/open_config_button"

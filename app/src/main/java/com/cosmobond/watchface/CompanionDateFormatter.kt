@@ -4,7 +4,16 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 internal object CompanionDateFormatter {
-    private val formatter = DateTimeFormatter.ofPattern("MMM d")
-
-    fun formatDate(time: ZonedDateTime): String = formatter.format(time)
+    fun formatDate(
+        time: ZonedDateTime,
+        formatVariant: DateFormatVariant,
+    ): String {
+        val formatter =
+            when (formatVariant) {
+                DateFormatVariant.LONG -> DateTimeFormatter.ofPattern("EEE, MMM d")
+                DateFormatVariant.NUMERIC -> DateTimeFormatter.ofPattern("MM/dd")
+                else -> DateTimeFormatter.ofPattern("MMM d")
+            }
+        return formatter.format(time)
+    }
 }

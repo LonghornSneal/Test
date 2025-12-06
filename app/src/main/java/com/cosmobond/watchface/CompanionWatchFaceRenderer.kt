@@ -87,6 +87,12 @@ internal class CompanionWatchFaceRenderer(
             textSize = 28f
             isAntiAlias = true
         }
+    private val musicPaint =
+        Paint().apply {
+            textAlign = Paint.Align.CENTER
+            textSize = 22f
+            isAntiAlias = true
+        }
 
     private val backgroundPaint =
         Paint().apply {
@@ -170,38 +176,64 @@ internal class CompanionWatchFaceRenderer(
                 renderParameters.drawMode,
             )
         datePaint.color = timePaint.color
+        musicPaint.color = timePaint.color
         val lowBit = watchState.hasLowBitAmbient || watchState.hasBurnInProtection
         timePaint.isAntiAlias = !(isAmbient && lowBit)
         datePaint.isAntiAlias = !(isAmbient && lowBit)
+        musicPaint.isAntiAlias = !(isAmbient && lowBit)
         timePaint.typeface =
-            when (layoutPreferences.fontVariant) {
+            when (layoutPreferences.timeFont) {
                 FontVariant.MONO -> Typeface.MONOSPACE
+                FontVariant.SERIF -> Typeface.SERIF
                 else -> Typeface.DEFAULT
             }
-        datePaint.typeface = timePaint.typeface
+        datePaint.typeface =
+            when (layoutPreferences.dateFont) {
+                FontVariant.MONO -> Typeface.MONOSPACE
+                FontVariant.SERIF -> Typeface.SERIF
+                else -> Typeface.DEFAULT
+            }
+        musicPaint.typeface = Typeface.SANS_SERIF
+        timePaint.textSize = layoutPreferences.timeTextSizeSp
+        datePaint.textSize = layoutPreferences.dateTextSizeSp
+        musicPaint.textSize = layoutPreferences.musicTextSizeSp
+        // Keep sizes reasonable in ambient
+        if (isAmbient) {
+            timePaint.textSize *= 0.9f
+            datePaint.textSize *= 0.9f
+            musicPaint.textSize *= 0.9f
+            }
 
         canvas.drawRect(bounds, backgroundPaint)
-        val timeYFraction =
-            when (layoutPreferences.timePosition) {
-                TimePosition.TOP -> 0.28f
-                TimePosition.BOTTOM -> 0.44f
-                else -> 0.34f
-            }
-        val timeY = bounds.top + bounds.height() * timeYFraction
+        val timePos = layoutPreferences.timePosition
+        val datePos = layoutPreferences.datePosition
+        val musicPos = layoutPreferences.musicPosition
+        val timeX = bounds.left + bounds.width() * timePos.x.coerceIn(0f, 1f)
+        val timeY = bounds.top + bounds.height() * timePos.y.coerceIn(0f, 1f)
         canvas.drawText(
-            CompanionTimeFormatter.formatTime(zonedDateTime),
-            bounds.exactCenterX(),
+            CompanionTimeFormatter.formatTime(
+                zonedDateTime,
+                layoutPreferences.showSeconds && !isAmbient,
+                layoutPreferences.use24Hour,
+            ),
+            timeX,
             timeY,
             timePaint,
         )
         if (layoutPreferences.showDate) {
-            val dateY = bounds.top + bounds.height() * (timeYFraction + 0.09f)
+            val dateX = bounds.left + bounds.width() * datePos.x.coerceIn(0f, 1f)
+            val dateY = bounds.top + bounds.height() * datePos.y.coerceIn(0f, 1f)
             canvas.drawText(
-                CompanionDateFormatter.formatDate(zonedDateTime),
-                bounds.exactCenterX(),
+                CompanionDateFormatter.formatDate(zonedDateTime, layoutPreferences.dateFormat),
+                dateX,
                 dateY,
                 datePaint,
             )
+        }
+        if (!isAmbient) {
+            val musicX = bounds.left + bounds.width() * musicPos.x.coerceIn(0f, 1f)
+            val musicY = bounds.top + bounds.height() * musicPos.y.coerceIn(0f, 1f)
+            canvas.drawText("Spotify", musicX, musicY, musicPaint)
         }
 
         // Draw complications

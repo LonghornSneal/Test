@@ -16,6 +16,7 @@ class PetSelectActivity : Activity() {
         findViewById<Button>(R.id.select_pet_button).setOnClickListener {
             settingsRepository.setSelectedPet(CompanionSettingsRepository.DEFAULT_PET_ID)
             startActivity(Intent(this, LayoutSetupActivity::class.java))
+            finish()
         }
     }
 

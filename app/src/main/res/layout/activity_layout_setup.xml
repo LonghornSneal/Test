@@ -1,95 +1,198 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:orientation="vertical"
+    android:padding="12dp">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/layout_setup_title"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/layout_setup_hint"
+        android:paddingBottom="8dp" />
+
+    <FrameLayout
+        android:id="@+id/preview_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#111">
+
+        <VideoView
+            android:id="@+id/preview_video"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:keepScreenOn="true" />
+
+        <FrameLayout
+            android:id="@+id/overlay_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/time_preview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10:10"
+                android:textStyle="bold"
+                android:textSize="64sp"
+                android:textColor="#F5E5B9" />
+
+            <TextView
+                android:id="@+id/date_preview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Aug 5"
+                android:textSize="22sp"
+                android:textColor="#F5E5B9" />
+
+            <TextView
+                android:id="@+id/music_preview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/layout_setup_music_label"
+                android:textSize="20sp"
+                android:textColor="#A6B6FF" />
+
+            <LinearLayout
+                android:id="@+id/slot_overlay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:background="#66000000"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/layout_setup_slot_prompt"
+                    android:textColor="#FFFFFF"
+                    android:paddingBottom="8dp" />
+
+                <LinearLayout
+                    android:id="@+id/slot_buttons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </LinearLayout>
+        </FrameLayout>
+    </FrameLayout>
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/layout_setup_title"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textStyle="bold"
-            android:paddingBottom="8dp" />
-
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/layout_setup_hint"
-            android:paddingBottom="12dp" />
+            android:orientation="vertical"
+            android:paddingTop="8dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/layout_setup_time_position"
-            android:textStyle="bold" />
-
-        <RadioGroup
-            android:id="@+id/time_position_group"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <RadioButton
-                android:id="@+id/time_top"
+            <CheckBox
+                android:id="@+id/show_date_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/layout_setup_time_top" />
+                android:text="@string/layout_setup_show_date" />
 
-            <RadioButton
-                android:id="@+id/time_center"
+            <CheckBox
+                android:id="@+id/show_seconds_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/layout_setup_time_center" />
+                android:text="@string/layout_setup_show_seconds" />
 
-            <RadioButton
-                android:id="@+id/time_bottom"
+            <CheckBox
+                android:id="@+id/use_24_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/layout_setup_time_bottom" />
-        </RadioGroup>
+                android:text="@string/layout_setup_use_24" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/layout_setup_font"
-            android:textStyle="bold"
-            android:paddingTop="8dp" />
-
-        <RadioGroup
-            android:id="@+id/font_group"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <RadioButton
-                android:id="@+id/font_default"
-                android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/layout_setup_font_default" />
+                android:text="@string/layout_setup_time_font"
+                android:textStyle="bold"
+                android:paddingTop="8dp" />
 
-            <RadioButton
-                android:id="@+id/font_mono"
-                android:layout_width="wrap_content"
+            <Spinner
+                android:id="@+id/time_font_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/layout_setup_font_mono" />
-        </RadioGroup>
+                android:text="@string/layout_setup_date_font"
+                android:textStyle="bold"
+                android:paddingTop="8dp" />
 
-        <CheckBox
-            android:id="@+id/show_date_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/layout_setup_show_date"
-            android:paddingTop="8dp" />
+            <Spinner
+                android:id="@+id/date_font_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <Button
-            android:id="@+id/save_layout_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/layout_setup_save"
-            android:layout_marginTop="12dp" />
-    </LinearLayout>
-</ScrollView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/layout_setup_date_format"
+                android:textStyle="bold"
+                android:paddingTop="8dp" />
+
+            <Spinner
+                android:id="@+id/date_format_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/layout_setup_time_size"
+                android:paddingTop="8dp" />
+
+            <SeekBar
+                android:id="@+id/time_size_seek"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="80" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/layout_setup_date_size"
+                android:paddingTop="8dp" />
+
+            <SeekBar
+                android:id="@+id/date_size_seek"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="60" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/layout_setup_music_size"
+                android:paddingTop="8dp" />
+
+            <SeekBar
+                android:id="@+id/music_size_seek"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="60" />
+
+            <Button
+                android:id="@+id/save_layout_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/layout_setup_save"
+                android:layout_marginTop="12dp" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

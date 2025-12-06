@@ -16,7 +16,12 @@ internal class CompanionSettingsRepository(context: Context) {
     private val listeners = mutableSetOf<(CompanionSettings) -> Unit>()
     private val prefListener =
         SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-            if (key == KEY_REDUCED_MOTION || key == KEY_HAPTICS_ENABLED || key == KEY_MIC_PLACEHOLDER) {
+            if (
+                key == KEY_REDUCED_MOTION ||
+                    key == KEY_HAPTICS_ENABLED ||
+                    key == KEY_MIC_PLACEHOLDER ||
+                    key == KEY_SELECTED_PET
+            ) {
                 notifyListeners()
             }
         }
@@ -48,6 +53,8 @@ internal class CompanionSettingsRepository(context: Context) {
     fun setSelectedPet(petId: String) {
         prefs.edit().putString(KEY_SELECTED_PET, petId).apply()
     }
+
+    fun hasSelectedPet(): Boolean = prefs.contains(KEY_SELECTED_PET)
 
     fun addListener(listener: (CompanionSettings) -> Unit) {
         listeners += listener
