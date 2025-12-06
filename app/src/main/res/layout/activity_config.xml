@@ -90,5 +90,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/toggle_mic_desc" />
+
+        <Button
+            android:id="@+id/config_continue_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/config_continue"
+            android:layout_marginTop="16dp" />
     </LinearLayout>
 </ScrollView>

@@ -132,6 +132,8 @@ dependencies {
     implementation("androidx.wear.watchface:watchface-complications:1.2.1")
     implementation("androidx.wear.watchface:watchface-complications-rendering:1.2.1")
     implementation("androidx.profileinstaller:profileinstaller:1.3.1")
+    implementation("androidx.wear.tiles:tiles:1.3.0")
+    implementation("androidx.concurrent:concurrent-futures:1.1.0")
 
     testImplementation("app.cash.paparazzi:paparazzi:1.3.4")
     testImplementation("junit:junit:4.13.2")

@@ -1,8 +1,10 @@
 package com.cosmobond.watchface
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Switch
+import android.widget.Button
 
 class ConfigActivity : Activity() {
     private lateinit var settingsRepository: CompanionSettingsRepository
@@ -29,6 +31,10 @@ class ConfigActivity : Activity() {
         }
         mic.setOnCheckedChangeListener { _, isChecked ->
             settingsRepository.setMicToggle(isChecked)
+        }
+
+        findViewById<Button>(R.id.config_continue_button).setOnClickListener {
+            startActivity(Intent(this, PetSelectActivity::class.java))
         }
     }
 

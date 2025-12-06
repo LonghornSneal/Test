@@ -7,6 +7,7 @@ internal data class CompanionSettings(
     val reducedMotion: Boolean = false,
     val hapticsEnabled: Boolean = true,
     val micToggleEnabled: Boolean = false,
+    val selectedPet: String = CompanionSettingsRepository.DEFAULT_PET_ID,
 )
 
 internal class CompanionSettingsRepository(context: Context) {
@@ -29,6 +30,7 @@ internal class CompanionSettingsRepository(context: Context) {
             reducedMotion = prefs.getBoolean(KEY_REDUCED_MOTION, false),
             hapticsEnabled = prefs.getBoolean(KEY_HAPTICS_ENABLED, true),
             micToggleEnabled = prefs.getBoolean(KEY_MIC_PLACEHOLDER, false),
+            selectedPet = prefs.getString(KEY_SELECTED_PET, DEFAULT_PET_ID) ?: DEFAULT_PET_ID,
         )
 
     fun setReducedMotion(enabled: Boolean) {
@@ -41,6 +43,10 @@ internal class CompanionSettingsRepository(context: Context) {
 
     fun setMicToggle(enabled: Boolean) {
         prefs.edit().putBoolean(KEY_MIC_PLACEHOLDER, enabled).apply()
+    }
+
+    fun setSelectedPet(petId: String) {
+        prefs.edit().putString(KEY_SELECTED_PET, petId).apply()
     }
 
     fun addListener(listener: (CompanionSettings) -> Unit) {
@@ -66,5 +72,7 @@ internal class CompanionSettingsRepository(context: Context) {
         private const val KEY_REDUCED_MOTION = "reduced_motion"
         private const val KEY_HAPTICS_ENABLED = "haptics_enabled"
         private const val KEY_MIC_PLACEHOLDER = "mic_placeholder"
+        private const val KEY_SELECTED_PET = "selected_pet"
+        const val DEFAULT_PET_ID = "beatbunny"
     }
 }

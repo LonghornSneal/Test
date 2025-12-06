@@ -22,4 +22,25 @@
     <string name="toggle_haptics_desc">Tiny ticks on beat hits (disabled if reduced motion).</string>
     <string name="toggle_mic">Mic (planned)</string>
     <string name="toggle_mic_desc">Placeholder for a future consented mic path. Disabled in this build.</string>
+    <string name="config_continue">Continue</string>
+    <string name="set_watch_face_title">Set CosmoBond Watchface</string>
+    <string name="set_watch_face_desc">Use the buttons below to open the system watch-face picker or jump into setup.</string>
+    <string name="set_watch_face_open_picker">Open watch-face picker</string>
+    <string name="set_watch_face_pet_setup">Choose pet</string>
+    <string name="set_watch_face_open_config">Open settings</string>
+    <string name="pet_select_title">Choose your companion</string>
+    <string name="pet_select_beatbunny_name">BeatBunny</string>
+    <string name="pet_select_beatbunny_desc">Music-driven rabbit that dances on-beat. Currently the only available pet.</string>
+    <string name="pet_select_button">Use BeatBunny</string>
+    <string name="layout_setup_title">Layout &amp; style</string>
+    <string name="layout_setup_time_position">Time position</string>
+    <string name="layout_setup_time_top">Top</string>
+    <string name="layout_setup_time_center">Center</string>
+    <string name="layout_setup_time_bottom">Lower</string>
+    <string name="layout_setup_font">Font</string>
+    <string name="layout_setup_font_default">Default</string>
+    <string name="layout_setup_font_mono">Mono</string>
+    <string name="layout_setup_show_date">Show date</string>
+    <string name="layout_setup_save">Save &amp; launch</string>
+    <string name="layout_setup_hint">Customize time/date placement and font before setting the watch face.</string>
 </resources>

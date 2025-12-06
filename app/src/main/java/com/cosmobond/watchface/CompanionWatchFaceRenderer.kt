@@ -11,6 +11,7 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.view.SurfaceHolder
 import androidx.annotation.VisibleForTesting
+import android.graphics.Typeface
 import androidx.wear.watchface.CanvasType
 import androidx.wear.watchface.ComplicationSlotsManager
 import androidx.wear.watchface.DrawMode
@@ -50,6 +51,8 @@ internal class CompanionWatchFaceRenderer(
         ) {
             settings.hapticsEnabled && !settings.reducedMotion
         }
+    private val layoutPreferencesRepository = LayoutPreferencesRepository(context)
+    private var layoutPreferences = layoutPreferencesRepository.current()
     @VisibleForTesting internal val beatEngine =
         BeatChaseEngine(
             tempoSource,
@@ -76,6 +79,12 @@ internal class CompanionWatchFaceRenderer(
         Paint().apply {
             textAlign = Paint.Align.CENTER
             textSize = 64f
+            isAntiAlias = true
+        }
+    private val datePaint =
+        Paint().apply {
+            textAlign = Paint.Align.CENTER
+            textSize = 28f
             isAntiAlias = true
         }
 
@@ -111,6 +120,9 @@ internal class CompanionWatchFaceRenderer(
         complicationSlotsManager.watchState = watchState
         settingsRepository.addListener { newSettings ->
             settings = newSettings
+        }
+        layoutPreferencesRepository.addListener { newPrefs ->
+            layoutPreferences = newPrefs
         }
         mediaSessionMonitor?.start()
     }
@@ -157,17 +169,40 @@ internal class CompanionWatchFaceRenderer(
                 currentStyle,
                 renderParameters.drawMode,
             )
+        datePaint.color = timePaint.color
         val lowBit = watchState.hasLowBitAmbient || watchState.hasBurnInProtection
         timePaint.isAntiAlias = !(isAmbient && lowBit)
+        datePaint.isAntiAlias = !(isAmbient && lowBit)
+        timePaint.typeface =
+            when (layoutPreferences.fontVariant) {
+                FontVariant.MONO -> Typeface.MONOSPACE
+                else -> Typeface.DEFAULT
+            }
+        datePaint.typeface = timePaint.typeface
 
         canvas.drawRect(bounds, backgroundPaint)
-        val timeY = bounds.top + bounds.height() * 0.34f
+        val timeYFraction =
+            when (layoutPreferences.timePosition) {
+                TimePosition.TOP -> 0.28f
+                TimePosition.BOTTOM -> 0.44f
+                else -> 0.34f
+            }
+        val timeY = bounds.top + bounds.height() * timeYFraction
         canvas.drawText(
             CompanionTimeFormatter.formatTime(zonedDateTime),
             bounds.exactCenterX(),
             timeY,
             timePaint,
         )
+        if (layoutPreferences.showDate) {
+            val dateY = bounds.top + bounds.height() * (timeYFraction + 0.09f)
+            canvas.drawText(
+                CompanionDateFormatter.formatDate(zonedDateTime),
+                bounds.exactCenterX(),
+                dateY,
+                datePaint,
+            )
+        }
 
         // Draw complications
         for ((_, slot) in complicationSlotsManager.complicationSlots) {
@@ -316,6 +351,7 @@ internal class CompanionWatchFaceRenderer(
     override fun onDestroy() {
         mediaSessionMonitor?.stop()
         settingsRepository.close()
+        layoutPreferencesRepository.close()
         super.onDestroy()
     }
 }

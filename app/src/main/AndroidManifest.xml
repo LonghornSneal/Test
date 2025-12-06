@@ -27,13 +27,23 @@
         <profileable
             android:shell="true" />
         <activity
-            android:name=".ConfigActivity"
-            android:exported="true">
+            android:name=".SetWatchFaceActivity"
+            android:exported="true"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ConfigActivity"
+            android:exported="true" />
+        <activity
+            android:name=".PetSelectActivity"
+            android:exported="true" />
+        <activity
+            android:name=".LayoutSetupActivity"
+            android:exported="true" />
         <service
             android:name=".CosmoBondWatchFaceService"
             android:exported="true"
@@ -53,6 +63,14 @@
             <meta-data
                 android:name="com.google.android.wearable.watchface.preview_circular"
                 android:resource="@drawable/watchface_preview" />
+        </service>
+        <service
+            android:name=".CosmoBondTileService"
+            android:exported="true"
+            android:permission="com.google.android.wearable.permission.BIND_TILE_PROVIDER">
+            <intent-filter>
+                <action android:name="androidx.wear.tiles.action.BIND_TILE_PROVIDER" />
+            </intent-filter>
         </service>
     </application>
 
