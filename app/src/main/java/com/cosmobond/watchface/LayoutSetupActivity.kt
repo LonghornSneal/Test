@@ -4,10 +4,10 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.ClipData
 import android.content.Intent
-import android.graphics.Point
 import android.graphics.PointF
 import android.graphics.Rect
 import android.graphics.Typeface
+import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -26,7 +26,6 @@ import android.widget.TextView
 import android.widget.Toast
 import android.widget.VideoView
 import androidx.core.view.doOnLayout
-import java.time.ZonedDateTime
 
 private const val MIN_TIME_SIZE_SP = 44
 private const val MIN_DATE_SIZE_SP = 18
@@ -34,15 +33,19 @@ private const val MIN_MUSIC_SIZE_SP = 16
 
 class LayoutSetupActivity : Activity() {
     private lateinit var layoutRepo: LayoutPreferencesRepository
-    private lateinit var previewContainer: FrameLayout
     private lateinit var overlayContainer: FrameLayout
     private lateinit var slotOverlay: View
     private lateinit var slotButtons: ViewGroup
     private lateinit var timeView: TextView
     private lateinit var dateView: TextView
     private lateinit var musicView: TextView
+    private lateinit var timeSizeValue: TextView
+    private lateinit var dateSizeValue: TextView
+    private lateinit var musicSizeValue: TextView
+    private lateinit var previewPlaceholder: View
     private lateinit var videoView: VideoView
     private val handler = Handler(Looper.getMainLooper())
+    private var videoPrepared = false
     private var activeDrag: ElementKind? = null
     private val anchors =
         listOf(
@@ -58,13 +61,16 @@ class LayoutSetupActivity : Activity() {
         setContentView(R.layout.activity_layout_setup)
         layoutRepo = LayoutPreferencesRepository(applicationContext)
 
-        previewContainer = findViewById(R.id.preview_container)
         overlayContainer = findViewById(R.id.overlay_container)
         slotOverlay = findViewById(R.id.slot_overlay)
         slotButtons = findViewById(R.id.slot_buttons)
         timeView = findViewById(R.id.time_preview)
         dateView = findViewById(R.id.date_preview)
         musicView = findViewById(R.id.music_preview)
+        previewPlaceholder = findViewById(R.id.preview_placeholder)
+        timeSizeValue = findViewById(R.id.time_size_value)
+        dateSizeValue = findViewById(R.id.date_size_value)
+        musicSizeValue = findViewById(R.id.music_size_value)
         videoView = findViewById(R.id.preview_video)
 
         val showDate = findViewById<CheckBox>(R.id.show_date_checkbox)
@@ -111,23 +117,61 @@ class LayoutSetupActivity : Activity() {
             applyPositions(layoutRepo.current())
             refreshPreview()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
         handler.post(timeUpdater)
+        refreshPreview()
+        resumeVideo()
+    }
+
+    override fun onPause() {
+        handler.removeCallbacks(timeUpdater)
+        previewPlaceholder.visibility = View.VISIBLE
+        videoView.pause()
+        super.onPause()
     }
 
     override fun onDestroy() {
         handler.removeCallbacksAndMessages(null)
+        videoView.stopPlayback()
         layoutRepo.close()
         super.onDestroy()
     }
 
     private fun setupVideo() {
+        videoPrepared = false
+        previewPlaceholder.visibility = View.VISIBLE
         val uri = Uri.parse("android.resource://$packageName/${R.raw.beatbunny_idle}")
         videoView.setVideoURI(uri)
         videoView.setOnPreparedListener { player ->
+            videoPrepared = true
+            previewPlaceholder.visibility = View.GONE
             player.isLooping = true
-            player.start()
+            player.setVolume(0f, 0f)
+            player.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING)
+            videoView.start()
+        }
+        videoView.setOnErrorListener { _, _, _ ->
+            videoPrepared = false
+            previewPlaceholder.visibility = View.VISIBLE
+            true
         }
         videoView.setOnCompletionListener { videoView.start() }
+    }
+
+    private fun resumeVideo() {
+        if (videoView.isPlaying) {
+            previewPlaceholder.visibility = View.GONE
+            return
+        }
+        if (videoPrepared) {
+            previewPlaceholder.visibility = View.GONE
+            videoView.start()
+        } else {
+            setupVideo()
+        }
     }
 
     private fun bindSpinners(
@@ -194,11 +238,15 @@ class LayoutSetupActivity : Activity() {
         timeSeek.progress = (prefs.timeTextSizeSp - MIN_TIME_SIZE_SP).toInt().coerceAtLeast(0)
         dateSeek.progress = (prefs.dateTextSizeSp - MIN_DATE_SIZE_SP).toInt().coerceAtLeast(0)
         musicSeek.progress = (prefs.musicTextSizeSp - MIN_MUSIC_SIZE_SP).toInt().coerceAtLeast(0)
+        timeSizeValue.text = formatSize(prefs.timeTextSizeSp)
+        dateSizeValue.text = formatSize(prefs.dateTextSizeSp)
+        musicSizeValue.text = formatSize(prefs.musicTextSizeSp)
 
         timeSeek.setOnSeekBarChangeListener(
             simpleSeekListener { value ->
                 val size = MIN_TIME_SIZE_SP + value
                 layoutRepo.setTimeTextSize(size.toFloat())
+                timeSizeValue.text = formatSize(size.toFloat())
                 refreshPreview()
             },
         )
@@ -206,6 +254,7 @@ class LayoutSetupActivity : Activity() {
             simpleSeekListener { value ->
                 val size = MIN_DATE_SIZE_SP + value
                 layoutRepo.setDateTextSize(size.toFloat())
+                dateSizeValue.text = formatSize(size.toFloat())
                 refreshPreview()
             },
         )
@@ -213,6 +262,7 @@ class LayoutSetupActivity : Activity() {
             simpleSeekListener { value ->
                 val size = MIN_MUSIC_SIZE_SP + value
                 layoutRepo.setMusicTextSize(size.toFloat())
+                musicSizeValue.text = formatSize(size.toFloat())
                 refreshPreview()
             },
         )
@@ -247,6 +297,10 @@ class LayoutSetupActivity : Activity() {
         musicView.textSize = prefs.musicTextSizeSp
         musicView.typeface = Typeface.SANS_SERIF
 
+        timeSizeValue.text = formatSize(prefs.timeTextSizeSp)
+        dateSizeValue.text = formatSize(prefs.dateTextSizeSp)
+        musicSizeValue.text = formatSize(prefs.musicTextSizeSp)
+
         applyPositions(prefs)
     }
 
@@ -255,6 +309,8 @@ class LayoutSetupActivity : Activity() {
         place(dateView, prefs.datePosition)
         place(musicView, prefs.musicPosition)
     }
+
+    private fun formatSize(size: Float): String = getString(R.string.layout_setup_size_value, size.toInt())
 
     private fun place(view: View, point: PointF) {
         overlayContainer.post {

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="cosmo_midnight">#0E1220</color>
+    <color name="cosmo_midnight_alt">#10182B</color>
+    <color name="cosmo_panel">#151A28</color>
+    <color name="cosmo_chip">#1F2434</color>
+    <color name="cosmo_accent">#6DD6FF</color>
+    <color name="cosmo_accent_alt">#8B7CFF</color>
+    <color name="cosmo_text_primary">#EEF3FF</color>
+    <color name="cosmo_text_secondary">#B5BED8</color>
+    <color name="cosmo_time_text">#F5E5B9</color>
+    <color name="cosmo_date_text">#EDE7FF</color>
+    <color name="cosmo_music_text">#A6B6FF</color>
+    <color name="cosmo_button_start">#5B6CFF</color>
+    <color name="cosmo_button_end">#42E8FF</color>
+    <color name="cosmo_preview_ring">#3E4C6E</color>
+    <color name="cosmo_slot_overlay">#AA0B142F</color>
+</resources>

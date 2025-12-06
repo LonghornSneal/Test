@@ -56,4 +56,11 @@
     <string name="layout_setup_date_short">Aug 5</string>
     <string name="layout_setup_date_long">Sat, Aug 5</string>
     <string name="layout_setup_date_numeric">08/05</string>
+    <string name="layout_setup_preview_badge">Live BeatBunny preview</string>
+    <string name="layout_setup_preview_content_desc">BeatBunny idle animation preview</string>
+    <string name="layout_setup_toggles_title">Quick toggles</string>
+    <string name="layout_setup_toggles_hint">Match your watch face style while BeatBunny idles in the background.</string>
+    <string name="layout_setup_fonts_title">Fonts &amp; date style</string>
+    <string name="layout_setup_sizes_title">Sizing</string>
+    <string name="layout_setup_size_value">%1$d sp</string>
 </resources>

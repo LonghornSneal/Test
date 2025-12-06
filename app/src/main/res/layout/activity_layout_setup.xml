@@ -1,161 +1,306 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="12dp">
+    android:background="@drawable/bg_layout_setup"
+    android:padding="16dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/layout_setup_title"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textStyle="bold" />
-
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/layout_setup_hint"
-        android:paddingBottom="8dp" />
+        android:orientation="vertical"
+        android:dividerPadding="12dp"
+        android:showDividers="none">
 
-    <FrameLayout
-        android:id="@+id/preview_container"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="#111">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/layout_setup_title"
+            android:textColor="@color/cosmo_text_primary"
+            android:textSize="22sp"
+            android:textStyle="bold" />
 
-        <VideoView
-            android:id="@+id/preview_video"
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:keepScreenOn="true" />
+            android:layout_height="wrap_content"
+            android:text="@string/layout_setup_hint"
+            android:textColor="@color/cosmo_text_secondary"
+            android:paddingBottom="8dp" />
 
         <FrameLayout
-            android:id="@+id/overlay_container"
+            android:id="@+id/preview_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="320dp"
+            android:background="@drawable/layout_preview_card"
+            android:foreground="@drawable/layout_preview_ring"
+            android:clipToOutline="true"
+            android:elevation="2dp"
+            android:padding="10dp">
 
-            <TextView
-                android:id="@+id/time_preview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="10:10"
-                android:textStyle="bold"
-                android:textSize="64sp"
-                android:textColor="#F5E5B9" />
-
-            <TextView
-                android:id="@+id/date_preview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Aug 5"
-                android:textSize="22sp"
-                android:textColor="#F5E5B9" />
-
-            <TextView
-                android:id="@+id/music_preview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/layout_setup_music_label"
-                android:textSize="20sp"
-                android:textColor="#A6B6FF" />
-
-            <LinearLayout
-                android:id="@+id/slot_overlay"
+            <VideoView
+                android:id="@+id/preview_video"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:visibility="gone"
-                android:background="#66000000"
-                android:padding="12dp">
+                android:keepScreenOn="true" />
+
+            <ImageView
+                android:id="@+id/preview_placeholder"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/layout_setup_preview_content_desc"
+                android:scaleType="centerCrop"
+                android:src="@drawable/watchface_preview" />
+
+            <View
+                android:id="@+id/preview_scrim"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/layout_preview_scrim" />
+
+            <FrameLayout
+                android:id="@+id/overlay_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
                 <TextView
+                    android:id="@+id/time_preview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/layout_setup_slot_prompt"
-                    android:textColor="#FFFFFF"
-                    android:paddingBottom="8dp" />
+                    android:shadowColor="#CC000000"
+                    android:shadowRadius="4"
+                    android:text="10:10"
+                    android:textColor="@color/cosmo_time_text"
+                    android:textSize="64sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/date_preview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:shadowColor="#99000000"
+                    android:shadowRadius="3"
+                    android:text="Aug 5"
+                    android:textColor="@color/cosmo_date_text"
+                    android:textSize="22sp" />
+
+                <TextView
+                    android:id="@+id/music_preview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:shadowColor="#99000000"
+                    android:shadowRadius="3"
+                    android:text="@string/layout_setup_music_label"
+                    android:textColor="@color/cosmo_music_text"
+                    android:textSize="20sp" />
 
                 <LinearLayout
-                    android:id="@+id/slot_buttons"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" />
-            </LinearLayout>
-        </FrameLayout>
-    </FrameLayout>
+                    android:id="@+id/slot_overlay"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/layout_slot_overlay"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="14dp"
+                    android:visibility="gone">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="8dp"
+                        android:text="@string/layout_setup_slot_prompt"
+                        android:textColor="@color/cosmo_text_primary"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:id="@+id/slot_buttons"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+                </LinearLayout>
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|top"
+                android:background="@drawable/layout_chip_background"
+                android:clickable="false"
+                android:focusable="false"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp"
+                android:text="@string/layout_setup_preview_badge"
+                android:textAllCaps="false"
+                android:textColor="@color/cosmo_text_primary"
+                android:textSize="12sp" />
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/layout_panel_background"
             android:orientation="vertical"
-            android:paddingTop="8dp">
+            android:padding="12dp">
 
-            <CheckBox
-                android:id="@+id/show_date_checkbox"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/layout_setup_show_date" />
+                android:text="@string/layout_setup_toggles_title"
+                android:textColor="@color/cosmo_text_primary"
+                android:textStyle="bold" />
 
-            <CheckBox
-                android:id="@+id/show_seconds_checkbox"
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="2dp"
+                android:paddingBottom="8dp"
+                android:text="@string/layout_setup_toggles_hint"
+                android:textColor="@color/cosmo_text_secondary"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <CheckBox
+                    android:id="@+id/show_date_checkbox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/layout_chip_background"
+                    android:buttonTint="@color/cosmo_accent"
+                    android:padding="8dp"
+                    android:text="@string/layout_setup_show_date"
+                    android:textColor="@color/cosmo_text_primary" />
+
+                <CheckBox
+                    android:id="@+id/show_seconds_checkbox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/layout_chip_background"
+                    android:buttonTint="@color/cosmo_accent"
+                    android:padding="8dp"
+                    android:text="@string/layout_setup_show_seconds"
+                    android:textColor="@color/cosmo_text_primary" />
+
+                <CheckBox
+                    android:id="@+id/use_24_checkbox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/layout_chip_background"
+                    android:buttonTint="@color/cosmo_accent"
+                    android:padding="8dp"
+                    android:text="@string/layout_setup_use_24"
+                    android:textColor="@color/cosmo_text_primary" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/layout_panel_background"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/layout_setup_show_seconds" />
+                android:text="@string/layout_setup_fonts_title"
+                android:textColor="@color/cosmo_text_primary"
+                android:textStyle="bold" />
 
-            <CheckBox
-                android:id="@+id/use_24_checkbox"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="6dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/layout_setup_time_font"
+                    android:textColor="@color/cosmo_text_secondary" />
+
+                <Spinner
+                    android:id="@+id/time_font_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/layout_chip_background"
+                    android:popupBackground="@drawable/layout_panel_background" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="6dp"
+                    android:text="@string/layout_setup_date_font"
+                    android:textColor="@color/cosmo_text_secondary" />
+
+                <Spinner
+                    android:id="@+id/date_font_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/layout_chip_background"
+                    android:popupBackground="@drawable/layout_panel_background" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="6dp"
+                    android:text="@string/layout_setup_date_format"
+                    android:textColor="@color/cosmo_text_secondary" />
+
+                <Spinner
+                    android:id="@+id/date_format_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/layout_chip_background"
+                    android:popupBackground="@drawable/layout_panel_background" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/layout_panel_background"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/layout_setup_use_24" />
+                android:text="@string/layout_setup_sizes_title"
+                android:textColor="@color/cosmo_text_primary"
+                android:textStyle="bold" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/layout_setup_time_font"
-                android:textStyle="bold"
-                android:paddingTop="8dp" />
+                android:gravity="center_vertical"
+                android:paddingTop="6dp">
 
-            <Spinner
-                android:id="@+id/time_font_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/layout_setup_time_size"
+                    android:textColor="@color/cosmo_text_secondary" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/layout_setup_date_font"
-                android:textStyle="bold"
-                android:paddingTop="8dp" />
-
-            <Spinner
-                android:id="@+id/date_font_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/layout_setup_date_format"
-                android:textStyle="bold"
-                android:paddingTop="8dp" />
-
-            <Spinner
-                android:id="@+id/date_format_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/layout_setup_time_size"
-                android:paddingTop="8dp" />
+                <TextView
+                    android:id="@+id/time_size_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/cosmo_text_primary"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
             <SeekBar
                 android:id="@+id/time_size_seek"
@@ -163,11 +308,26 @@
                 android:layout_height="wrap_content"
                 android:max="80" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/layout_setup_date_size"
-                android:paddingTop="8dp" />
+                android:gravity="center_vertical"
+                android:paddingTop="6dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/layout_setup_date_size"
+                    android:textColor="@color/cosmo_text_secondary" />
+
+                <TextView
+                    android:id="@+id/date_size_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/cosmo_text_primary"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
             <SeekBar
                 android:id="@+id/date_size_seek"
@@ -175,24 +335,44 @@
                 android:layout_height="wrap_content"
                 android:max="60" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/layout_setup_music_size"
-                android:paddingTop="8dp" />
+                android:gravity="center_vertical"
+                android:paddingTop="6dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/layout_setup_music_size"
+                    android:textColor="@color/cosmo_text_secondary" />
+
+                <TextView
+                    android:id="@+id/music_size_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/cosmo_text_primary"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
             <SeekBar
                 android:id="@+id/music_size_seek"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:max="60" />
-
-            <Button
-                android:id="@+id/save_layout_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/layout_setup_save"
-                android:layout_marginTop="12dp" />
         </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+
+        <Button
+            android:id="@+id/save_layout_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/layout_primary_button"
+            android:padding="12dp"
+            android:text="@string/layout_setup_save"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+    </LinearLayout>
+</ScrollView>
