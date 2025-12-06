@@ -311,7 +311,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
     - **Artifacts:** Screenshots from emulator (WFF) or renderer preview captures showing complications (Kotlin track).
     - **Fail?:** Verify slot IDs and data types.
 
-22. **[ ] Prompt:** _"Design and validate the always-on display and power-saving modes for the watch face."_
+22. **[x] Prompt:** _"Design and validate the always-on display and power-saving modes for the watch face."_ _(Completed: media-gated mini-game pauses in ambient, reduced-motion toggle + stats freeze, safe overlays (2025-12-05 19:52 UTC))_
     - **Purpose:** Great battery behavior.
     - **Steps:**
       * **Watch Face Format track:** Provide simplified `ambient` group in WFF; throttle updates; avoid constant phone interactions & heavy animations to pass Play warnings.

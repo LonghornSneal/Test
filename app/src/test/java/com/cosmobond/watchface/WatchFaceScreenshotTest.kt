@@ -35,7 +35,11 @@ class WatchFaceScreenshotTest {
             rendererFor(
                 paletteOptionId = CompanionUserStyle.cosmicBlueOptionId,
                 drawMode = DrawMode.INTERACTIVE,
-            ) { it.debugForceGameState(GameState.Playing, streak = 6, misses = 1, cue = BeatChaseCue.Hit) }
+            ) {
+                it.tempoSource.playing = true
+                it.tempoSource.currentBpm = 120
+                it.debugForceGameState(GameState.Playing, streak = 6, misses = 1, cue = BeatChaseCue.Hit)
+            }
         snapshotRenderer(renderer, "watchface_interactive_overlay")
     }
 
@@ -67,6 +71,7 @@ class WatchFaceScreenshotTest {
                 currentUserStyleRepository = repository,
                 watchState = watchState,
                 complicationSlotsManager = slotsManager,
+                enableMediaMonitor = false,
             )
         // renderer.renderParameters = renderParametersFor(drawMode) // Commented out due to access visibility issue
         configure(renderer)

@@ -63,7 +63,7 @@ class BeatChaseEngineTest {
         val beat = engine.peekNearestBeat(clock.now())!!
 
         clock.setTo(beat.centerMs)
-        engine.onUserTap(clock.now(), reducedMotion = false)
+        engine.onUserTap(clock.now(), allowHaptics = true)
 
         assertEquals(1, engine.streak)
         assertEquals(0, engine.misses)
@@ -83,7 +83,7 @@ class BeatChaseEngineTest {
         engine.onTick(clock.now())
         val beat = engine.peekNearestBeat(clock.now())!!
 
-        engine.onUserTap(beat.centerMs, reducedMotion = true)
+        engine.onUserTap(beat.centerMs, allowHaptics = false)
 
         assertEquals(1, engine.streak)
         assertEquals(0, haptics.ticks)
@@ -102,7 +102,7 @@ class BeatChaseEngineTest {
         val beat = engine.peekNearestBeat(clock.now())!!
 
         val missTime = beat.centerMs + beat.toleranceMs + 200
-        engine.onUserTap(missTime, reducedMotion = false)
+        engine.onUserTap(missTime, allowHaptics = true)
 
         assertEquals(0, engine.streak)
         assertEquals(1, engine.misses)
@@ -122,7 +122,7 @@ class BeatChaseEngineTest {
         val beat = engine.peekNearestBeat(clock.now())!!
 
         val missTime = beat.centerMs + beat.toleranceMs + 300
-        repeat(3) { engine.onUserTap(missTime + it, reducedMotion = false) }
+        repeat(3) { engine.onUserTap(missTime + it, allowHaptics = true) }
 
         assertEquals(GameState.Finished, engine.state)
         assertEquals(BeatChaseCue.Lose, engine.cue)
@@ -157,7 +157,7 @@ class BeatChaseEngineTest {
         engine.onTick(clock.now())
         val beat = engine.peekNearestBeat(clock.now())!!
 
-        engine.onUserTap(beat.centerMs, reducedMotion = false)
+        engine.onUserTap(beat.centerMs, allowHaptics = true)
 
         assertEquals(12_000L, engine.timerMs)
         assertEquals(GameState.Finished, engine.state)
@@ -184,6 +184,51 @@ class BeatChaseEngineTest {
         tempo.playing = true
         engine.resumeIfPossible(clock.now())
         assertEquals(GameState.Playing, engine.state)
+    }
+
+    @Test
+    fun startRequiresTempoAndPlayback() {
+        val tempo = FakeTempoSource(bpm = null, playing = false)
+        val engine = BeatChaseEngine(tempo, FakeHaptics(), FakeClock())
+
+        engine.startIfTempoAvailable(0)
+
+        assertEquals(GameState.Paused, engine.state)
+        assertEquals(BeatChaseCue.Pause, engine.cue)
+
+        tempo.bpm = 110
+        tempo.playing = true
+        engine.startIfTempoAvailable(1_000)
+
+        assertEquals(GameState.Countdown, engine.state)
+        assertEquals(BeatChaseCue.Countdown, engine.cue)
+    }
+
+    @Test
+    fun timerCapsAtMax() {
+        val tempo = FakeTempoSource(bpm = 110)
+        val haptics = FakeHaptics()
+        val clock = FakeClock()
+        val engine =
+            BeatChaseEngine(
+                tempo,
+                haptics,
+                clock,
+                specialsEvery = 1,
+                specialBonusCycleMs = listOf(50_000L),
+                initialTimerMs = 190_000L,
+                maxTimerMs = 200_000L,
+            )
+
+        engine.startIfTempoAvailable(clock.now())
+        clock.advanceBy(3_000)
+        engine.onTick(clock.now())
+        val beat = engine.peekNearestBeat(clock.now())!!
+
+        engine.onUserTap(beat.centerMs, allowHaptics = true)
+
+        assertEquals(200_000L, engine.timerMs)
+        assertEquals(BeatChaseCue.Win, engine.cue)
     }
 
     @Test
@@ -224,5 +269,6 @@ class BeatChaseEngineTest {
         assertEquals(BeatBunnyAnimation.VoltagePop, hitReduced)
         assertEquals(BeatBunnyAnimation.AmbientBounceReduced, idleReduced)
         assertFalse(BeatBunnyVisuals.assetFor(hitAction).isBlank())
+        assertFalse(BeatBunnyVisuals.assetFor(BeatBunnyAnimation.ClubCarousel).isBlank())
     }
 }

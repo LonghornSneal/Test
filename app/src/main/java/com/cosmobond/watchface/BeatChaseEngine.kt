@@ -134,7 +134,7 @@ internal class BeatChaseEngine(
         }
     }
 
-    fun onUserTap(now: Long = clock.now(), reducedMotion: Boolean) {
+    fun onUserTap(now: Long = clock.now(), allowHaptics: Boolean) {
         if (state != GameState.Playing) return
         if (!tempoSource.isPlaying()) {
             pauseToSilence()
@@ -145,7 +145,7 @@ internal class BeatChaseEngine(
             streak += 1
             misses = 0
             if (window.isSpecial) timerMs = min(maxTimerMs, timerMs + window.bonusMs)
-            if (!reducedMotion) haptics.tick()
+            if (allowHaptics) haptics.tick()
             cue = BeatChaseCue.Hit
             if (timerMs >= maxTimerMs) finish(win = true)
         } else {

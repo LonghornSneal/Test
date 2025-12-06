@@ -21,15 +21,15 @@ internal object BeatBunnyVisuals {
 
     private val assetMap =
         mapOf(
-            BeatBunnyAnimation.AmbientBounce to "BeatBunny-Idle.mp4",
-            BeatBunnyAnimation.AmbientBounceReduced to "BeatBunny-Idle-action.mp4",
+            BeatBunnyAnimation.AmbientBounce to "BeatBunny-Idle-action.mp4",
+            BeatBunnyAnimation.AmbientBounceReduced to "BeatBunny-Idle.mp4",
             BeatBunnyAnimation.SlideSwitch to "BeatBunny-TempoChange.mp4",
             BeatBunnyAnimation.VoltagePop to "BeatBunny-VoltagePop.mp4",
             BeatBunnyAnimation.VoltagePopAction to "BeatBunny-VoltagePop-action.mp4",
-            BeatBunnyAnimation.SilencePause to "BeatBunny-SilencePause.mp4",
-            BeatBunnyAnimation.ClubCarousel to "assets/video/pets/beatbunny/club-carousel/BeatBunny-ClubCarousel.mp4",
-            BeatBunnyAnimation.FadingStage to "assets/video/pets/beatbunny/runaway/FadingStage.mp4",
-            BeatBunnyAnimation.VinylMemorial to "assets/video/pets/beatbunny/runaway/VinylMemorial.mp4",
+            BeatBunnyAnimation.SilencePause to "BeatBunny-Idle.mp4",
+            BeatBunnyAnimation.ClubCarousel to "BeatBunny-VoltagePop-action.mp4",
+            BeatBunnyAnimation.FadingStage to "assets/video/pets/beatbunny/idle/beatbunny_idle_1080p24.mp4",
+            BeatBunnyAnimation.VinylMemorial to "assets/video/pets/beatbunny/idle/beatbunny_idle_1080p24.mp4",
         )
 
     fun animationForCue(
@@ -128,23 +128,23 @@ internal object BeatChaseOverlayDefaults {
             tapTarget =
                 TapTargetLayout(
                     centerXFraction = 0.5f,
-                    centerYFraction = 0.52f,
-                    radiusFraction = 0.12f,
-                    strokeFraction = 0.02f,
+                    centerYFraction = 0.58f,
+                    radiusFraction = 0.10f,
+                    strokeFraction = 0.018f,
                 ),
             streakArc =
                 StreakArcLayout(
                     centerXFraction = 0.5f,
-                    centerYFraction = 0.5f,
-                    radiusFraction = 0.13f,
-                    thicknessFraction = 0.015f,
+                    centerYFraction = 0.56f,
+                    radiusFraction = 0.11f,
+                    thicknessFraction = 0.012f,
                 ),
             missDots =
                 MissDotsLayout(
                     centerXFraction = 0.5f,
-                    centerYFraction = 0.94f,
+                    centerYFraction = 0.66f,
                     radiusFraction = 0.012f,
-                    spacingFraction = 0.05f,
+                    spacingFraction = 0.06f,
                 ),
         )
 

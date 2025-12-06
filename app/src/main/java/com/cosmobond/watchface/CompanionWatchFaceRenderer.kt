@@ -6,6 +6,9 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.SurfaceHolder
 import androidx.annotation.VisibleForTesting
 import androidx.wear.watchface.CanvasType
@@ -13,11 +16,8 @@ import androidx.wear.watchface.ComplicationSlotsManager
 import androidx.wear.watchface.DrawMode
 import androidx.wear.watchface.Renderer
 import androidx.wear.watchface.WatchState
-import androidx.wear.watchface.complications.rendering.CanvasComplicationDrawable
-import androidx.wear.watchface.complications.rendering.ComplicationDrawable
 import androidx.wear.watchface.style.CurrentUserStyleRepository
 import androidx.wear.watchface.TapEvent
-import java.time.Instant
 import java.time.ZonedDateTime
 
 private const val INTERACTIVE_FRAME_MS = 1000L
@@ -31,6 +31,7 @@ internal class CompanionWatchFaceRenderer(
     private val currentUserStyleRepository: CurrentUserStyleRepository,
     private val watchState: WatchState,
     private val complicationSlotsManager: ComplicationSlotsManager,
+    private val enableMediaMonitor: Boolean = true,
 ) : Renderer.CanvasRenderer(
         surfaceHolder,
         currentUserStyleRepository,
@@ -39,13 +40,37 @@ internal class CompanionWatchFaceRenderer(
         INTERACTIVE_FRAME_MS,
         false,
     ) {
+    private val settingsRepository = CompanionSettingsRepository(context)
+    private var settings = settingsRepository.current()
+
     @VisibleForTesting internal val tempoSource = MutablePlaybackTempoSource()
+    private val haptics: Haptics =
+        ToggleableHaptics(
+            context,
+        ) {
+            settings.hapticsEnabled && !settings.reducedMotion
+        }
     @VisibleForTesting internal val beatEngine =
         BeatChaseEngine(
             tempoSource,
-            NoOpHaptics(),
+            haptics,
             SystemGameClock(),
         )
+    @VisibleForTesting internal var lastAnimationAsset: String? = null
+    private val mediaSessionMonitor =
+        if (enableMediaMonitor) {
+            MediaSessionPlaybackMonitor(
+                context = context,
+                tempoSink = tempoSource,
+                onPlaybackUpdate = ::onPlaybackSnapshot,
+            )
+        } else {
+            null
+        }
+    private val petStats = CompanionPetStats()
+    private var lastFrameTimeMs: Long? = null
+    private var lastAmbient = false
+    private val lastRenderBounds = Rect()
 
     private val timePaint =
         Paint().apply {
@@ -75,10 +100,19 @@ internal class CompanionWatchFaceRenderer(
             isAntiAlias = true
         }
 
-    private var lastAmbient = false
+    private val statsPaint =
+        Paint().apply {
+            textAlign = Paint.Align.RIGHT
+            textSize = 24f
+            isAntiAlias = true
+        }
 
     init {
         complicationSlotsManager.watchState = watchState
+        settingsRepository.addListener { newSettings ->
+            settings = newSettings
+        }
+        mediaSessionMonitor?.start()
     }
 
     override fun render(
@@ -86,20 +120,35 @@ internal class CompanionWatchFaceRenderer(
         bounds: Rect,
         zonedDateTime: ZonedDateTime,
     ) {
+        lastRenderBounds.set(bounds)
         val nowMs = System.currentTimeMillis()
         val isAmbient = renderParameters.drawMode == DrawMode.AMBIENT
         if (isAmbient != lastAmbient) {
             beatEngine.onAmbientModeChanged(isAmbient)
+            if (!isAmbient && tempoSource.isReady()) {
+                beatEngine.resumeIfPossible(nowMs)
+            }
             lastAmbient = isAmbient
         }
-        tempoSource.playing = !isAmbient
-        if (tempoSource.currentBpm == null && !isAmbient) {
-            tempoSource.currentBpm = 120 // placeholder until media metadata is wired
-        }
-        if (!isAmbient && beatEngine.state == GameState.Idle) {
+        if (!isAmbient && beatEngine.state == GameState.Idle && tempoSource.isReady()) {
             beatEngine.startIfTempoAvailable(nowMs)
         }
         beatEngine.onTick(nowMs)
+        val delta = lastFrameTimeMs?.let { nowMs - it } ?: 0
+        lastFrameTimeMs = nowMs
+        petStats.tick(delta, !isAmbient && beatEngine.state == GameState.Playing)
+        lastAnimationAsset =
+            if (!isAmbient) {
+                BeatBunnyVisuals.assetFor(
+                    BeatBunnyVisuals.animationForCue(
+                        cue = beatEngine.cue,
+                        streak = beatEngine.streak,
+                        reducedMotion = settings.reducedMotion,
+                    ),
+                )
+            } else {
+                null
+            }
 
         val currentStyle = currentUserStyleRepository.userStyle.value
         backgroundPaint.color = CompanionPalette.backgroundFor(renderParameters.drawMode)
@@ -112,10 +161,11 @@ internal class CompanionWatchFaceRenderer(
         timePaint.isAntiAlias = !(isAmbient && lowBit)
 
         canvas.drawRect(bounds, backgroundPaint)
+        val timeY = bounds.top + bounds.height() * 0.34f
         canvas.drawText(
             CompanionTimeFormatter.formatTime(zonedDateTime),
             bounds.exactCenterX(),
-            bounds.centerY().toFloat(),
+            timeY,
             timePaint,
         )
 
@@ -135,6 +185,7 @@ internal class CompanionWatchFaceRenderer(
         }
 
         if (!isAmbient) {
+            drawPetStats(canvas, bounds)
             drawBeatOverlay(canvas, bounds, currentStyle)
         }
     }
@@ -167,11 +218,26 @@ internal class CompanionWatchFaceRenderer(
         )
     }
 
+    private fun drawPetStats(
+        canvas: Canvas,
+        bounds: Rect,
+    ) {
+        statsPaint.color = CompanionPalette.accentFor(currentUserStyleRepository.userStyle.value, renderParameters.drawMode)
+        val text = "H ${petStats.hunger}%  E ${petStats.energy}%  M ${petStats.mood}%"
+        val x = bounds.left + bounds.width() * 0.88f
+        val y = bounds.top + bounds.height() * 0.22f
+        canvas.drawText(text, x, y, statsPaint)
+    }
+
     private fun drawBeatOverlay(
         canvas: Canvas,
         bounds: Rect,
         userStyle: androidx.wear.watchface.style.UserStyle,
     ) {
+        if (beatEngine.state == GameState.Idle || beatEngine.state == GameState.Paused) return
+        if (!BeatChaseOverlayDefaults.isClearOfComplications(CompanionComplicationSlots.normalizedBounds())) {
+            return
+        }
         val accent = CompanionPalette.accentFor(userStyle, renderParameters.drawMode)
         val missColor = 0xFFFF6B6B.toInt()
         val successColor = accent
@@ -212,8 +278,45 @@ internal class CompanionWatchFaceRenderer(
     }
 
     fun handleTap(tapEvent: TapEvent) {
-        val reducedMotion = renderParameters.drawMode == DrawMode.AMBIENT
-        beatEngine.onUserTap(tapEvent.tapTime.toEpochMilli(), reducedMotion = reducedMotion)
+        if (renderParameters.drawMode == DrawMode.AMBIENT) return
+        val tappedSlot =
+            runCatching {
+                complicationSlotsManager.getComplicationSlotAt(tapEvent.xPos, tapEvent.yPos)
+            }.getOrNull()
+        if (tappedSlot != null) {
+            return
+        }
+        if (beatEngine.state != GameState.Playing) return
+        val overlayBounds = BeatChaseOverlayDefaults.layout.tapTarget.bounds().scale(lastRenderBounds)
+        if (!overlayBounds.contains(tapEvent.xPos.toFloat(), tapEvent.yPos.toFloat())) return
+        val allowHaptics = settings.hapticsEnabled && !settings.reducedMotion
+        beatEngine.onUserTap(tapEvent.tapTime.toEpochMilli(), allowHaptics = allowHaptics)
+    }
+
+    private fun onPlaybackSnapshot(snapshot: PlaybackSnapshot) {
+        tempoSource.currentBpm = snapshot.bpm
+        tempoSource.playing = snapshot.isPlaying
+        if (lastAmbient) return
+        if (!snapshot.isPlaying || snapshot.bpm == null) {
+            if (beatEngine.state != GameState.Idle) {
+                beatEngine.onPlaybackStopped()
+            }
+            return
+        }
+        val now = System.currentTimeMillis()
+        when (beatEngine.state) {
+            GameState.Idle,
+            GameState.Finished,
+            -> beatEngine.startIfTempoAvailable(now)
+            GameState.Paused -> beatEngine.resumeIfPossible(now)
+            else -> Unit
+        }
+    }
+
+    override fun onDestroy() {
+        mediaSessionMonitor?.stop()
+        settingsRepository.close()
+        super.onDestroy()
     }
 }
 
@@ -222,11 +325,24 @@ internal class MutablePlaybackTempoSource : PlaybackTempoSource {
     var playing: Boolean = false
     override fun currentBpm(): Int? = currentBpm
     override fun isPlaying(): Boolean = playing
+
+    fun isReady(): Boolean = playing && currentBpm != null
 }
 
-private class NoOpHaptics : Haptics {
+private class ToggleableHaptics(
+    private val context: Context,
+    private val enabled: () -> Boolean,
+) : Haptics {
+    private val vibrator: Vibrator? = context.getSystemService(Vibrator::class.java)
+
     override fun tick() {
-        // Hook haptic feedback (Vibrator/VibratorManager) when hardware is available.
+        if (!enabled()) return
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            vibrator?.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK))
+        } else {
+            @Suppress("DEPRECATION")
+            vibrator?.vibrate(20)
+        }
     }
 }
 

@@ -9,4 +9,17 @@
     <string name="user_style_palette_description">Choose the accent color for the CosmoBond face.</string>
     <string name="palette_cosmic_blue">Cosmic blue</string>
     <string name="palette_starlight">Starlight</string>
+    <string name="config_title">Beat Chase primer</string>
+    <string name="config_intro_media">BeatBunny wakes up when media plays. We read playback metadata or tempo hints from session progress to find the beat and stay paused when silent.</string>
+    <string name="config_intro_taps">Tap the ring on-beat to stretch the timer. You lose after three misses or when the timer drains. Fill the meter to win and trigger the Club Carousel celebration.</string>
+    <string name="config_intro_controls">Ambient mode pauses the overlay. Toggle reduced motion to calm particles and haptics. Mic access is a placeholder only.</string>
+    <string name="config_permission_media">Media playback access: required to read playback state/BPM. If prompted, allow access so the mini-game can match your music.</string>
+    <string name="config_permission_mic">Mic rationale (future): planned for optional on-watch beat detection. No microphone access is requested or started today.</string>
+    <string name="config_stats_stub">Pet stats stay frozen while paused or ambient. Hunger, energy, and mood only shift while the game is actively running.</string>
+    <string name="toggle_reduced_motion">Reduced motion</string>
+    <string name="toggle_reduced_motion_desc">Use calmer animations and skip particles/haptics.</string>
+    <string name="toggle_haptics">Haptics</string>
+    <string name="toggle_haptics_desc">Tiny ticks on beat hits (disabled if reduced motion).</string>
+    <string name="toggle_mic">Mic (planned)</string>
+    <string name="toggle_mic_desc">Placeholder for a future consented mic path. Disabled in this build.</string>
 </resources>
