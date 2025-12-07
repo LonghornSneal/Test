@@ -105,7 +105,7 @@ class LayoutSetupActivity : Activity() {
         setMovable(dateView, ElementKind.DATE)
         setMovable(musicView, ElementKind.MUSIC)
 
-        findViewById<Button>(R.id.save_layout_button).setOnClickListener {
+        findViewById<Chip>(R.id.save_layout_button).setOnClickListener {
             saveAndReturn()
         }
 
