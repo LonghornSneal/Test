@@ -3,7 +3,6 @@ package com.cosmobond.watchface
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.ClipData
-import android.content.Intent
 import android.graphics.PointF
 import android.graphics.Rect
 import android.graphics.Typeface
@@ -15,17 +14,14 @@ import android.os.Looper
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.CheckBox
 import android.widget.FrameLayout
-import android.widget.SeekBar
-import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.VideoView
 import androidx.core.view.doOnLayout
+import com.google.android.material.chip.Chip
+import com.google.android.material.slider.Slider
 
 private const val MIN_TIME_SIZE_SP = 44
 private const val MIN_DATE_SIZE_SP = 18
@@ -73,19 +69,19 @@ class LayoutSetupActivity : Activity() {
         musicSizeValue = findViewById(R.id.music_size_value)
         videoView = findViewById(R.id.preview_video)
 
-        val showDate = findViewById<CheckBox>(R.id.show_date_checkbox)
-        val showSeconds = findViewById<CheckBox>(R.id.show_seconds_checkbox)
-        val use24 = findViewById<CheckBox>(R.id.use_24_checkbox)
-        val timeFontSpinner = findViewById<Spinner>(R.id.time_font_spinner)
-        val dateFontSpinner = findViewById<Spinner>(R.id.date_font_spinner)
-        val dateFormatSpinner = findViewById<Spinner>(R.id.date_format_spinner)
-        val timeSizeSeek = findViewById<SeekBar>(R.id.time_size_seek)
-        val dateSizeSeek = findViewById<SeekBar>(R.id.date_size_seek)
-        val musicSizeSeek = findViewById<SeekBar>(R.id.music_size_seek)
+        val showDate = findViewById<Chip>(R.id.show_date_chip)
+        val showSeconds = findViewById<Chip>(R.id.show_seconds_chip)
+        val use24 = findViewById<Chip>(R.id.use_24_chip)
+        val timeFontChip = findViewById<Chip>(R.id.time_font_chip)
+        val dateFontChip = findViewById<Chip>(R.id.date_font_chip)
+        val dateFormatChip = findViewById<Chip>(R.id.date_format_chip)
+        val timeSizeSlider = findViewById<Slider>(R.id.time_size_slider)
+        val dateSizeSlider = findViewById<Slider>(R.id.date_size_slider)
+        val musicSizeSlider = findViewById<Slider>(R.id.music_size_slider)
 
         setupVideo()
-        bindSpinners(timeFontSpinner, dateFontSpinner, dateFormatSpinner)
-        bindSeekBars(timeSizeSeek, dateSizeSeek, musicSizeSeek)
+        bindChoiceChips(timeFontChip, dateFontChip, dateFormatChip)
+        bindSliders(timeSizeSlider, dateSizeSlider, musicSizeSlider)
 
         val prefs = layoutRepo.current()
         showDate.isChecked = prefs.showDate
@@ -110,7 +106,7 @@ class LayoutSetupActivity : Activity() {
         setMovable(musicView, ElementKind.MUSIC)
 
         findViewById<Button>(R.id.save_layout_button).setOnClickListener {
-            launchPicker()
+            saveAndReturn()
         }
 
         overlayContainer.doOnLayout {
@@ -174,10 +170,10 @@ class LayoutSetupActivity : Activity() {
         }
     }
 
-    private fun bindSpinners(
-        timeFontSpinner: Spinner,
-        dateFontSpinner: Spinner,
-        dateFormatSpinner: Spinner,
+    private fun bindChoiceChips(
+        timeFontChip: Chip,
+        dateFontChip: Chip,
+        dateFormatChip: Chip,
     ) {
         val fontLabels =
             listOf(
@@ -186,13 +182,6 @@ class LayoutSetupActivity : Activity() {
                 getString(R.string.layout_setup_font_serif),
             )
         val fontValues = listOf(FontVariant.DEFAULT, FontVariant.MONO, FontVariant.SERIF)
-        val fontAdapter =
-            ArrayAdapter(this, android.R.layout.simple_spinner_item, fontLabels).also {
-                it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            }
-        timeFontSpinner.adapter = fontAdapter
-        dateFontSpinner.adapter = fontAdapter
-
         val dateLabels =
             listOf(
                 getString(R.string.layout_setup_date_short),
@@ -201,71 +190,107 @@ class LayoutSetupActivity : Activity() {
             )
         val dateValues =
             listOf(DateFormatVariant.SHORT, DateFormatVariant.LONG, DateFormatVariant.NUMERIC)
-        val dateAdapter =
-            ArrayAdapter(this, android.R.layout.simple_spinner_item, dateLabels).also {
-                it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            }
-        dateFormatSpinner.adapter = dateAdapter
 
         val prefs = layoutRepo.current()
-        timeFontSpinner.setSelection(fontValues.indexOf(prefs.timeFont).coerceAtLeast(0))
-        dateFontSpinner.setSelection(fontValues.indexOf(prefs.dateFont).coerceAtLeast(0))
-        dateFormatSpinner.setSelection(dateValues.indexOf(prefs.dateFormat).coerceAtLeast(0))
-
-        timeFontSpinner.onItemSelectedListener =
-            simpleSelectionListener { index ->
-                layoutRepo.setTimeFont(fontValues[index])
-                refreshPreview()
-            }
-        dateFontSpinner.onItemSelectedListener =
-            simpleSelectionListener { index ->
-                layoutRepo.setDateFont(fontValues[index])
-                refreshPreview()
-            }
-        dateFormatSpinner.onItemSelectedListener =
-            simpleSelectionListener { index ->
-                layoutRepo.setDateFormat(dateValues[index])
-                refreshPreview()
-            }
+        bindChoiceChip(
+            timeFontChip,
+            R.string.layout_setup_time_font,
+            fontLabels,
+            fontValues,
+            prefs.timeFont,
+        ) { selected ->
+            layoutRepo.setTimeFont(selected)
+        }
+        bindChoiceChip(
+            dateFontChip,
+            R.string.layout_setup_date_font,
+            fontLabels,
+            fontValues,
+            prefs.dateFont,
+        ) { selected ->
+            layoutRepo.setDateFont(selected)
+        }
+        bindChoiceChip(
+            dateFormatChip,
+            R.string.layout_setup_date_format,
+            dateLabels,
+            dateValues,
+            prefs.dateFormat,
+        ) { selected ->
+            layoutRepo.setDateFormat(selected)
+        }
     }
 
-    private fun bindSeekBars(
-        timeSeek: SeekBar,
-        dateSeek: SeekBar,
-        musicSeek: SeekBar,
+    private fun <T> bindChoiceChip(
+        chip: Chip,
+        labelRes: Int,
+        labels: List<String>,
+        values: List<T>,
+        current: T,
+        onSelect: (T) -> Unit,
+    ) {
+        var currentIndex = values.indexOf(current).coerceAtLeast(0)
+
+        fun updateLabel(index: Int) {
+            chip.text = getString(
+                R.string.layout_setup_chip_label,
+                getString(labelRes),
+                labels[index],
+            )
+        }
+
+        updateLabel(currentIndex)
+
+        chip.setOnClickListener {
+            AlertDialog.Builder(this)
+                .setTitle(labelRes)
+                .setItems(labels.toTypedArray()) { _, which ->
+                    currentIndex = which
+                    onSelect(values[which])
+                    updateLabel(which)
+                    refreshPreview()
+                }
+                .show()
+        }
+    }
+
+    private fun bindSliders(
+        timeSlider: Slider,
+        dateSlider: Slider,
+        musicSlider: Slider,
     ) {
         val prefs = layoutRepo.current()
-        timeSeek.progress = (prefs.timeTextSizeSp - MIN_TIME_SIZE_SP).toInt().coerceAtLeast(0)
-        dateSeek.progress = (prefs.dateTextSizeSp - MIN_DATE_SIZE_SP).toInt().coerceAtLeast(0)
-        musicSeek.progress = (prefs.musicTextSizeSp - MIN_MUSIC_SIZE_SP).toInt().coerceAtLeast(0)
+        timeSlider.value = (prefs.timeTextSizeSp - MIN_TIME_SIZE_SP).coerceAtLeast(0f)
+        dateSlider.value = (prefs.dateTextSizeSp - MIN_DATE_SIZE_SP).coerceAtLeast(0f)
+        musicSlider.value = (prefs.musicTextSizeSp - MIN_MUSIC_SIZE_SP).coerceAtLeast(0f)
         timeSizeValue.text = formatSize(prefs.timeTextSizeSp)
         dateSizeValue.text = formatSize(prefs.dateTextSizeSp)
         musicSizeValue.text = formatSize(prefs.musicTextSizeSp)
 
-        timeSeek.setOnSeekBarChangeListener(
-            simpleSeekListener { value ->
+        timeSlider.addOnChangeListener { _, value, fromUser ->
+            if (fromUser) {
                 val size = MIN_TIME_SIZE_SP + value
-                layoutRepo.setTimeTextSize(size.toFloat())
-                timeSizeValue.text = formatSize(size.toFloat())
+                layoutRepo.setTimeTextSize(size)
+                timeSizeValue.text = formatSize(size)
                 refreshPreview()
-            },
-        )
-        dateSeek.setOnSeekBarChangeListener(
-            simpleSeekListener { value ->
+            }
+        }
+        dateSlider.addOnChangeListener { _, value, fromUser ->
+            if (fromUser) {
                 val size = MIN_DATE_SIZE_SP + value
-                layoutRepo.setDateTextSize(size.toFloat())
-                dateSizeValue.text = formatSize(size.toFloat())
+                layoutRepo.setDateTextSize(size)
+                dateSizeValue.text = formatSize(size)
                 refreshPreview()
-            },
-        )
-        musicSeek.setOnSeekBarChangeListener(
-            simpleSeekListener { value ->
+            }
+        }
+        musicSlider.addOnChangeListener { _, value, fromUser ->
+            if (fromUser) {
                 val size = MIN_MUSIC_SIZE_SP + value
-                layoutRepo.setMusicTextSize(size.toFloat())
-                musicSizeValue.text = formatSize(size.toFloat())
+                layoutRepo.setMusicTextSize(size)
+                musicSizeValue.text = formatSize(size)
                 refreshPreview()
-            },
-        )
+            }
+        }
     }
 
     private fun refreshPreview() {
@@ -430,29 +455,6 @@ class LayoutSetupActivity : Activity() {
             }
         }
 
-    private fun simpleSelectionListener(onSelect: (Int) -> Unit) =
-        object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long,
-            ) {
-                onSelect(position)
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
-        }
-
-    private fun simpleSeekListener(onChange: (Int) -> Unit) =
-        object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (fromUser) onChange(progress)
-            }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
-            override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
-        }
-
     private fun showOptions(kind: ElementKind) {
         when (kind) {
             ElementKind.TIME -> {
@@ -508,22 +510,10 @@ class LayoutSetupActivity : Activity() {
     private fun toggleLabel(stringId: Int, enabled: Boolean): String =
         "${getString(stringId)} (${if (enabled) "on" else "off"})"
 
-    private fun launchPicker() {
-        val intents =
-            listOf(
-                Intent("com.google.android.clockwork.home.action.CHANGE_WATCH_FACE"),
-                Intent("com.google.android.clockwork.action.SET_WATCH_FACE"),
-                Intent("android.service.wallpaper.LIVE_WALLPAPER_CHOOSER").addCategory(Intent.CATEGORY_DEFAULT),
-            )
-        for (intent in intents) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            if (intent.resolveActivity(packageManager) != null) {
-                runCatching { startActivity(intent) }
-                Toast.makeText(this, "Opening watch-face picker...", Toast.LENGTH_SHORT).show()
-                return
-            }
-        }
-        Toast.makeText(this, "Picker unavailable. Select CosmoBond from watch-face list.", Toast.LENGTH_LONG).show()
+    private fun saveAndReturn() {
+        Toast.makeText(this, R.string.layout_setup_saved, Toast.LENGTH_SHORT).show()
+        setResult(Activity.RESULT_OK)
+        finish()
     }
 }
 
