@@ -263,6 +263,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
     - **Acceptance:** Play shows “App signing enabled,” and the service-account JSON + upload keystore are archived for CI secrets.
     - **Artifacts:** App signing status screenshot; redacted note of service-account JSON location.
     - **Fail?:** Complete identity verification; retry.
+    - **Always be explicit when pointing to UI paths:** If instructions require navigation, name the clicks exactly. Example for Play Console: log in → select the app → left nav “Setup” → “App integrity” → “App signing” tab. There you can view the upload key certificate (fingerprints) but not passwords. Keystore passwords remain in the vault; the keystore file is `keystore/upload-keystore.jks`.
 
 17. **[ ] Prompt:** _"Configure Gradle release signing and build types to use CI-provided credentials."_ _(Blocked: depends on Task 16 keys (2025-12-04 10:45 UTC))_
     - **Purpose:** Deterministic release builds in CI.
