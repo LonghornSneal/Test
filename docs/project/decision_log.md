@@ -124,7 +124,16 @@
 - Command validation: `JAVA_HOME=C:/Users/HhsJa/.jdks/temurin-17/jdk-17.0.17+10 ./gradlew :baselineprofile:tasks --all` to verify the new task appears; generation itself deferred to CI because no emulator was started locally for this task.
 - Markdown lint: `npx markdownlint "**/*.md"` initially failed to resolve the executable; reran with `npx --yes markdownlint-cli "**/*.md"` (2025-12-01) which exited 0 under the current `.markdownlint.json`. Both attempts captured in `docs/project/logs/task15-markdownlint.txt`; no auto-fixes applied.
 
+<<<<<<< Updated upstream
 ## 2025-12-05 - Beat Chase mini-game engine + tests
 - Added `BeatChaseEngine` (state machine for Idle → Countdown → Playing → Finished/Paused) with beat windows (±18% capped at ±140 ms), streak/miss handling, timer bonuses on special beats, reduced-motion haptic gating, and pause/resume on playback stops or ambient entry. Introduced `BeatChaseVisuals` for animation cues (Ambient Bounce/Slide Switch/Voltage Pop/Club Carousel/Silence Pause, runaway placeholders) and overlay layout defaults that avoid the four complication bounds.
 - Tests: `./gradlew -Dorg.gradle.java.home=/usr/lib/jvm/java-17-openjdk-amd64 testDebugUnitTest` (uses Linux SDK at `/tmp/android-sdk-linux` installed via commandline-tools + build-tools 35.0.0/platforms 34). New unit coverage under `BeatChaseEngineTest` validates tolerances, scoring, miss-out, time cap win, reduced-motion haptics off, overlay safe zones, and animation mapping.
 - Build env note: Windows SDK tools lacked Linux AAPT; installed Linux cmdline-tools + build-tools into `/tmp/android-sdk-linux` and pointed `local.properties` there for WSL builds. Future CI should rely on the standard SDK setup rather than the Windows install to avoid missing AAPT errors with AGP 8.13.x.
+=======
+## 2025-12-01 - Task 16: Play App Signing
+- Goal: enable Play App Signing and gather evidence (status screenshot, upload cert, service-account JSON location).
+- Blocked: No Google Play Console/SSO access or credentials available from this environment (owner listed as LonghornSneal in `docs/ops/account_access.md`), so unable to open the console, enable Play App Signing, or capture the required screenshot.
+- Missing inputs: service-account JSON not provided; upload keystore not generated; GitHub Secrets (`PLAY_SERVICE_ACCOUNT_JSON`, `UPLOAD_KEYSTORE_BASE64`, `UPLOAD_KEY_ALIAS`, `UPLOAD_KEY_PASSWORD`, `STORE_PASSWORD`) not present to validate the Gradle signing path.
+- Next actions for owner: sign into Play Console, enable Play App Signing, download/upload certificate for evidence, create upload keystore + service account JSON, store both in the secure vault, and share redacted screenshot plus secret storage locations so Tasks 17-18 can proceed.
+- Markdown lint: `npx --yes markdownlint-cli "**/*.md"` (2025-12-01) exited 0 for this update (no findings logged); see `docs/project/logs/task16-markdownlint.txt`.
+>>>>>>> Stashed changes

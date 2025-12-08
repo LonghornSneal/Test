@@ -254,7 +254,11 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 
 ### Phase 5 — Signing & Play Integration
 
+<<<<<<< Updated upstream
 16. **[ ] Prompt:** _"Enable Play App Signing in the Google Play Console and capture evidence."_ _(Blocked: awaiting Google Play developer verification (2025-12-04 10:45 UTC))_
+=======
+16. **[ ] Prompt:** _"Enable Play App Signing in the Google Play Console and capture evidence."_ _(claimed by @agent, 2025-12-01 13:13 UTC)_ _(Blocked: Play Console access/SSO credentials unavailable in this environment; cannot enable or capture evidence (2025-12-01 13:14 UTC))_
+>>>>>>> Stashed changes
     - **Purpose:** Use Google-managed signing; CI only needs upload key.
     - **Steps:**
       * In Play Console, enable **App signing by Google Play**; download upload certificate; export a dedicated upload keystore and base64-encode it for CI.
