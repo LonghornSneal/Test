@@ -255,11 +255,7 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 
 ### Phase 5 — Signing & Play Integration
 
-<<<<<<< Updated upstream
-16. **[ ] Prompt:** _"Enable Play App Signing in the Google Play Console and capture evidence."_ _(Blocked: awaiting Google Play developer verification (2025-12-04 10:45 UTC))_
-=======
 16. **[ ] Prompt:** _"Enable Play App Signing in the Google Play Console and capture evidence."_ _(claimed by @agent, 2025-12-01 13:13 UTC)_ _(Blocked: Play Console access/SSO credentials unavailable in this environment; cannot enable or capture evidence (2025-12-01 13:14 UTC))_
->>>>>>> Stashed changes
     - **Purpose:** Use Google-managed signing; CI only needs upload key.
     - **Steps:**
       * In Play Console, enable **App signing by Google Play**; download upload certificate; export a dedicated upload keystore and base64-encode it for CI.
@@ -328,10 +324,10 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
 22b. **[x] Prompt:** _"Migrate the runtime to Watch Face Format v2 as a resource-only face and retire the Kotlin renderer."_ _(Completed: WFF v2 resource-only face shipped; manifest/watch_face_info updated and bundleRelease built (2025-12-08 09:24 UTC))_
     - **Purpose:** Meet the WFF v2-only policy and remove the Canvas renderer host.
     - **Steps:**
-      * Align manifest with WFF v2 (`minSdk`/`targetSdk` 34, `android:hasCode="false"`, format version meta-data, retain standalone meta-data, wire watch face info).
-      * Replace Kotlin renderer/service/complication wiring with WFF `watchface.xml` definitions covering dial, hands, ticks, complications, personalization bindings, and ambient scene.
-      * Add `res/xml/watch_face_info.xml` and ensure previews/assets match the metadata; restructure resources per WFF docs.
-      * Build `./gradlew :app:bundleRelease` to confirm the AAB ships only WFF resources and updated previews.
+      - Align manifest with WFF v2 (`minSdk`/`targetSdk` 34, `android:hasCode="false"`, format version meta-data, retain standalone meta-data, wire watch face info).
+      - Replace Kotlin renderer/service/complication wiring with WFF `watchface.xml` definitions covering dial, hands, ticks, complications, personalization bindings, and ambient scene.
+      - Add `res/xml/watch_face_info.xml` and ensure previews/assets match the metadata; restructure resources per WFF docs.
+      - Build `./gradlew :app:bundleRelease` to confirm the AAB ships only WFF resources and updated previews.
     - **Acceptance:** Manifest advertises WFF v2 with resource-only app; Kotlin renderer/service unused; `watchface.xml` defines complications, personalization, and ambient; release bundle builds successfully.
     - **Artifacts:** Updated `watchface.xml`, `watch_face_info.xml`, manifest diff, release bundle/logs.
     - **Fail?:** Fix missing metadata or resource references and rebuild.
