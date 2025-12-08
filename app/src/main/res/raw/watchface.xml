@@ -1,89 +1,413 @@
-<?xml version="1.0" encoding="utf-8"?>
-<WatchFaceFormat
-    xmlns:tools="http://schemas.android.com/tools"
-    version="2.0"
-    tools:ignore="UnusedResources">
-    <Metadata>
-        <Name>CosmoBond Watchface</Name>
-        <Author>CosmoBond</Author>
-    </Metadata>
-    <Parameters>
-        <DeviceParameters>
-            <ScreenWidth>480</ScreenWidth>
-            <ScreenHeight>480</ScreenHeight>
-        </DeviceParameters>
-    </Parameters>
-    <Partials>
-        <Partial id="time_text">
-            <Text>
-                <Value>
-                    <Time format="HH:mm"/>
-                </Value>
-                <Font family="sans-serif" size="48"/>
-                <Position x="50%" y="48%" anchor="center"/>
-            </Text>
-        </Partial>
-        <Partial id="date_text">
-            <Text>
-                <Value>
-                    <Time format="EEE, MMM d"/>
-                </Value>
-                <Font family="sans-serif" size="18"/>
-                <Position x="50%" y="58%" anchor="center"/>
-                <Color>#A6B6FF</Color>
-            </Text>
-        </Partial>
-        <Partial id="time_text_ambient">
-            <Text>
-                <Value>
-                    <Time format="HH:mm"/>
-                </Value>
-                <Font family="sans-serif" size="48"/>
-                <Position x="50%" y="48%" anchor="center"/>
-                <Color>#B0B0B0</Color>
-            </Text>
-        </Partial>
-        <Partial id="date_text_ambient">
-            <Text>
-                <Value>
-                    <Time format="EEE, MMM d"/>
-                </Value>
-                <Font family="sans-serif" size="18"/>
-                <Position x="50%" y="58%" anchor="center"/>
-                <Color>#B0B0B0</Color>
-            </Text>
-        </Partial>
-    </Partials>
+<?xml version="1.0" encoding="UTF-8"?>
+<WatchFace width="480" height="480">
+    <Metadata key="CLOCK_TYPE" value="ANALOG" />
+    <Metadata key="PREVIEW_TIME" value="10:10:00" />
 
-    <Complications>
-        <Complication id="left_slot" type="SHORT_TEXT">
-            <Bounds width="72" height="72">
-                <Position x="28%" y="65%" anchor="center"/>
-            </Bounds>
-        </Complication>
-        <Complication id="right_slot" type="SHORT_TEXT">
-            <Bounds width="72" height="72">
-                <Position x="72%" y="65%" anchor="center"/>
-            </Bounds>
-        </Complication>
-    </Complications>
+    <UserConfigurations>
+        <ColorConfiguration id="accentPalette" displayName="@string/config_accent_label" defaultValue="0">
+            <ColorOption id="0" displayName="@string/config_accent_option_celestial" colors="#3B5BFF #3BD5FF #0B1020 #99FFFFFF" />
+            <ColorOption id="1" displayName="@string/config_accent_option_solar" colors="#FF9F1C #F8485E #0F0A16 #99FFFFFF" />
+            <ColorOption id="2" displayName="@string/config_accent_option_aurora" colors="#3DD6A0 #46B1FF #0C1820 #99FFFFFF" />
+        </ColorConfiguration>
+        <BooleanConfiguration id="showSecondHand" displayName="@string/config_show_seconds" defaultValue="true" />
+    </UserConfigurations>
 
-    <Scenes>
-        <Scene id="active">
-            <Group>
-                <Background color="#0A0D18"/>
-                <PartialRef ref="time_text"/>
-                <PartialRef ref="date_text"/>
-                <ComplicationRef ref="left_slot"/>
-                <ComplicationRef ref="right_slot"/>
-            </Group>
-        </Scene>
-        <Scene id="ambient">
-            <Group>
-                <Background color="#000000"/>
-                <PartialRef ref="time_text_ambient"/>
-                <PartialRef ref="date_text_ambient"/>
-            </Group>
-        </Scene>
-    </Scenes>
-</WatchFaceFormat>
+    <Scene backgroundColor="#0A0D18">
+        <Group id="dial" x="0" y="0" width="480" height="480">
+            <PartDraw x="0" y="0" width="480" height="480">
+                <Ellipse x="0" y="0" width="480" height="480">
+                    <Fill color="[CONFIGURATION.accentPalette.2]" />
+                </Ellipse>
+                <Ellipse x="28" y="28" width="424" height="424">
+                    <Fill color="#0E1426" />
+                </Ellipse>
+                <Ellipse x="80" y="80" width="320" height="320">
+                    <Stroke thickness="8" color="[CONFIGURATION.accentPalette.0]" />
+                </Ellipse>
+            </PartDraw>
+
+            <PartDraw x="30" y="30" width="420" height="420">
+                <Arc centerX="210" centerY="210" width="420" height="420" startAngle="-90" endAngle="-85">
+                    <Stroke thickness="8" color="[CONFIGURATION.accentPalette.1]" cap="ROUND" />
+                </Arc>
+                <Arc centerX="210" centerY="210" width="420" height="420" startAngle="-60" endAngle="-55">
+                    <Stroke thickness="8" color="[CONFIGURATION.accentPalette.1]" cap="ROUND" />
+                </Arc>
+                <Arc centerX="210" centerY="210" width="420" height="420" startAngle="-30" endAngle="-25">
+                    <Stroke thickness="8" color="[CONFIGURATION.accentPalette.1]" cap="ROUND" />
+                </Arc>
+                <Arc centerX="210" centerY="210" width="420" height="420" startAngle="0" endAngle="5">
+                    <Stroke thickness="8" color="[CONFIGURATION.accentPalette.1]" cap="ROUND" />
+                </Arc>
+                <Arc centerX="210" centerY="210" width="420" height="420" startAngle="30" endAngle="35">
+                    <Stroke thickness="8" color="[CONFIGURATION.accentPalette.1]" cap="ROUND" />
+                </Arc>
+                <Arc centerX="210" centerY="210" width="420" height="420" startAngle="60" endAngle="65">
+                    <Stroke thickness="8" color="[CONFIGURATION.accentPalette.1]" cap="ROUND" />
+                </Arc>
+                <Arc centerX="210" centerY="210" width="420" height="420" startAngle="90" endAngle="95">
+                    <Stroke thickness="8" color="[CONFIGURATION.accentPalette.1]" cap="ROUND" />
+                </Arc>
+                <Arc centerX="210" centerY="210" width="420" height="420" startAngle="120" endAngle="125">
+                    <Stroke thickness="8" color="[CONFIGURATION.accentPalette.1]" cap="ROUND" />
+                </Arc>
+                <Arc centerX="210" centerY="210" width="420" height="420" startAngle="150" endAngle="155">
+                    <Stroke thickness="8" color="[CONFIGURATION.accentPalette.1]" cap="ROUND" />
+                </Arc>
+                <Arc centerX="210" centerY="210" width="420" height="420" startAngle="180" endAngle="185">
+                    <Stroke thickness="8" color="[CONFIGURATION.accentPalette.1]" cap="ROUND" />
+                </Arc>
+                <Arc centerX="210" centerY="210" width="420" height="420" startAngle="210" endAngle="215">
+                    <Stroke thickness="8" color="[CONFIGURATION.accentPalette.1]" cap="ROUND" />
+                </Arc>
+                <Arc centerX="210" centerY="210" width="420" height="420" startAngle="240" endAngle="245">
+                    <Stroke thickness="8" color="[CONFIGURATION.accentPalette.1]" cap="ROUND" />
+                </Arc>
+            </PartDraw>
+
+            <PartDraw x="235" y="235" width="10" height="10">
+                <Ellipse x="0" y="0" width="10" height="10">
+                    <Fill color="[CONFIGURATION.accentPalette.0]" />
+                </Ellipse>
+            </PartDraw>
+        </Group>
+
+        <AnalogClock x="0" y="0" width="480" height="480">
+            <Variant mode="AMBIENT" target="alpha" value="210" />
+
+            <HourHand resource="@drawable/hand_hour" x="228" y="60" width="24" height="220" pivotX="0.5" pivotY="0.92" tintColor="[CONFIGURATION.accentPalette.0]">
+                <Variant mode="AMBIENT" target="tintColor" value="#B0B0B0" />
+            </HourHand>
+            <MinuteHand resource="@drawable/hand_minute" x="231" y="30" width="18" height="260" pivotX="0.5" pivotY="0.9" tintColor="[CONFIGURATION.accentPalette.1]">
+                <Variant mode="AMBIENT" target="tintColor" value="#B0B0B0" />
+            </MinuteHand>
+            <Condition>
+                <Expressions>
+                    <Expression name="showSeconds"><![CDATA[[CONFIGURATION.showSecondHand] == true]]></Expression>
+                </Expressions>
+                <Compare expression="showSeconds">
+                    <SecondHand resource="@drawable/hand_second" x="234" y="10" width="12" height="260" pivotX="0.5" pivotY="0.88" tintColor="[CONFIGURATION.accentPalette.3]">
+                        <Variant mode="AMBIENT" target="alpha" value="0" />
+                        <Sweep frequency="15" />
+                    </SecondHand>
+                </Compare>
+            </Condition>
+        </AnalogClock>
+
+        <ComplicationSlot x="185" y="36" width="110" height="110" slotId="101" displayName="@string/complication_top_name" supportedTypes="SHORT_TEXT RANGED_VALUE MONOCHROMATIC_IMAGE EMPTY" isCustomizable="true" tintColor="[CONFIGURATION.accentPalette.1]">
+            <DefaultProviderPolicy defaultSystemProvider="DAY_OF_WEEK" defaultSystemProviderType="SHORT_TEXT" />
+            <BoundingOval x="0" y="0" width="110" height="110" outlinePadding="2.0" />
+            <Variant mode="AMBIENT" target="alpha" value="180" />
+            <Complication type="SHORT_TEXT">
+                <PartDraw x="0" y="0" width="110" height="110">
+                    <Ellipse x="0" y="0" width="110" height="110">
+                        <Stroke thickness="6" color="[CONFIGURATION.accentPalette.0]" />
+                    </Ellipse>
+                </PartDraw>
+                <Condition>
+                    <Expressions>
+                        <Expression name="hasTitle"><![CDATA[[COMPLICATION.TITLE] != null]]></Expression>
+                    </Expressions>
+                    <Compare expression="hasTitle">
+                        <PartText x="20" y="30" width="70" height="26" tintColor="[CONFIGURATION.accentPalette.1]">
+                            <Text ellipsis="TRUE">
+                                <Font family="SYNC_TO_DEVICE" size="18.0">
+                                    <Template><![CDATA[%s]]>
+                                        <Parameter expression="[COMPLICATION.TITLE]" />
+                                    </Template>
+                                </Font>
+                            </Text>
+                        </PartText>
+                        <PartText x="20" y="52" width="70" height="26" tintColor="[CONFIGURATION.accentPalette.1]">
+                            <Text ellipsis="TRUE">
+                                <Font family="SYNC_TO_DEVICE" size="18.0">
+                                    <Template><![CDATA[%s]]>
+                                        <Parameter expression="[COMPLICATION.TEXT]" />
+                                    </Template>
+                                </Font>
+                            </Text>
+                        </PartText>
+                    </Compare>
+                    <Default>
+                        <PartText x="20" y="42" width="70" height="28" tintColor="[CONFIGURATION.accentPalette.1]">
+                            <Text ellipsis="TRUE">
+                                <Font family="SYNC_TO_DEVICE" size="20.0">
+                                    <Template><![CDATA[%s]]>
+                                        <Parameter expression="[COMPLICATION.TEXT]" />
+                                    </Template>
+                                </Font>
+                            </Text>
+                        </PartText>
+                    </Default>
+                </Condition>
+            </Complication>
+            <Complication type="RANGED_VALUE">
+                <PartDraw x="8" y="8" width="94" height="94">
+                    <Arc centerX="47" centerY="47" width="94" height="94" startAngle="-140" endAngle="140">
+                        <Stroke thickness="10" color="[CONFIGURATION.accentPalette.2]" cap="ROUND" />
+                    </Arc>
+                    <Arc centerX="47" centerY="47" width="94" height="94" startAngle="-140" endAngle="140">
+                        <Stroke thickness="10" color="[CONFIGURATION.accentPalette.0]" cap="ROUND" />
+                        <Transform target="endAngle" value="-140 + (((clamp(([COMPLICATION.RANGED_VALUE_VALUE]), ([COMPLICATION.RANGED_VALUE_MIN]), ([COMPLICATION.RANGED_VALUE_MAX])) - ([COMPLICATION.RANGED_VALUE_MIN])) / (([COMPLICATION.RANGED_VALUE_MAX]) - ([COMPLICATION.RANGED_VALUE_MIN]))) * (280))" />
+                    </Arc>
+                </PartDraw>
+                <PartText x="20" y="38" width="70" height="28" tintColor="[CONFIGURATION.accentPalette.1]">
+                    <Text ellipsis="TRUE">
+                        <Font family="SYNC_TO_DEVICE" size="18.0">
+                            <Template><![CDATA[%s]]>
+                                <Parameter expression="[COMPLICATION.TEXT]" />
+                            </Template>
+                        </Font>
+                    </Text>
+                </PartText>
+            </Complication>
+            <Complication type="MONOCHROMATIC_IMAGE">
+                <PartDraw x="0" y="0" width="110" height="110">
+                    <Ellipse x="0" y="0" width="110" height="110">
+                        <Stroke thickness="6" color="[CONFIGURATION.accentPalette.0]" />
+                    </Ellipse>
+                </PartDraw>
+                <PartImage x="30" y="30" width="50" height="50" tintColor="[CONFIGURATION.accentPalette.1]">
+                    <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]" />
+                </PartImage>
+            </Complication>
+        </ComplicationSlot>
+
+        <ComplicationSlot x="36" y="185" width="110" height="110" slotId="102" displayName="@string/complication_left_name" supportedTypes="SHORT_TEXT RANGED_VALUE MONOCHROMATIC_IMAGE EMPTY" isCustomizable="true" tintColor="[CONFIGURATION.accentPalette.1]">
+            <DefaultProviderPolicy defaultSystemProvider="STEP_COUNT" defaultSystemProviderType="SHORT_TEXT" />
+            <BoundingOval x="0" y="0" width="110" height="110" outlinePadding="2.0" />
+            <Variant mode="AMBIENT" target="alpha" value="180" />
+            <Complication type="SHORT_TEXT">
+                <PartDraw x="0" y="0" width="110" height="110">
+                    <Ellipse x="0" y="0" width="110" height="110">
+                        <Stroke thickness="6" color="[CONFIGURATION.accentPalette.0]" />
+                    </Ellipse>
+                </PartDraw>
+                <Condition>
+                    <Expressions>
+                        <Expression name="hasTitle"><![CDATA[[COMPLICATION.TITLE] != null]]></Expression>
+                    </Expressions>
+                    <Compare expression="hasTitle">
+                        <PartText x="20" y="30" width="70" height="26" tintColor="[CONFIGURATION.accentPalette.1]">
+                            <Text ellipsis="TRUE">
+                                <Font family="SYNC_TO_DEVICE" size="18.0">
+                                    <Template><![CDATA[%s]]>
+                                        <Parameter expression="[COMPLICATION.TITLE]" />
+                                    </Template>
+                                </Font>
+                            </Text>
+                        </PartText>
+                        <PartText x="20" y="52" width="70" height="26" tintColor="[CONFIGURATION.accentPalette.1]">
+                            <Text ellipsis="TRUE">
+                                <Font family="SYNC_TO_DEVICE" size="18.0">
+                                    <Template><![CDATA[%s]]>
+                                        <Parameter expression="[COMPLICATION.TEXT]" />
+                                    </Template>
+                                </Font>
+                            </Text>
+                        </PartText>
+                    </Compare>
+                    <Default>
+                        <PartText x="20" y="42" width="70" height="28" tintColor="[CONFIGURATION.accentPalette.1]">
+                            <Text ellipsis="TRUE">
+                                <Font family="SYNC_TO_DEVICE" size="20.0">
+                                    <Template><![CDATA[%s]]>
+                                        <Parameter expression="[COMPLICATION.TEXT]" />
+                                    </Template>
+                                </Font>
+                            </Text>
+                        </PartText>
+                    </Default>
+                </Condition>
+            </Complication>
+            <Complication type="RANGED_VALUE">
+                <PartDraw x="8" y="8" width="94" height="94">
+                    <Arc centerX="47" centerY="47" width="94" height="94" startAngle="-140" endAngle="140">
+                        <Stroke thickness="10" color="[CONFIGURATION.accentPalette.2]" cap="ROUND" />
+                    </Arc>
+                    <Arc centerX="47" centerY="47" width="94" height="94" startAngle="-140" endAngle="140">
+                        <Stroke thickness="10" color="[CONFIGURATION.accentPalette.0]" cap="ROUND" />
+                        <Transform target="endAngle" value="-140 + (((clamp(([COMPLICATION.RANGED_VALUE_VALUE]), ([COMPLICATION.RANGED_VALUE_MIN]), ([COMPLICATION.RANGED_VALUE_MAX])) - ([COMPLICATION.RANGED_VALUE_MIN])) / (([COMPLICATION.RANGED_VALUE_MAX]) - ([COMPLICATION.RANGED_VALUE_MIN]))) * (280))" />
+                    </Arc>
+                </PartDraw>
+                <PartText x="20" y="38" width="70" height="28" tintColor="[CONFIGURATION.accentPalette.1]">
+                    <Text ellipsis="TRUE">
+                        <Font family="SYNC_TO_DEVICE" size="18.0">
+                            <Template><![CDATA[%s]]>
+                                <Parameter expression="[COMPLICATION.TEXT]" />
+                            </Template>
+                        </Font>
+                    </Text>
+                </PartText>
+            </Complication>
+            <Complication type="MONOCHROMATIC_IMAGE">
+                <PartDraw x="0" y="0" width="110" height="110">
+                    <Ellipse x="0" y="0" width="110" height="110">
+                        <Stroke thickness="6" color="[CONFIGURATION.accentPalette.0]" />
+                    </Ellipse>
+                </PartDraw>
+                <PartImage x="30" y="30" width="50" height="50" tintColor="[CONFIGURATION.accentPalette.1]">
+                    <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]" />
+                </PartImage>
+            </Complication>
+        </ComplicationSlot>
+
+        <ComplicationSlot x="334" y="185" width="110" height="110" slotId="103" displayName="@string/complication_right_name" supportedTypes="SHORT_TEXT RANGED_VALUE MONOCHROMATIC_IMAGE EMPTY" isCustomizable="true" tintColor="[CONFIGURATION.accentPalette.1]">
+            <DefaultProviderPolicy defaultSystemProvider="NEXT_EVENT" defaultSystemProviderType="SHORT_TEXT" />
+            <BoundingOval x="0" y="0" width="110" height="110" outlinePadding="2.0" />
+            <Variant mode="AMBIENT" target="alpha" value="180" />
+            <Complication type="SHORT_TEXT">
+                <PartDraw x="0" y="0" width="110" height="110">
+                    <Ellipse x="0" y="0" width="110" height="110">
+                        <Stroke thickness="6" color="[CONFIGURATION.accentPalette.0]" />
+                    </Ellipse>
+                </PartDraw>
+                <Condition>
+                    <Expressions>
+                        <Expression name="hasTitle"><![CDATA[[COMPLICATION.TITLE] != null]]></Expression>
+                    </Expressions>
+                    <Compare expression="hasTitle">
+                        <PartText x="20" y="30" width="70" height="26" tintColor="[CONFIGURATION.accentPalette.1]">
+                            <Text ellipsis="TRUE">
+                                <Font family="SYNC_TO_DEVICE" size="18.0">
+                                    <Template><![CDATA[%s]]>
+                                        <Parameter expression="[COMPLICATION.TITLE]" />
+                                    </Template>
+                                </Font>
+                            </Text>
+                        </PartText>
+                        <PartText x="20" y="52" width="70" height="26" tintColor="[CONFIGURATION.accentPalette.1]">
+                            <Text ellipsis="TRUE">
+                                <Font family="SYNC_TO_DEVICE" size="18.0">
+                                    <Template><![CDATA[%s]]>
+                                        <Parameter expression="[COMPLICATION.TEXT]" />
+                                    </Template>
+                                </Font>
+                            </Text>
+                        </PartText>
+                    </Compare>
+                    <Default>
+                        <PartText x="20" y="42" width="70" height="28" tintColor="[CONFIGURATION.accentPalette.1]">
+                            <Text ellipsis="TRUE">
+                                <Font family="SYNC_TO_DEVICE" size="20.0">
+                                    <Template><![CDATA[%s]]>
+                                        <Parameter expression="[COMPLICATION.TEXT]" />
+                                    </Template>
+                                </Font>
+                            </Text>
+                        </PartText>
+                    </Default>
+                </Condition>
+            </Complication>
+            <Complication type="RANGED_VALUE">
+                <PartDraw x="8" y="8" width="94" height="94">
+                    <Arc centerX="47" centerY="47" width="94" height="94" startAngle="-140" endAngle="140">
+                        <Stroke thickness="10" color="[CONFIGURATION.accentPalette.2]" cap="ROUND" />
+                    </Arc>
+                    <Arc centerX="47" centerY="47" width="94" height="94" startAngle="-140" endAngle="140">
+                        <Stroke thickness="10" color="[CONFIGURATION.accentPalette.0]" cap="ROUND" />
+                        <Transform target="endAngle" value="-140 + (((clamp(([COMPLICATION.RANGED_VALUE_VALUE]), ([COMPLICATION.RANGED_VALUE_MIN]), ([COMPLICATION.RANGED_VALUE_MAX])) - ([COMPLICATION.RANGED_VALUE_MIN])) / (([COMPLICATION.RANGED_VALUE_MAX]) - ([COMPLICATION.RANGED_VALUE_MIN]))) * (280))" />
+                    </Arc>
+                </PartDraw>
+                <PartText x="20" y="38" width="70" height="28" tintColor="[CONFIGURATION.accentPalette.1]">
+                    <Text ellipsis="TRUE">
+                        <Font family="SYNC_TO_DEVICE" size="18.0">
+                            <Template><![CDATA[%s]]>
+                                <Parameter expression="[COMPLICATION.TEXT]" />
+                            </Template>
+                        </Font>
+                    </Text>
+                </PartText>
+            </Complication>
+            <Complication type="MONOCHROMATIC_IMAGE">
+                <PartDraw x="0" y="0" width="110" height="110">
+                    <Ellipse x="0" y="0" width="110" height="110">
+                        <Stroke thickness="6" color="[CONFIGURATION.accentPalette.0]" />
+                    </Ellipse>
+                </PartDraw>
+                <PartImage x="30" y="30" width="50" height="50" tintColor="[CONFIGURATION.accentPalette.1]">
+                    <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]" />
+                </PartImage>
+            </Complication>
+        </ComplicationSlot>
+
+        <ComplicationSlot x="185" y="334" width="110" height="110" slotId="104" displayName="@string/complication_bottom_name" supportedTypes="SHORT_TEXT RANGED_VALUE MONOCHROMATIC_IMAGE EMPTY" isCustomizable="true" tintColor="[CONFIGURATION.accentPalette.1]">
+            <DefaultProviderPolicy defaultSystemProvider="NEXT_EVENT" defaultSystemProviderType="SHORT_TEXT" />
+            <BoundingOval x="0" y="0" width="110" height="110" outlinePadding="2.0" />
+            <Variant mode="AMBIENT" target="alpha" value="180" />
+            <Complication type="SHORT_TEXT">
+                <PartDraw x="0" y="0" width="110" height="110">
+                    <Ellipse x="0" y="0" width="110" height="110">
+                        <Stroke thickness="6" color="[CONFIGURATION.accentPalette.0]" />
+                    </Ellipse>
+                </PartDraw>
+                <Condition>
+                    <Expressions>
+                        <Expression name="hasTitle"><![CDATA[[COMPLICATION.TITLE] != null]]></Expression>
+                    </Expressions>
+                    <Compare expression="hasTitle">
+                        <PartText x="20" y="30" width="70" height="26" tintColor="[CONFIGURATION.accentPalette.1]">
+                            <Text ellipsis="TRUE">
+                                <Font family="SYNC_TO_DEVICE" size="18.0">
+                                    <Template><![CDATA[%s]]>
+                                        <Parameter expression="[COMPLICATION.TITLE]" />
+                                    </Template>
+                                </Font>
+                            </Text>
+                        </PartText>
+                        <PartText x="20" y="52" width="70" height="26" tintColor="[CONFIGURATION.accentPalette.1]">
+                            <Text ellipsis="TRUE">
+                                <Font family="SYNC_TO_DEVICE" size="18.0">
+                                    <Template><![CDATA[%s]]>
+                                        <Parameter expression="[COMPLICATION.TEXT]" />
+                                    </Template>
+                                </Font>
+                            </Text>
+                        </PartText>
+                    </Compare>
+                    <Default>
+                        <PartText x="20" y="42" width="70" height="28" tintColor="[CONFIGURATION.accentPalette.1]">
+                            <Text ellipsis="TRUE">
+                                <Font family="SYNC_TO_DEVICE" size="20.0">
+                                    <Template><![CDATA[%s]]>
+                                        <Parameter expression="[COMPLICATION.TEXT]" />
+                                    </Template>
+                                </Font>
+                            </Text>
+                        </PartText>
+                    </Default>
+                </Condition>
+            </Complication>
+            <Complication type="RANGED_VALUE">
+                <PartDraw x="8" y="8" width="94" height="94">
+                    <Arc centerX="47" centerY="47" width="94" height="94" startAngle="-140" endAngle="140">
+                        <Stroke thickness="10" color="[CONFIGURATION.accentPalette.2]" cap="ROUND" />
+                    </Arc>
+                    <Arc centerX="47" centerY="47" width="94" height="94" startAngle="-140" endAngle="140">
+                        <Stroke thickness="10" color="[CONFIGURATION.accentPalette.0]" cap="ROUND" />
+                        <Transform target="endAngle" value="-140 + (((clamp(([COMPLICATION.RANGED_VALUE_VALUE]), ([COMPLICATION.RANGED_VALUE_MIN]), ([COMPLICATION.RANGED_VALUE_MAX])) - ([COMPLICATION.RANGED_VALUE_MIN])) / (([COMPLICATION.RANGED_VALUE_MAX]) - ([COMPLICATION.RANGED_VALUE_MIN]))) * (280))" />
+                    </Arc>
+                </PartDraw>
+                <PartText x="20" y="38" width="70" height="28" tintColor="[CONFIGURATION.accentPalette.1]">
+                    <Text ellipsis="TRUE">
+                        <Font family="SYNC_TO_DEVICE" size="18.0">
+                            <Template><![CDATA[%s]]>
+                                <Parameter expression="[COMPLICATION.TEXT]" />
+                            </Template>
+                        </Font>
+                    </Text>
+                </PartText>
+            </Complication>
+            <Complication type="MONOCHROMATIC_IMAGE">
+                <PartDraw x="0" y="0" width="110" height="110">
+                    <Ellipse x="0" y="0" width="110" height="110">
+                        <Stroke thickness="6" color="[CONFIGURATION.accentPalette.0]" />
+                    </Ellipse>
+                </PartDraw>
+                <PartImage x="30" y="30" width="50" height="50" tintColor="[CONFIGURATION.accentPalette.1]">
+                    <Image resource="[COMPLICATION.MONOCHROMATIC_IMAGE]" />
+                </PartImage>
+            </Complication>
+        </ComplicationSlot>
+    </Scene>
+</WatchFace>

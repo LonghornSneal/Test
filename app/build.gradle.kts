@@ -6,7 +6,6 @@ plugins {
     id("com.android.application")
     kotlin("android")
     id("com.github.triplet.play")
-    id("app.cash.paparazzi")
     jacoco
 }
 
@@ -62,7 +61,7 @@ android {
 
     defaultConfig {
         applicationId = "com.cosmobond.watchface"
-        minSdk = 30 // Lowered to ensure compatibility across more Wear OS versions
+        minSdk = 34
         targetSdk = 34
         versionCode = 1
         versionName = "0.1.0"
@@ -124,22 +123,9 @@ play {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.wear:wear:1.3.0")
-    implementation("androidx.wear.watchface:watchface:1.2.1")
-    implementation("androidx.wear.watchface:watchface-client:1.2.1")
-    implementation("androidx.wear.watchface:watchface-style:1.2.1")
-    implementation("androidx.wear.watchface:watchface-complications:1.2.1")
-    implementation("androidx.wear.watchface:watchface-complications-rendering:1.2.1")
-    implementation("androidx.profileinstaller:profileinstaller:1.3.1")
-    implementation("androidx.wear.tiles:tiles:1.3.0")
-    implementation("androidx.concurrent:concurrent-futures:1.1.0")
-    implementation("com.google.android.material:material:1.12.0")
-
-    testImplementation("app.cash.paparazzi:paparazzi:1.3.4")
     testImplementation("junit:junit:4.13.2")
-    testImplementation("org.robolectric:robolectric:4.11.1")
     testImplementation("androidx.test:core-ktx:1.5.0")
+    testImplementation("org.robolectric:robolectric:4.11.1")
 }
 
 tasks.withType<Test>().configureEach {

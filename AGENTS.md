@@ -325,6 +325,17 @@ Follow the tasks in order. Each item lists its purpose, precise steps, acceptanc
     - **Artifacts:** Perf numbers; Play review notes; Kotlin track may substitute renderer logs + ambient screenshots if applicable.
     - **Fail?:** Reduce animation frequency/bitmap size.
 
+22b. **[x] Prompt:** _"Migrate the runtime to Watch Face Format v2 as a resource-only face and retire the Kotlin renderer."_ _(Completed: WFF v2 resource-only face shipped; manifest/watch_face_info updated and bundleRelease built (2025-12-08 09:24 UTC))_
+    - **Purpose:** Meet the WFF v2-only policy and remove the Canvas renderer host.
+    - **Steps:**
+      * Align manifest with WFF v2 (`minSdk`/`targetSdk` 34, `android:hasCode="false"`, format version meta-data, retain standalone meta-data, wire watch face info).
+      * Replace Kotlin renderer/service/complication wiring with WFF `watchface.xml` definitions covering dial, hands, ticks, complications, personalization bindings, and ambient scene.
+      * Add `res/xml/watch_face_info.xml` and ensure previews/assets match the metadata; restructure resources per WFF docs.
+      * Build `./gradlew :app:bundleRelease` to confirm the AAB ships only WFF resources and updated previews.
+    - **Acceptance:** Manifest advertises WFF v2 with resource-only app; Kotlin renderer/service unused; `watchface.xml` defines complications, personalization, and ambient; release bundle builds successfully.
+    - **Artifacts:** Updated `watchface.xml`, `watch_face_info.xml`, manifest diff, release bundle/logs.
+    - **Fail?:** Fix missing metadata or resource references and rebuild.
+
 23. **[ ] Prompt:** _"Automate generation of multi-density previews and Play Store screenshots."_
     - **Purpose:** Auto-produce Play assets.
     - **Steps:**

@@ -15,7 +15,7 @@ class BaselineProfileGenerator {
     fun generateBaselineProfile() = baselineProfileRule.collect(
         packageName = PACKAGE_NAME,
     ) {
-        startActivityAndWait()
+        // Resource-only Watch Face Format app has no launchable activity.
         device.waitForIdle()
     }
 
