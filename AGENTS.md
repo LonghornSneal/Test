@@ -11,9 +11,10 @@
   1. Smaller prompts work better—ship one feature at a time.
   2. Prototype core logic first before polishing visuals or notifications.
   3. Name and reuse components so prompts become building blocks.
-  4. Keep context lean by feeding only relevant files/configs.
-  5. Use version control aggressively; avoid large untracked change sets.
-  6. Debug quickly with print statements and share the captured output when looping.
+ 4. Keep context lean by feeding only relevant files/configs.
+ 5. Use version control aggressively; avoid large untracked change sets.
+ 6. Debug quickly with print statements and share the captured output when looping.
+  7. When the user reports an issue/error and asks to “investigate,” start by reading the entire current chat log in reverse order (from the latest reply backwards), noting every possible cause before stopping. After that first pass, review each noted item one by one to confirm or rule it out before acting.
 
 ### Companion Experience Charter
 - **Presence management:** Companion complications and tiles must pause progression the moment the user switches to any non-CosmoBond watch face, then resume instantly when the face returns to foreground. Persist timers and state snapshots so no passive stats advance while hidden.
